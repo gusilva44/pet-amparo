@@ -1,0 +1,75 @@
+import { db } from "./connection.js";
+
+export async function buscarTodosAnimais() {
+    const [resultado] = await db.query(`
+        SELECT * FROM animais 
+    `, [])
+
+    return resultado
+}
+
+export async function buscarAnimaisrId(id){
+    const [resultado] = await db.query(`
+        SELECT * FROM animais
+        WHERE animais_id = ?
+    `, [id])
+
+    return resultado[0]
+}
+
+export async function adicionarAnimais(animais) {
+    const [resultado] = await db.query(`
+        INSERT INTO animais(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+        animais.nome,
+        animais.especie,
+        animais.raca,
+        animais.rga,
+        animais.idade,
+        animais.sexo,
+        animais.porte,
+        animais.foto,
+        animais.e_vacinado, 
+    ])
+
+    return resultado.insertId
+}
+
+export async function atualizarAnimais(animais, id) {
+    const [resultado] = await db.query(`
+        UPDATE animais 
+        SET nome = ?, 
+            especie = ?, 
+            a = ?, 
+            rga = ?, 
+            idade = ?, 
+            sexo = ?
+            porte = ?,
+            foto = ?,
+            e_vacinado = ?,
+        WHERE id_cliente = ?
+    `, [
+        animais.nome,
+        animais.especie,
+        animais.raca,
+        animais.rga,
+        animais.idade,
+        animais.sexo,
+        animais.porte,
+        animais.foto,
+        animais.e_vacinado,
+        id
+    ])
+
+    return resultado.affectedRows
+}
+
+export async function deletarAnimais(id) {
+    const [resultado] = await db.query(`
+        DELETE FROM animais
+        WHERE id_animais = ?
+    `, [id])
+
+    return resultado.affectedRows
+}
