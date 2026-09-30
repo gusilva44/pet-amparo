@@ -37,3 +37,18 @@ export async function buscarClientePorId(id) {
 export async function buscarTodosClientes() {
     return crud.buscarTodosClientes()
 }
+
+export async function deletarCliente(id) {
+    if(!id) throw new Error("Erro ao enviar o ID do cliente.")
+    if(id < 0) throw new Error("O id deve ser inteiro e positivo.")
+
+    return crud.deletarCliente(id)
+}
+
+export async function atualizarCliente(cliente, id) {
+    const ano 
+
+    if(!cliente) throw new Error("Todos os dados devem ser preenchidos.")
+    if(!cliente.nome ||  /\d/.test(cliente.nome)) throw new Error("Não pode haver números no nome.")
+    if(cliente.data_nasc) // chegar data de nascimento
+}
