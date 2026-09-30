@@ -67,7 +67,7 @@ export class CRUD {
     }
 }
 
-export class regrasDeNegocio {
+export class RegrasDeNegocio {
     async Telefone({ telefone }) {
         const [res] = await db.query(`
             SELECT * FROM clientes
