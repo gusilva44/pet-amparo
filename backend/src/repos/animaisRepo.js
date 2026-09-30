@@ -1,26 +1,28 @@
 import { db } from "./connection.js";
 
-export async function buscarTodosAnimal() {
-    const [resultado] = await db.query(`
-        SELECT * FROM animais 
-    `, [])
+export class CRUD {
 
-    return resultado
-}
+    async buscarTodosAnimal() {
+        const [resultado] = await db.query(`
+            SELECT * FROM animais 
+        `, [])
 
-export async function buscarAnimalPorId(id){
-    const [resultado] = await db.query(`
-        SELECT * FROM animais
-        WHERE animais_id = ?
-    `, [id])
+        return resultado
+    }
 
-    return resultado[0]
-}
+    async buscarAnimalPorId(id){
+        const [resultado] = await db.query(`
+            SELECT * FROM animais
+            WHERE animais_id = ?
+        `, [id])
 
-export async function adicionarAnimal(animais) {
-    const [resultado] = await db.query(`
-        INSERT INTO animal(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        return resultado[0]
+    }
+
+    async adicionarAnimal(animais) {
+        const [resultado] = await db.query(`
+             INSERT INTO animal(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [
         animais.nome,
         animais.especie,
@@ -36,7 +38,7 @@ export async function adicionarAnimal(animais) {
     return resultado.insertId
 }
 
-export async function atualizarAnimais(animais, id) {
+async atualizarAnimais(animais, id) {
     const [resultado] = await db.query(`
         UPDATE animais 
         SET nome = ?, 
@@ -58,14 +60,15 @@ export async function atualizarAnimais(animais, id) {
         cliente.sexo,
         animais.porte,
         animais.foto,
-        animais.e_vacinado
+        animais.e_vacinado,
         id
     ])
 
     return resultado.affectedRows
 }
 
-export async function deletarCliente(id) {
+
+async deletarCliente(id) {
     const [resultado] = await db.query(`
         DELETE FROM clientes
         WHERE id_cliente = ?
@@ -73,3 +76,10 @@ export async function deletarCliente(id) {
 
     return resultado.affectedRows
 }
+}
+
+
+
+
+
+
