@@ -1,7 +1,7 @@
 export default function horaAtual(){
     const agora = new Date()
-    const data = agora.getTimezoneOffset() + " " + agora.toLocaleTimeString
-    console.log(data)
+    const data = `${agora.toLocaleTimeString()} ${agora.toLocaleDateString()}`
+    console.log(data) 
 }
 
 horaAtual()
