@@ -1,4 +1,5 @@
 import { CRUD, RegrasDeNegocio } from '../repos/clientesRepo.js'
+import { validarDataNascimento } from '../utils/date.js'
 
 const crud = new CRUD()
 const regras = new RegrasDeNegocio()
@@ -46,9 +47,21 @@ export async function deletarCliente(id) {
 }
 
 export async function atualizarCliente(cliente, id) {
-    const ano 
-
     if(!cliente) throw new Error("Todos os dados devem ser preenchidos.")
-    if(!cliente.nome ||  /\d/.test(cliente.nome)) throw new Error("Não pode haver números no nome.")
-    if(cliente.data_nasc) // chegar data de nascimento
+    
+    if(/\d/.test(cliente.nome)) throw new Error("Não pode haver números no nome.")
+    
+    validarDataNascimento(cliente.data_nasc)
+
+    if(cliente.telefone.length > 14) throw new Error("O telefone está maior do que o normal.")
+    if(cliente.telefone.length < 0) throw new Error("O telefone não pode ter o tamanho menor que 0.")
+
+    const cpfLimpo = cliente.cpf.replace(/\D/g, "");
+    if(cpfLimpo.length > 11) throw new Error("CPF grande demais.")
+    
+    if(!cliente.email.includes('@') || !cliente.email.includes('.com')) throw new Error("Digite o email corretamente.")
+    if(!id) throw new Error("Digite corretamnete o id do cliente.")
+    if(id < 0) throw new Error("O id deve ser inteiro e positivo.")
+    
+    return crud.atualizarCliente(cliente, id)
 }
