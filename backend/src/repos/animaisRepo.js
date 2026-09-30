@@ -21,65 +21,87 @@ export class CRUD {
 
     async adicionarAnimal(animais) {
         const [resultado] = await db.query(`
-             INSERT INTO animal(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
+             INSERT INTO animais(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-        animais.nome,
-        animais.especie,
-        animais.raca,
-        animais.rga,
-        animais.idade,
-        animais.sexo,
-        animais.porte,
-        animais.foto,
-        animais.e_vacinado
-    ])
+        `, [
+            animais.nome,
+            animais.especie,
+            animais.raca,
+            animais.rga,
+            animais.idade,
+            animais.sexo,
+            animais.porte,
+            animais.foto,
+            animais.e_vacinado
+        ])
 
-    return resultado.insertId
+        return resultado.insertId
+    }
+
+    async atualizarAnimais(animais, id) {
+        const [resultado] = await db.query(`
+            UPDATE animais 
+            SET nome = ?, 
+                especie = ?, 
+                raca = ?, 
+                rga = ?, 
+                idade = ?, 
+                sexo = ?,
+                porte =?,
+                foto = ?, 
+                e_vacinado = ?
+            WHERE id_animal = ?
+        `, [
+            cliente.nome,
+            cliente.especie,
+            cliente.raca,
+            cliente.rga,
+            cliente.idade,
+            cliente.sexo,
+            animais.porte,
+            animais.foto,
+            animais.e_vacinado,
+            id
+        ])
+
+        return resultado.affectedRows
+    }
+
+
+    async deletarAnimal(id) {
+        const [resultado] = await db.query(`
+            DELETE FROM animais
+            WHERE id_animal = ?
+        `, [id])
+
+        return resultado.affectedRows
+    }
 }
 
-async atualizarAnimais(animais, id) {
-    const [resultado] = await db.query(`
-        UPDATE animais 
-        SET nome = ?, 
-            especie = ?, 
-            raca = ?, 
-            rga = ?, 
-            idade = ?, 
-            sexo = ?,
-            porte =?,
-            foto = ?, 
-            e_vacinado = ?
-        WHERE id_cliente = ?
-    `, [
-        cliente.nome,
-        cliente.especie,
-        cliente.raca,
-        cliente.rga,
-        cliente.idade,
-        cliente.sexo,
-        animais.porte,
-        animais.foto,
-        animais.e_vacinado,
-        id
-    ])
+export class RegrasDeNegocio {
+    async nomesIguais({ id_cliente, id_animal, nome }){
+        const [resultado] = await db.query(`
+        SELECT * FROM animais
+        INNER JOIN clientes
+        ON clientes.id_cliente = animais.id_cliente
+        WHERE id_cliente = ? 
+        AND id_animal = ?
+        AND nome = ?
+        `, [
+            id_cliente,
+            id_animal,
+            nome
+        ])
 
-    return resultado.affectedRows
+        return resultado
+    }
+    
+    async RGA({ rga }) {
+        const [resultado] = await db.query(`
+            SELECT * FROM animais
+            WHERE rga = ?
+        `, [rga])
+
+        return resultado
+    }
 }
-
-
-async deletarCliente(id) {
-    const [resultado] = await db.query(`
-        DELETE FROM clientes
-        WHERE id_cliente = ?
-    `, [id])
-
-    return resultado.affectedRows
-}
-}
-
-
-
-
-
-
