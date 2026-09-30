@@ -4,6 +4,8 @@ const crud = new CRUD()
 const regras = new RegrasDeNegocio()
 
 export async function cadastrarCliente(cliente){
+    if(!cliente) throw new Error ("Erro ao enviar os dados.")
+
     const [ 
         verificarEmail, 
         verificarCpf, 
@@ -19,8 +21,19 @@ export async function cadastrarCliente(cliente){
     } else if (verificarEmail > 0) {
         throw new Error('Cliente já cadastrado com esse email.')
     } else if (verificarTelefone > 0) {
-        throw new Error("Cliente já cadastrado com esse telefone")
+        throw new Error("Cliente já cadastrado com esse telefone.")
     }
 
     return crud.adicionarCliente(cliente)
+}
+
+export async function buscarClientePorId(id) {
+    if(!id) throw new Error("Erro ao enviar o ID do cliente.")
+    if(id < 0) throw new Error("O id deve ser inteiro e positivo.")
+
+    return crud.buscarClientePorId(id)
+}
+
+export async function buscarTodosClientes() {
+    return crud.buscarTodosClientes()
 }
