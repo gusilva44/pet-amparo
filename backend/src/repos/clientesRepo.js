@@ -1,6 +1,6 @@
 import { db } from "./connection.js";
 
-export class CRUD {
+export class banco {
     async buscarTodosClientes() {
         const [resultado] = await db.query(`
             SELECT * FROM clientes 
@@ -9,12 +9,40 @@ export class CRUD {
         return resultado
     }
 
-    async buscarClientePorId(id){
+    async buscarClientePorFiltros({ nome, id, cpf }) {
+        let query = `
+            SELECT * FROM clientes
+            WHERE 1 = 1
+        `
+
+        let valores = []
+
+        if(nome){
+            query += `AND nome LIKE ?`
+            valores.push(`%${nome}%`)
+        }
+
+        if(id){
+            query += `AND id_cliente = ?`
+            valores.push(id)
+        }
+
+        if(cpf){
+            query += `AND cpf = ?`
+            valores.push(cpf)
+        }
+
+        const [resultado] = await db.query(query, valores)
+
+        return resultado[0]
+    }
+
+    async buscarClientePorNome(nome) {
         const [resultado] = await db.query(`
             SELECT * FROM clientes
-            WHERE id_cliente = ?
-        `, [id])
-
+            WHERE nome = ?
+        `, [nome])
+        
         return resultado[0]
     }
 
@@ -75,9 +103,7 @@ export class CRUD {
 
         return resultado.affectedRows
     }
-}
 
-export class RegrasDeNegocio {
     async Telefone({ telefone }) {
         const [res] = await db.query(`
             SELECT * FROM clientes

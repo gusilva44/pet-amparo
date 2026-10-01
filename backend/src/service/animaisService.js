@@ -1,24 +1,23 @@
-import { CRUD, RegrasDeNegocio } from "../repos/animaisRepo.js";
+import { banco } from "../repos/animaisRepo.js";
 
-const crud = new CRUD()
-const regras = new RegrasDeNegocio()
+const db = new banco()
 
 export default function buscarAnimalPorId(id){
     if(!id) throw new Error("Error ao buscar o id.")
     if(id < 0) throw new Error("O id deve ser positivo e inteiro.")
 
-    return crud.buscarAnimalPorId(id)
+    return db.buscarAnimalPorId(id)
 }
 
 export default function buscarTodosAnimal(){
-    return crud.buscarTodosAnimal()
+    return db.buscarTodosAnimal()
 }
 
 export default function deletarAnimal(id){
     if(!id) throw new Error("Error ao buscar o id.")
     if(id < 0) throw new Error("O id deve ser positivo e inteiro.")
 
-    return crud.deletarAnimal(id)
+    return db.deletarAnimal(id)
 }
 
 export default function adicionarAnimal(animal){
@@ -33,7 +32,7 @@ export default function adicionarAnimal(animal){
     if(!animais.porte) throw new Error("Insira a porte corretamente")
     if(!animais.e_vacinado) throw new Error("Insira o 'e_vacinado' corretamente")
     
-    return crud.adicionarAnimal(animal)
+    return db.adicionarAnimal(animal)
 }
 
 export default function atualizarAnimal(animal, id){
@@ -51,5 +50,5 @@ export default function atualizarAnimal(animal, id){
     if(!id) throw new Error("Error ao buscar o id.")
     if(id < 0) throw new Error("O id deve ser positivo e inteiro.")
 
-    return crud.atualizarAnimais(animal)
+    return db.atualizarAnimais(animal)
 }

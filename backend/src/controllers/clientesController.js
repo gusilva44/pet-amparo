@@ -4,6 +4,7 @@ import { logError, formatarError } from '../utils/error.js'
 
 const endpoints = Router()
 
+// CADASTRAR CLIENTE
 endpoints.post('/clientes', async (req, res) => {
     try {
         const cliente = req.body
@@ -19,6 +20,7 @@ endpoints.post('/clientes', async (req, res) => {
     }
 })
 
+// BUSCAR TODOS CLIENTES
 endpoints.get('/clientes', async (req, res) => {
     try {
         const resultado = await service.buscarTodosClientes()
@@ -30,6 +32,7 @@ endpoints.get('/clientes', async (req, res) => {
     }
 })
 
+// BUSCAR CLIENTE POR FILTROS
 endpoints.get('/clientes/:id', async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -45,6 +48,7 @@ endpoints.get('/clientes/:id', async (req, res) => {
     }
 })
 
+// DELETAR CLIENTE POR ID
 endpoints.delete('/clientes/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
@@ -57,7 +61,8 @@ endpoints.delete('/clientes/:id', async (req, res) => {
     }
 })
 
-endpoints.put('/clientes/:id ', async (req, res) => {
+// ATUALIZAR CLIENTE POR ID
+endpoints.put('/clientes/:id', async (req, res) => {
     try {
         const id = Number(req.params.id);
         const cliente = req.body;

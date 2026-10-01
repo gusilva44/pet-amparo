@@ -1,6 +1,6 @@
 import { db } from "./connection.js";
 
-export class CRUD {
+export class banco {
 
     async buscarTodosAnimal() {
         const [resultado] = await db.query(`
@@ -76,9 +76,7 @@ export class CRUD {
 
         return resultado.affectedRows
     }
-}
 
-export class RegrasDeNegocio {
     async nomesIguais({ id_cliente, id_animal, nome }){
         const [resultado] = await db.query(`
         SELECT * FROM animais

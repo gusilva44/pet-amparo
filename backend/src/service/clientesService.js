@@ -1,22 +1,22 @@
-import { CRUD, RegrasDeNegocio } from '../repos/clientesRepo.js'
+import { banco } from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
 import { validarId } from '../validation/idCliente.js'
 
-const crud = new CRUD()
-const regras = new RegrasDeNegocio()
+const db = new banco()
 
+// CADASTRAR CLIENTE
 export async function cadastrarCliente(cliente){
     if(!cliente) 
-        throw new Error ("Erro ao enviar os dados.")
+        throw new Error("Erro ao enviar os dados.")
 
     const [ 
         verificarEmail, 
         verificarCpf, 
         verificarTelefone
     ] = await Promise.all([
-        regras.Email(cliente),
-        regras.Cpf(cliente),
-        regras.Telefone(cliente)
+        db.Email(cliente),
+        db.Cpf(cliente),
+        db.Telefone(cliente)
     ])
 
     if(verificarCpf > 0){
@@ -27,25 +27,29 @@ export async function cadastrarCliente(cliente){
         throw new Error("Cliente já cadastrado com esse telefone.")
     }
 
-    return crud.adicionarCliente(cliente)
+    return db.adicionarCliente(cliente)
 }
 
+// BUSCAR POR ID
 export async function buscarClientePorId(id) {
     validarId(id)
 
-    return crud.buscarClientePorId(id)
+    return db.buscarClientePorId(id)
 }
 
+// BUSCAR TODOS
 export async function buscarTodosClientes() {
-    return crud.buscarTodosClientes()
+    return db.buscarTodosClientes()
 }
 
+// DELETAR
 export async function deletarCliente(id) {
     validarId(id)
 
-    return crud.deletarCliente(id)
+    return db.deletarCliente(id)
 }
 
+// ATUALIZAR CLIENTE POR ID
 export async function atualizarCliente(cliente, id) {
     if(!cliente) 
         throw new Error("Todos os dados devem ser preenchidos.")
@@ -76,5 +80,17 @@ export async function atualizarCliente(cliente, id) {
     
     validarId(id)
     
-    return crud.atualizarCliente(cliente, id)
+    return db.atualizarCliente(cliente, id)
+}
+
+// BUSCAR CLIENTE POR NOME
+
+export async function buscarClientePorNome(nome) {
+    if(!nome) 
+        throw new Error("Preencha o campo nome.")
+    
+    if(!isNaN(nome)) 
+        throw new Error("Preencha o nome corretamente")
+
+    return db.buscarClientePorNome(nome)
 }
