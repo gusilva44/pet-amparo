@@ -84,9 +84,9 @@ export class RegrasDeNegocio {
         SELECT * FROM animais
         INNER JOIN clientes
         ON clientes.id_cliente = animais.id_cliente
-        WHERE id_cliente = ? 
-        AND id_animal = ?
-        AND nome = ?
+        WHERE cliente.id_cliente = ? 
+        AND animais.id_animal = ?
+        AND animais.nome = ?
         `, [
             id_cliente,
             id_animal,

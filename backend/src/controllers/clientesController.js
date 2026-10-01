@@ -1,7 +1,6 @@
 import * as service from '../service/clientesService.js'
 import { Router } from 'express'
 import { logError, formatarError } from '../utils/error.js'
-import { CRUD } from '../repos/clientesRepo.js'
 
 const endpoints = Router()
 
