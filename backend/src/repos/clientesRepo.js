@@ -20,7 +20,7 @@ export class CRUD {
 
     async adicionarCliente(cliente) {
         const [resultado] = await db.query(`
-            INSERT INTO clientes(nome, data_nasc, telefone, cpf, email, endereco)
+            INSERT INTO clientes(nome, data_nascimento, telefone, cpf, email, endereco)
             VALUES (?, ?, ?, ?, ?, ?)
         `, [
             cliente.nome,

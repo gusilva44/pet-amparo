@@ -32,16 +32,41 @@ endpoints.get('/clientes', async (req, res) => {
 
 endpoints.get('/clientes/:id', async (req, res) => {
     try {
-        const resultado = service.buscarClientePorId(id)
+        const resultado = await service.buscarClientePorId(req.params.id)
 
         if (!resultado) throw new Error("Erro ao buscar cliente.")
-        if (resultado < 0) throw new Error("Nenhum cliente registrado com esse id.")
 
         res.status(200).json(resultado)
+    } catch (error) {
+        logError(error)
+        res.status(404).json(formatarError(error))
+    }
+})
+
+endpoints.delete('/clientes/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const cliente = await service.deletarCliente(id)
+        res.status(200).json(cliente)
+        
     } catch (error) {
         logError(error)
         res.status(400).json(formatarError(error))
     }
 })
+
+endpoints.put('/clientes/:id ', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const cliente = req.body;
+
+        const up = await service.atualizarCliente(cliente, id)
+
+        res.status(200).json(up)
+    } catch (error){
+        logError(error)
+        res.status(400).json(formatarError(error))
+    }
+});
 
 export default endpoints;

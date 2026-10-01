@@ -1,5 +1,6 @@
 import { CRUD, RegrasDeNegocio } from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
+import { validarId } from '../utils/id.js'
 
 const crud = new CRUD()
 const regras = new RegrasDeNegocio()
@@ -66,7 +67,7 @@ export async function atualizarCliente(cliente, id) {
         throw new Error("O telefone está maior do que o normal.")
 
     const cpfLimpo = cliente.cpf.replace(/\D/g, "");
-    
+
     if(cpfLimpo.length > 11) 
         throw new Error("CPF grande demais.")
 
