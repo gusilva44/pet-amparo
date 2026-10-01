@@ -81,3 +81,5 @@ VALUES
 (8, 8, 'Consulta veterinária', 'Unidade Norte', '15:00:00', '2026-10-13'),
 (9, 9, 'Consulta veterinária', 'Unidade Sul', '09:30:00', '2026-10-14'),
 (10, 10, 'Vacinação', 'Unidade Leste', '16:00:00', '2026-10-15');
+
+select * from clientes;

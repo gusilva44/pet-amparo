@@ -33,15 +33,22 @@ endpoints.get('/clientes', async (req, res) => {
 })
 
 // BUSCAR CLIENTE POR FILTROS
-endpoints.get('/clientes/:id', async (req, res) => {
+endpoints.get('/clientes/filtros', async (req, res) => {
     try {
-        const id = Number(req.params.id)
+        const filtros = {
+            nome: req.query.nome,
+            id: req.query.id,
+            cpf: req.query.cpf
+        }
 
-        const resultado = await service.buscarClientePorId(id)
+        const resultado = await service.buscarClientePorFiltros(filtros)
 
         if (!resultado) throw new Error("Erro ao buscar cliente.")
 
-        res.status(200).json(resultado)
+        res.status(200).json({
+            messagem: "Cliente encontrado com sucesso.",
+            busca: resultado
+        })
     } catch (error) {
         logError(error)
         res.status(404).json(formatarError(error))

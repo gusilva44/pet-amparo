@@ -30,11 +30,9 @@ export async function cadastrarCliente(cliente){
     return db.adicionarCliente(cliente)
 }
 
-// BUSCAR POR ID
-export async function buscarClientePorId(id) {
-    validarId(id)
-
-    return db.buscarClientePorId(id)
+// BUSCAR POR FILTROS
+export async function buscarClientePorFiltros(filtros) { 
+    return db.buscarClientePorFiltros(filtros)
 }
 
 // BUSCAR TODOS
