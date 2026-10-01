@@ -12,7 +12,7 @@ export class CRUD {
     async buscarClientePorId(id){
         const [resultado] = await db.query(`
             SELECT * FROM clientes
-            WHERE cliente_id = ?
+            WHERE id_cliente = ?
         `, [id])
 
         return resultado[0]
@@ -58,6 +58,16 @@ export class CRUD {
     }
 
     async deletarCliente(id) {
+        await db.query(`
+            DELETE FROM agendamentos
+            WHERE id_cliente = ?
+        `, [id])
+
+        await db.query(`
+            DELETE FROM animais
+            WHERE id_cliente =? 
+        `, [id])
+
         const [resultado] = await db.query(`
             DELETE FROM clientes
             WHERE id_cliente = ?

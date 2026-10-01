@@ -3,7 +3,7 @@ import { db } from "./connection.js";
 export class CRUD {
     async buscarTodosAgendamento() {
         const [resultado] = await db.query(`
-            SELECT * FROM agendamento 
+            SELECT * FROM agendamento s
         `, [])
 
         return resultado
@@ -11,7 +11,7 @@ export class CRUD {
 
     async buscarAgendamentoPorId(id){
         const [resultado] = await db.query(`
-            SELECT * FROM agendamento
+            SELECT * FROM agendamentos
             WHERE agendamento_id = ?
         `, [id])
 
@@ -20,7 +20,7 @@ export class CRUD {
 
     async adicionarAgendamento(agendamento) {
         const [resultado] = await db.query(`
-            INSERT INTO agendamento(servico, unidade, dia, hora))
+            INSERT INTO agendamentos(servico, unidade, dia, hora))
             VALUES (?, ?, ?, ?)
         `, [
             agendamento.veterinario,
@@ -35,7 +35,7 @@ export class CRUD {
 
     async atualizarAgendamento(agendamento, id) {
         const [resultado] = await db.query(`
-            UPDATE agendamento
+            UPDATE agendamentos
             SET servico = ?, 
                 unidade = ?, 
                 dia = ?, 
@@ -55,7 +55,7 @@ export class CRUD {
 
     async deletarAgendamento(id) {
         const [resultado] = await db.query(`
-            DELETE FROM agendamento
+            DELETE FROM agendamentos
             WHERE id_agendamento = ?
         `, [id])
 
@@ -66,7 +66,7 @@ export class CRUD {
 export class RegrasDeNegocio {
     async agenda({ id_cliente, id_animal }) {
         const [res] = await db.query(`
-            SELECT * FROM agendamento
+            SELECT * FROM agendamentos
             WHERE hora = ?
         `, [hora])
 

@@ -1,14 +1,9 @@
 import { CRUD, RegrasDeNegocio } from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
-import { validarId } from '../utils/id.js'
+import { validarId } from '../validation/idCliente.js'
 
 const crud = new CRUD()
 const regras = new RegrasDeNegocio()
-
-function validarId(id) {
-    if(!Number.isInteger(id) || id <= 0)
-        throw new Error("O id deve ser um número inteiro e positivo.")
-}
 
 export async function cadastrarCliente(cliente){
     if(!cliente) 

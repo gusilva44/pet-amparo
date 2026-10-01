@@ -32,7 +32,9 @@ endpoints.get('/clientes', async (req, res) => {
 
 endpoints.get('/clientes/:id', async (req, res) => {
     try {
-        const resultado = await service.buscarClientePorId(req.params.id)
+        const id = Number(req.params.id)
+
+        const resultado = await service.buscarClientePorId(id)
 
         if (!resultado) throw new Error("Erro ao buscar cliente.")
 
@@ -45,7 +47,7 @@ endpoints.get('/clientes/:id', async (req, res) => {
 
 endpoints.delete('/clientes/:id', async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = Number(req.params.id);
         const cliente = await service.deletarCliente(id)
         res.status(200).json(cliente)
         
@@ -57,7 +59,7 @@ endpoints.delete('/clientes/:id', async (req, res) => {
 
 endpoints.put('/clientes/:id ', async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = Number(req.params.id);
         const cliente = req.body;
 
         const up = await service.atualizarCliente(cliente, id)
