@@ -1,4 +1,4 @@
-import horaAtual from "./date";
+import horaAtual from "./date.js";
 
 export function logError(error){
     console.log(`---> ERRO ${horaAtual()} --- ${error}`)

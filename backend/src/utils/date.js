@@ -4,9 +4,7 @@ export default function horaAtual(){
     console.log(data) 
 }
 
-horaAtual()
-
-export default function validarDataNascimento(dataNascimentoString) {
+export function validarDataNascimento(dataNascimentoString) {
     const dataNascimento = new Date(dataNascimentoString);
     const hoje = new Date();
   
