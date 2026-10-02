@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-import * as authRepo from '../repos/authRepo.js'
+import * as db from '../repos/authRepo.js'
 
 import { validarDataNascimento } from '../utils/date.js'
 import { gerarToken } from '../utils/jwt.js'
@@ -30,18 +30,18 @@ export async function cadastrarCliente(dados) {
     if (telefoneNormalizado.length < 10 || telefoneNormalizado.length > 11) 
         throw new Error('O telefone deve possuir 10 ou 11 números.')
 
-    const usuarioExistente = await authRepo.buscarUsuarioPorEmail(emailNormalizado)
+    const usuarioExistente = await db.buscarUsuarioPorEmail(emailNormalizado)
     if (usuarioExistente) throw new Error('Já existe um usuário cadastrado com esse email.')
 
-    const cpfExistente = await authRepo.buscarClientePorCpf(cpfNormalizado)
+    const cpfExistente = await db.buscarClientePorCpf(cpfNormalizado)
     if (cpfExistente) throw new Error('Já existe um cliente cadastrado com esse CPF.')
 
-    const telefoneExistente =await authRepo.buscarClientePorTelefone(telefoneNormalizado)
+    const telefoneExistente =await db.buscarClientePorTelefone(telefoneNormalizado)
     if (telefoneExistente) throw new Error('Já existe um cliente cadastrado com esse telefone.')
 
     const senhaHash = await bcrypt.hash(senha, 12)
 
-    return authRepo.cadastrarCliente({
+    return db.cadastrarCliente({
         nome,
         email: emailNormalizado,
         senhaHash,
@@ -57,7 +57,7 @@ export async function login(email, senha) {
 
     const emailNormalizado = email.trim().toLowerCase()
 
-    const usuario = await authRepo.buscarUsuarioPorEmail(emailNormalizado)
+    const usuario = await db.buscarUsuarioPorEmail(emailNormalizado)
 
     if (!usuario) throw new Error('Email ou senha inválidos.')
     if (!usuario.ativo) throw new Error('Este usuário está desativado.')
@@ -78,7 +78,7 @@ export async function login(email, senha) {
 }
 
 export async function buscarUsuarioAutenticado(idUsuario) {
-    const usuario = await authRepo.buscarUsuarioPorId(idUsuario)
+    const usuario = await db.buscarUsuarioPorId(idUsuario)
 
     if (!usuario) throw new Error('Usuário não encontrado.')
     if (!usuario.ativo) throw new Error('Usuário desativado.')

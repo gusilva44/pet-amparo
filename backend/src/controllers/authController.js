@@ -41,9 +41,7 @@ endpoints.post('/auth/login', async (req, res) => {
 
     } catch (error) {
         logError(error)
-        res.status(401).json(
-            formatarError(error)
-        )
+        res.status(401).json(formatarError(error))
     }
 })
 

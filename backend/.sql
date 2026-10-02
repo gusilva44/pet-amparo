@@ -1,11 +1,9 @@
 -- Active: 1790850489930@@127.0.0.1@3306
 -- BANCO DE DADOS PET-AMPARO
 -- =========================================================
-
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
-
 
 -- =========================================================
 -- 1. USUÁRIOS
@@ -43,21 +41,13 @@ CREATE TABLE usuarios (
 
 CREATE TABLE clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-
     id_usuario INT NOT NULL UNIQUE,
-
     nome VARCHAR(150) NOT NULL,
-
     data_nascimento DATE NOT NULL,
-
     telefone VARCHAR(30) NOT NULL UNIQUE,
-
     cpf VARCHAR(20) NOT NULL UNIQUE,
-
     endereco VARCHAR(150) NOT NULL,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     atualizado_em DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -77,23 +67,14 @@ CREATE TABLE clientes (
 
 CREATE TABLE veterinarios (
     id_veterinario INT AUTO_INCREMENT PRIMARY KEY,
-
     id_usuario INT NOT NULL UNIQUE,
-
     nome VARCHAR(150) NOT NULL,
-
     crmv VARCHAR(30) NOT NULL UNIQUE,
-
     especialidade VARCHAR(150),
-
     unidade VARCHAR(100) NOT NULL,
-
     telefone VARCHAR(30),
-
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     atualizado_em DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -113,29 +94,17 @@ CREATE TABLE veterinarios (
 
 CREATE TABLE animais (
     id_animal INT AUTO_INCREMENT PRIMARY KEY,
-
     id_cliente INT NOT NULL,
-
     nome VARCHAR(150) NOT NULL,
-
     especie VARCHAR(150) NOT NULL,
-
     raca VARCHAR(150) NOT NULL,
-
     rga VARCHAR(20) NOT NULL UNIQUE,
-
     idade INT NOT NULL,
-
     sexo ENUM('M', 'F') NOT NULL,
-
     porte VARCHAR(30) NOT NULL,
-
     foto VARCHAR(255),
-
     e_vacinado BOOLEAN NOT NULL DEFAULT FALSE,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     atualizado_em DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -155,17 +124,12 @@ CREATE TABLE animais (
 
 CREATE TABLE servicos (
     id_servico INT AUTO_INCREMENT PRIMARY KEY,
-
     nome VARCHAR(100) NOT NULL UNIQUE,
-
     descricao VARCHAR(255),
-
     duracao_minutos INT NOT NULL,
-
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
+    
     CONSTRAINT chk_duracao_servico
         CHECK (duracao_minutos > 0)
 );
@@ -187,17 +151,11 @@ CREATE TABLE servicos (
 
 CREATE TABLE horarios_veterinarios (
     id_horario INT AUTO_INCREMENT PRIMARY KEY,
-
     id_veterinario INT NOT NULL,
-
     dia_semana TINYINT NOT NULL,
-
     hora_inicio TIME NOT NULL,
-
     hora_fim TIME NOT NULL,
-
     unidade VARCHAR(100) NOT NULL,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_horario_veterinario
@@ -221,21 +179,13 @@ CREATE TABLE horarios_veterinarios (
 
 CREATE TABLE agendamentos (
     id_agendamento INT AUTO_INCREMENT PRIMARY KEY,
-
     id_cliente INT NOT NULL,
-
     id_animal INT NOT NULL,
-
     id_veterinario INT NOT NULL,
-
     id_servico INT NOT NULL,
-
     unidade VARCHAR(100) NOT NULL,
-
     inicio DATETIME NOT NULL,
-
     fim DATETIME NOT NULL,
-
     status ENUM(
         'agendado',
         'confirmado',
@@ -243,11 +193,8 @@ CREATE TABLE agendamentos (
         'concluido',
         'cancelado'
     ) NOT NULL DEFAULT 'agendado',
-
     observacao VARCHAR(500),
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     atualizado_em DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -288,11 +235,8 @@ CREATE TABLE agendamentos (
 
 CREATE TABLE medicamentos (
     id_medicamento INT AUTO_INCREMENT PRIMARY KEY,
-
     nome VARCHAR(150) NOT NULL,
-
     descricao VARCHAR(255),
-
     ativo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -304,23 +248,14 @@ CREATE TABLE medicamentos (
 
 CREATE TABLE carteiras_medicacao (
     id_carteira INT AUTO_INCREMENT PRIMARY KEY,
-
     id_animal INT NOT NULL,
-
     id_veterinario INT,
-
     id_medicamento INT NOT NULL,
-
     dosagem VARCHAR(100) NOT NULL,
-
     frequencia VARCHAR(100) NOT NULL,
-
     data_inicio DATE NOT NULL,
-
     data_fim DATE,
-
     observacao VARCHAR(500),
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_carteira_animal
