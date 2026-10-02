@@ -2,11 +2,12 @@ import * as service from '../service/adminService.js'
 import { Router } from 'express'
 import { logError, formatarError } from '../utils/error.js'
 import { autenticar } from '../middleware/authMiddlware.js'
+import { exigirCliente } from '../middleware/exigirCliente.js'
 
 const endpoints = Router()
 
 // BUSCAR MEUS DADOS
-endpoints.get('/clientes/me', autenticar, async (req, res) => {
+endpoints.get('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario
         const cliente = await service.buscarClientePorUsuario(idUsuario)

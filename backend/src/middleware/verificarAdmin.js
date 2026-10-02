@@ -1,16 +1,3 @@
-export default function verificarAdmin(req, res, next) {
+import { autorizar } from '../middleware/autorizar.js'
 
-    if (!req.usuario) {
-        return res.status(401).json({
-            mensagem: 'Usuário não autenticado.'
-        })
-    }
-
-    if (req.usuario.tipo !== 'admin') {
-        return res.status(403).json({
-            mensagem: 'Acesso permitido somente para administradores.'
-        })
-    }
-
-    next()
-}
+export default autorizar('admin')

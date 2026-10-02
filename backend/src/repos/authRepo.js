@@ -106,3 +106,17 @@ export async function cadastrarCliente(dados) {
         throw error
     }
 }
+
+export async function buscarClientePorUsuario(idUsuario) {
+
+    const [resultado] = await db.query(`
+        SELECT
+            id_cliente,
+            id_usuario,
+            nome
+        FROM clientes
+        WHERE id_usuario = ?
+    `, [idUsuario])
+
+    return resultado[0]
+}

@@ -14,7 +14,7 @@ app.use(cors({
     credentials: true
 }))
 
-app(cookieParser())
+app.use(cookieParser())
 
 adicionarRotas(app)
 

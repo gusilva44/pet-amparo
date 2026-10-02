@@ -403,3 +403,4 @@ VALUES
     '11999990002'
 );
 
+SELECT * from usuarios;

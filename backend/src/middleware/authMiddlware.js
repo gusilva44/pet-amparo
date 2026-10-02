@@ -1,23 +1,41 @@
-import jwt from 'jsonwebtoken'
+import { verificarToken } from '../utils/jwt.js'
+import * as db from '../repos/authRepo.js'
 
-export function autenticar(req, res, next) {
+export async function autenticar(req, res, next) {
     try {
-        const token = req.cookies.token
+        const token = req.cookies?.token
 
         if (!token) {
             return res.status(401).json({
-                erro: 'Usuário não autenticado.'
+                mensagem: 'Usuário não autenticado.'
             })
         }
 
-        const usuario = jwt.verify(token, process.env.JWT_SECRET)
+        const dadosToken = verificarToken(token)
+        const usuario = await db.buscarUsuarioPorId(dadosToken.id_usuario)
 
-        req.usuario = usuario
+        if (!usuario) {
+            return res.status(401).json({
+                mensagem: 'Usuário não encontrado.'
+            })
+        }
+
+        if (!usuario.ativo) {
+            return res.status(401).json({
+                mensagem: 'Usuário desativado.'
+            })
+        }
+
+        req.usuario = { 
+            id_usuario: usuario.id_usuario,
+            email: usuario.email,
+            tipo: usuario.tipo
+        }
 
         next()
     } catch (error) {
         return res.status(401).json({
-            erro: 'Sessão inválida ou expirada.'
+            mensagem: 'Sessão inválida ou expirada.'
         })
     }
 }
