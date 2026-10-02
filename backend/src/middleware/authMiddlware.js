@@ -10,10 +10,7 @@ export function autenticar(req, res, next) {
             })
         }
 
-        const usuario = jwt.verify(
-            token,
-            process.env.JWT_SECRET
-        )
+        const usuario = jwt.verify(token, process.env.JWT_SECRET)
 
         req.usuario = usuario
 

@@ -6,14 +6,14 @@ const db = new banco()
 const dbUser = new Usuario()
 
 // BUSCAR MEUS DADOS
-export default function buscarClientePorUsuario(idUsuario){
+export function buscarClientePorUsuario(idUsuario){
     autenticacaoUsuario(idUsuario)
 
     return dbUser.buscarDadosCliente(idUsuario)
 }
 
 // ATUALIZAR MEUS DADOS
-export default function atualizarClientePorUsuario(cliente, idUsuario){
+export function atualizarClientePorUsuario(cliente, idUsuario){
     autenticacaoUsuario(idUsuario)
     
     if (!cliente) {
@@ -22,10 +22,10 @@ export default function atualizarClientePorUsuario(cliente, idUsuario){
         })
     }
 
-    return dbUser.atualizarClientePorUsuario(idUsuario)
+    return dbUser.atualizarClientePorUsuario(cliente, idUsuario)
 }
 
 // DELETAR MINHA CONTA
-export default function deletarClientePorUsuario(idUsuario){
+export function deletarClientePorUsuario(idUsuario){
     
 }

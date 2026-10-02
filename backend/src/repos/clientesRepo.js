@@ -48,14 +48,13 @@ export class banco {
 
     async adicionarCliente(cliente) {
         const [resultado] = await db.query(`
-            INSERT INTO clientes(nome, data_nascimento, telefone, cpf, email, endereco)
+            INSERT INTO clientes(nome, data_nascimento, telefone, cpf, endereco)
             VALUES (?, ?, ?, ?, ?, ?)
         `, [
             cliente.nome,
             cliente.data_nasc,
             cliente.telefone,
             cliente.cpf,
-            cliente.email,
             cliente.endereco
         ])
 
@@ -154,7 +153,7 @@ export default class Usuario {
             email
         } = cliente
 
-        const [resultado] = await con.query(`
+        const [resultado] = await db.query(`
             UPDATE clientes c
             INNER JOIN usuarios u
                 ON u.id_usuario = c.id_usuario
