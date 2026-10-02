@@ -131,3 +131,51 @@ export class banco {
         return res
     }
 }
+
+export default class Usuario {
+    async buscarDadosCliente(id){
+        const [resultado] = await db.query(`
+            SELECT * FROM clientes as c
+            INNER JOIN usuarios as u
+                ON u.id_usuario = c.id_usuario
+            WHERE c.id_usuario = ? 
+        `, [id])
+
+        return resultado[0]
+    }
+
+    async atualizarClientePorUsuario(cliente, idUsuario){
+            const {
+            nome,
+            data_nascimento,
+            telefone,
+            cpf,
+            endereco,
+            email
+        } = cliente
+
+        const [resultado] = await con.query(`
+            UPDATE clientes c
+            INNER JOIN usuarios u
+                ON u.id_usuario = c.id_usuario
+            SET
+                c.nome = ?,
+                c.data_nascimento = ?,
+                c.telefone = ?,
+                c.cpf = ?,
+                c.endereco = ?,
+                u.email = ?
+            WHERE u.id_usuario = ?
+        `, [
+            nome,
+            data_nascimento,
+            telefone,
+            cpf,
+            endereco,
+            email,
+            idUsuario
+        ])
+
+        return resultado
+    }
+}

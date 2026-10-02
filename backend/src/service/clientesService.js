@@ -1,94 +1,31 @@
-import { banco } from '../repos/clientesRepo.js'
+import { banco, Usuario } from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
-import { validarId } from '../validation/idCliente.js'
+import { validarId, autenticacaoUsuario } from '../validation/idCliente.js'
 
 const db = new banco()
+const dbUser = new Usuario()
 
-// CADASTRAR CLIENTE
-export async function cadastrarCliente(cliente){
-    if(!cliente) 
-        throw new Error("Erro ao enviar os dados.")
+// BUSCAR MEUS DADOS
+export default function buscarClientePorUsuario(idUsuario){
+    autenticacaoUsuario(idUsuario)
 
-    const [ 
-        verificarEmail, 
-        verificarCpf, 
-        verificarTelefone
-    ] = await Promise.all([
-        db.Email(cliente),
-        db.Cpf(cliente),
-        db.Telefone(cliente)
-    ])
+    return dbUser.buscarDadosCliente(idUsuario)
+}
 
-    if(verificarCpf > 0){
-        throw new Error("Cliente já cadastrado com esse CPF.")
-    } else if (verificarEmail > 0) {
-        throw new Error('Cliente já cadastrado com esse email.')
-    } else if (verificarTelefone > 0) {
-        throw new Error("Cliente já cadastrado com esse telefone.")
+// ATUALIZAR MEUS DADOS
+export default function atualizarClientePorUsuario(cliente, idUsuario){
+    autenticacaoUsuario(idUsuario)
+    
+    if (!cliente) {
+        return res.status(400).json({
+            mensagem: 'Nenhum dado foi enviado.'
+        })
     }
 
-    return db.adicionarCliente(cliente)
+    return dbUser.atualizarClientePorUsuario(idUsuario)
 }
 
-// BUSCAR POR FILTROS
-export async function buscarClientePorFiltros(filtros) { 
-    return db.buscarClientePorFiltros(filtros)
-}
-
-// BUSCAR TODOS
-export async function buscarTodosClientes() {
-    return db.buscarTodosClientes()
-}
-
-// DELETAR
-export async function deletarCliente(id) {
-    validarId(id)
-
-    return db.deletarCliente(id)
-}
-
-// ATUALIZAR CLIENTE POR ID
-export async function atualizarCliente(cliente, id) {
-    if(!cliente) 
-        throw new Error("Todos os dados devem ser preenchidos.")
+// DELETAR MINHA CONTA
+export default function deletarClientePorUsuario(idUsuario){
     
-    if(/\d/.test(cliente.nome)) 
-        throw new Error("Não pode haver números no nome.")
-    
-    validarDataNascimento(cliente.data_nasc)
-
-    if(!cliente.telefone) 
-        throw new Error("O telefone dever ser preenchido.")
-
-    if(cliente.telefone.length > 14) 
-        throw new Error("O telefone está maior do que o normal.")
-
-    const cpfLimpo = cliente.cpf.replace(/\D/g, "");
-
-    if(cpfLimpo.length > 11) 
-        throw new Error("CPF grande demais.")
-
-    if(cpfLimpo.length !== 11) 
-        throw new Error("O CPF deve ter 11 números.")
-
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-    if(!emailValido.test(cliente.email)) 
-        throw new Error("Digite o email corretamente.")
-    
-    validarId(id)
-    
-    return db.atualizarCliente(cliente, id)
-}
-
-// BUSCAR CLIENTE POR NOME
-
-export async function buscarClientePorNome(nome) {
-    if(!nome) 
-        throw new Error("Preencha o campo nome.")
-    
-    if(!isNaN(nome)) 
-        throw new Error("Preencha o nome corretamente")
-
-    return db.buscarClientePorNome(nome)
 }

@@ -1,85 +1,404 @@
--- Active: 1790878550305@@127.0.0.1@3306@pet_amparo
-create database pet_amparo;
-use pet_amparo;
+-- BANCO DE DADOS PET-AMPARO
+-- =========================================================
 
-create table clientes (
-	id_cliente int auto_increment primary key, 
-	nome varchar(150) not null,
-    data_nascimento date not null, 
-    telefone varchar(30) unique not null,
-    cpf varchar(20) unique not null, 
-    email varchar(150) unique not null,
-	endereco varchar(150) not null
-    );
+CREATE DATABASE IF NOT EXISTS pet_amparo;
 
-create table animais(
-	id_animal int auto_increment primary key, 
-	nome varchar (150) not null,
-	especie varchar (150) not null, 
-	raca varchar (150) not null, 
-	rga varchar(20) unique not null, 
-	idade int not null, 
-	sexo char(1) not null,
-	porte varchar (30) not null,
-	foto varchar(255) not null, 
-	e_vacinado boolean not null, 
-	id_cliente int,
-	foreign key (id_cliente) references clientes(id_cliente)
-	);
-    
-create table agendamentos(
-	id_agendamentos int auto_increment primary key, 
-	id_cliente int, 
-	id_animal int, 
-	servico varchar(100) not null, 
-	unidade varchar(50) not null, 
-	horario time not null, 
-	dia date not null, 
+USE pet_amparo;
 
-	foreign key (id_cliente) references clientes(id_cliente),
-	foreign key (id_animal) references animais(id_animal)
+
+-- =========================================================
+-- 1. USUÁRIOS
+-- Responsável pela autenticação do sistema
+-- =========================================================
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+
+    email VARCHAR(150) NOT NULL UNIQUE,
+
+    senha_hash VARCHAR(255) NOT NULL,
+
+    tipo ENUM(
+        'cliente',
+        'veterinario',
+        'admin'
+    ) NOT NULL DEFAULT 'cliente',
+
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	
+
+    atualizado_em DATETIME NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
 );
 
-INSERT INTO clientes
-(nome, data_nascimento, telefone, cpf, email, endereco)
-VALUES
-('Gustavo Silva', '2008-05-14', '11987654321', '12345678901', 'gustavo@email.com', 'Rua das Flores, 100'),
-('Ana Souza', '1995-08-22', '11987654322', '23456789012', 'ana@email.com', 'Rua São Paulo, 250'),
-('Carlos Oliveira', '1987-03-10', '11987654323', '34567890123', 'carlos@email.com', 'Avenida Brasil, 500'),
-('Mariana Santos', '2001-11-30', '11987654324', '45678901234', 'mariana@email.com', 'Rua das Palmeiras, 80'),
-('João Pereira', '1978-06-17', '11987654325', '56789012345', 'joao@email.com', 'Rua do Comércio, 120'),
-('Beatriz Lima', '1999-01-25', '11987654326', '67890123456', 'beatriz@email.com', 'Rua das Acácias, 45'),
-('Lucas Martins', '1992-09-13', '11987654327', '78901234567', 'lucas@email.com', 'Avenida Central, 900'),
-('Fernanda Alves', '1985-12-05', '11987654328', '89012345678', 'fernanda@email.com', 'Rua Bela Vista, 320'),
-('Rafael Costa', '1997-04-19', '11987654329', '90123456789', 'rafael@email.com', 'Rua das Orquídeas, 150'),
-('Juliana Rocha', '1990-07-28', '11987654330', '01234567890', 'juliana@email.com', 'Avenida Paulista, 700');
 
-INSERT INTO animais
-(nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado, id_cliente)
-VALUES
-('Thor', 'Cachorro', 'Golden Retriever', 'RGA000001', 5, 'M', 'Grande', 'thor.jpg', true, 1),
-('Luna', 'Cachorro', 'Shih-tzu', 'RGA000002', 3, 'F', 'Pequeno', 'luna.jpg', true, 2),
-('Mingau', 'Gato', 'Siamês', 'RGA000003', 2, 'M', 'Pequeno', 'mingau.jpg', true, 3),
-('Mel', 'Cachorro', 'Poodle', 'RGA000004', 7, 'F', 'Pequeno', 'mel.jpg', false, 4),
-('Bob', 'Cachorro', 'Labrador', 'RGA000005', 4, 'M', 'Grande', 'bob.jpg', true, 5),
-('Nina', 'Gato', 'Persa', 'RGA000006', 6, 'F', 'Pequeno', 'nina.jpg', true, 6),
-('Max', 'Cachorro', 'Pastor Alemão', 'RGA000007', 8, 'M', 'Grande', 'max.jpg', false, 7),
-('Amora', 'Cachorro', 'Pinscher', 'RGA000008', 2, 'F', 'Pequeno', 'amora.jpg', true, 8),
-('Simba', 'Gato', 'Maine Coon', 'RGA000009', 5, 'M', 'Grande', 'simba.jpg', true, 9),
-('Belinha', 'Cachorro', 'Beagle', 'RGA000010', 3, 'F', 'Médio', 'belinha.jpg', false, 10);
+-- =========================================================
+-- 2. CLIENTES
+-- Dados pessoais dos usuários que utilizam o sistema
+-- =========================================================
 
-INSERT INTO agendamentos
-(id_cliente, id_animal, servico, unidade, horario, dia)
-VALUES
-(1, 1, 'Consulta veterinária', 'Unidade Centro', '08:30:00', '2026-10-05'),
-(2, 2, 'Vacinação', 'Unidade Norte', '09:00:00', '2026-10-06'),
-(3, 3, 'Consulta veterinária', 'Unidade Sul', '10:30:00', '2026-10-07'),
-(4, 4, 'Exame de sangue', 'Unidade Centro', '13:00:00', '2026-10-08'),
-(5, 5, 'Consulta veterinária', 'Unidade Leste', '14:30:00', '2026-10-09'),
-(6, 6, 'Vacinação', 'Unidade Oeste', '08:00:00', '2026-10-10'),
-(7, 7, 'Exame de imagem', 'Unidade Centro', '11:00:00', '2026-10-12'),
-(8, 8, 'Consulta veterinária', 'Unidade Norte', '15:00:00', '2026-10-13'),
-(9, 9, 'Consulta veterinária', 'Unidade Sul', '09:30:00', '2026-10-14'),
-(10, 10, 'Vacinação', 'Unidade Leste', '16:00:00', '2026-10-15');
+CREATE TABLE clientes (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
 
-select * from clientes;
+    id_usuario INT NOT NULL UNIQUE,
+
+    nome VARCHAR(150) NOT NULL,
+
+    data_nascimento DATE NOT NULL,
+
+    telefone VARCHAR(30) NOT NULL UNIQUE,
+
+    cpf VARCHAR(20) NOT NULL UNIQUE,
+
+    endereco VARCHAR(150) NOT NULL,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    atualizado_em DATETIME NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_cliente_usuario
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- =========================================================
+-- 3. VETERINÁRIOS
+-- Dados dos veterinários do sistema
+-- =========================================================
+
+CREATE TABLE veterinarios (
+    id_veterinario INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_usuario INT NOT NULL UNIQUE,
+
+    nome VARCHAR(150) NOT NULL,
+
+    crmv VARCHAR(30) NOT NULL UNIQUE,
+
+    especialidade VARCHAR(150),
+
+    unidade VARCHAR(100) NOT NULL,
+
+    telefone VARCHAR(30),
+
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    atualizado_em DATETIME NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_veterinario_usuario
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- =========================================================
+-- 4. ANIMAIS
+-- Cada animal pertence a um cliente
+-- =========================================================
+
+CREATE TABLE animais (
+    id_animal INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_cliente INT NOT NULL,
+
+    nome VARCHAR(150) NOT NULL,
+
+    especie VARCHAR(150) NOT NULL,
+
+    raca VARCHAR(150) NOT NULL,
+
+    rga VARCHAR(20) NOT NULL UNIQUE,
+
+    idade INT NOT NULL,
+
+    sexo ENUM('M', 'F') NOT NULL,
+
+    porte VARCHAR(30) NOT NULL,
+
+    foto VARCHAR(255),
+
+    e_vacinado BOOLEAN NOT NULL DEFAULT FALSE,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    atualizado_em DATETIME NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_animal_cliente
+        FOREIGN KEY (id_cliente)
+        REFERENCES clientes(id_cliente)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+
+-- =========================================================
+-- 5. SERVIÇOS
+-- Cada serviço possui uma duração
+-- =========================================================
+
+CREATE TABLE servicos (
+    id_servico INT AUTO_INCREMENT PRIMARY KEY,
+
+    nome VARCHAR(100) NOT NULL UNIQUE,
+
+    descricao VARCHAR(255),
+
+    duracao_minutos INT NOT NULL,
+
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT chk_duracao_servico
+        CHECK (duracao_minutos > 0)
+);
+
+
+-- =========================================================
+-- 6. HORÁRIOS DOS VETERINÁRIOS
+-- Define quando cada veterinário atende
+--
+-- dia_semana:
+-- 1 = Segunda
+-- 2 = Terça
+-- 3 = Quarta
+-- 4 = Quinta
+-- 5 = Sexta
+-- 6 = Sábado
+-- 7 = Domingo
+-- =========================================================
+
+CREATE TABLE horarios_veterinarios (
+    id_horario INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_veterinario INT NOT NULL,
+
+    dia_semana TINYINT NOT NULL,
+
+    hora_inicio TIME NOT NULL,
+
+    hora_fim TIME NOT NULL,
+
+    unidade VARCHAR(100) NOT NULL,
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_horario_veterinario
+        FOREIGN KEY (id_veterinario)
+        REFERENCES veterinarios(id_veterinario)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT chk_dia_semana
+        CHECK (dia_semana BETWEEN 1 AND 7),
+
+    CONSTRAINT chk_horario
+        CHECK (hora_inicio < hora_fim)
+);
+
+
+-- =========================================================
+-- 7. AGENDAMENTOS
+-- Guarda o intervalo completo do atendimento
+-- =========================================================
+
+CREATE TABLE agendamentos (
+    id_agendamento INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_cliente INT NOT NULL,
+
+    id_animal INT NOT NULL,
+
+    id_veterinario INT NOT NULL,
+
+    id_servico INT NOT NULL,
+
+    unidade VARCHAR(100) NOT NULL,
+
+    inicio DATETIME NOT NULL,
+
+    fim DATETIME NOT NULL,
+
+    status ENUM(
+        'agendado',
+        'confirmado',
+        'em_atendimento',
+        'concluido',
+        'cancelado'
+    ) NOT NULL DEFAULT 'agendado',
+
+    observacao VARCHAR(500),
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    atualizado_em DATETIME NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_agendamento_cliente
+        FOREIGN KEY (id_cliente)
+        REFERENCES clientes(id_cliente)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamento_animal
+        FOREIGN KEY (id_animal)
+        REFERENCES animais(id_animal)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamento_veterinario
+        FOREIGN KEY (id_veterinario)
+        REFERENCES veterinarios(id_veterinario)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamento_servico
+        FOREIGN KEY (id_servico)
+        REFERENCES servicos(id_servico)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT chk_intervalo_agendamento
+        CHECK (inicio < fim)
+);
+
+
+-- =========================================================
+-- 8. MEDICAMENTOS
+-- Base para carteira de medicação
+-- =========================================================
+
+CREATE TABLE medicamentos (
+    id_medicamento INT AUTO_INCREMENT PRIMARY KEY,
+
+    nome VARCHAR(150) NOT NULL,
+
+    descricao VARCHAR(255),
+
+    ativo BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
+-- =========================================================
+-- 9. CARTEIRA DE MEDICAÇÃO
+-- Registra medicamentos receitados para cada animal
+-- =========================================================
+
+CREATE TABLE carteiras_medicacao (
+    id_carteira INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_animal INT NOT NULL,
+
+    id_veterinario INT,
+
+    id_medicamento INT NOT NULL,
+
+    dosagem VARCHAR(100) NOT NULL,
+
+    frequencia VARCHAR(100) NOT NULL,
+
+    data_inicio DATE NOT NULL,
+
+    data_fim DATE,
+
+    observacao VARCHAR(500),
+
+    criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_carteira_animal
+        FOREIGN KEY (id_animal)
+        REFERENCES animais(id_animal)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_carteira_veterinario
+        FOREIGN KEY (id_veterinario)
+        REFERENCES veterinarios(id_veterinario)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_carteira_medicamento
+        FOREIGN KEY (id_medicamento)
+        REFERENCES medicamentos(id_medicamento)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
+INSERT INTO servicos
+(nome, descricao, duracao_minutos)
+VALUES
+(
+    'Consulta veterinária',
+    'Consulta clínica geral',
+    45
+),
+(
+    'Vacinação',
+    'Aplicação de vacina',
+    20
+),
+(
+    'Exame de sangue',
+    'Coleta de sangue para análise',
+    15
+),
+(
+    'Exame de imagem',
+    'Exame de imagem veterinário',
+    30
+),
+(
+	'Microchipagem',
+	'Implementação de chip restreador',
+	15
+),
+(
+	'Medicamentos',
+	'Receber medicamentos intravenosos',
+	45
+);
+
+INSERT INTO veterinarios
+(
+    id_usuario,
+    nome,
+    crmv,
+    especialidade,
+    unidade,
+    telefone
+)
+VALUES
+(
+    2,
+    'Mariana Oliveira',
+    'CRMV-SP-12345',
+    'Clínica Geral',
+    'Unidade Centro',
+    '11999990001'
+),
+(
+    3,
+    'Carlos Mendes',
+    'CRMV-SP-54321',
+    'Cirurgia Veterinária',
+    'Unidade Norte',
+    '11999990002'
+);
+
