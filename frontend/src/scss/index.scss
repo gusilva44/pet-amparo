@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap');
+
+body{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: #F2EBDD;
+
+}
+
+:root {
+    --verde-claro: #4f6a57;
+    --verde-escuro: #263a31;
+    --laranja: #d9775b;
+    --creme: #f2ebdd;
+    --branco: #ffffff;
+
+    --titulo: "Outfit", sans-serif;
+    --textos: "Nutito Sans", sans-serif;
+}
