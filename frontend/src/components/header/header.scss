@@ -1,3 +1,38 @@
 .comps-header{
-    background-color: #ffff;
+    background-color: var(--branco);
+    display: flex;
+    height: 5.5rem;
+    justify-content: start;
+    align-items: center;
+    gap: 250px;
+
+    section ul {
+        display: flex;
+        align-items: center;
+        gap: 100px;
+        font-family: var(--textos);
+        list-style: none;
+        font-size: 18px;
+        
+        .nav{
+            color: var(--verde-claro);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            .icone-header{
+                height: 30px;
+            }
+        }
+
+        .nav:hover{
+            color: var(--verde-escuro);
+        }
+    }
+
+    .comps-logo{
+        width: 12rem;
+        margin-left: 30px;
+    }
 }
