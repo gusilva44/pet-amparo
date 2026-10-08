@@ -1,14 +1,19 @@
 .comps-aside{
     background-color: var(--verde-escuro);
-    width: 300px;
+    width: 23%;
     height: 100vh;
     gap: 40px;
     color: var(--branco);
+    position: fixed;
+
     ul{
         display: flex;
         flex-direction: column;
         justify-content: start;
-        gap: 10px;
+        gap: 30px;
+        list-style: none;
+        font-family: var(--textos);
+        font-size: 20px;
     }
     .dados-usuario{
         display: flex;
@@ -21,10 +26,28 @@
         display: flex;
         flex-direction: row;
         padding: 20px;
+        gap: 25px;
+
+        p{
+            font-family: var(--textos);
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        h2{
+             font-family: var(--textos);
+             font-size: 22px;
+        
+        }
     }
     .nav{
         text-decoration: none;
         color: var(--branco);
+    }
+
+    .img-usuario{
+        width: 60px;
+        height: 60px;
     }
 }
 .linha{

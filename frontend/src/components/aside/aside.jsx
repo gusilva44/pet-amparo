@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import './aside.scss'
-import usuarioLogo from '../../assets/imagens/usuarioLogo.png'
+import usuarioLogo from '../../assets/imagens/icones/Perfil.png'
 
 export default function Aside() {
     return (
@@ -14,10 +14,19 @@ export default function Aside() {
             </div>
             <div className="linha"></div>
             <ul>
-                <Link className="nav" to='#'> <img className=""/> Meus Pets</Link>
-                <Link className="nav"  to='#'> <img className=""/>Agendamentos</Link>
-                <Link className="nav"  to='#'> <img className=""/>Início</Link>
-                <Link className="nav"  to='#'> <img className=""/>Sair</Link>
+                <li>
+                    <Link className="nav" to='#'> <img className=""/>Meus Pets</Link>
+                </li>
+                <li>
+                    <Link className="nav"  to='#'> <img className=""/>Agendamentos</Link>
+                </li>
+                <li>
+                     <Link className="nav"  to='#'> <img className=""/>Início</Link>
+                </li>
+                <li>
+                     <Link className="nav"  to='#'> <img className=""/>Sair</Link>
+                </li>
+                
             </ul>
         </div>
     )
