@@ -3,12 +3,31 @@
   display: flex;
   gap: 6%;
 
+  .mini-banner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 75%;
+    height: auto;
+    background-color: var(--verde-escuro);
+    border-radius: 15px;
+    h2{
+      font-family: var(--titulo);
+      color: var(--branco);
+    }
+    img{
+      width: 8%;
+    }
+  }
+
   .sobre{
     margin-left: 30px;
     
     h2{
       font-family: var(--titulo);
-      color: var(--verde-escuro)
+      color: var(--verde-escuro);
+      font-size: 30px;
     }
     .conteudo-sobre{
       display: flex; 
@@ -30,7 +49,7 @@
         align-items: center;
         gap: 10px;
         img{
-          width:13%;
+          width:8%;
         }
 
         p{
@@ -39,7 +58,8 @@
         }
         h2{
           font-family: var(--titulo);
-          color: var(--verde-escuro)
+          color: var(--verde-escuro);
+          font-size: 20px;
         }
        
       }

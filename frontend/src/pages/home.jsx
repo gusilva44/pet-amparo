@@ -60,7 +60,7 @@ export default function Home(){
                             <section className="sobre-esq">
                                 <section className="sub-titulo" > 
                                     <img src={Pata} alt="icone-pata" />
-                                    <h2>Nosso projeto</h2>
+                                    <h2>Nosso projeto</h2><hr />
                                 </section>
                                 <section>
                                     <p> Este projeto foi desenvolvido como parte do nosso Trabalho de Conclusão de Curso (TCC) e tem como objetivo facilitar o acesso a informações sobre atendimento veterinário público.</p><br />
@@ -83,6 +83,12 @@ export default function Home(){
                                 <p>{card.texto}</p>
                             </div>
                         )}
+                    </div>
+
+                    <div className="mini-banner">
+                        <img src={Pata} alt="" />
+                        <h2>Porque todo pet merece saúde e cuidado!</h2>
+                        <img src={Pata} alt="" />
                     </div>
                 </div>
 
