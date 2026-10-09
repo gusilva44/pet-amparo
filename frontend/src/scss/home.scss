@@ -3,6 +3,51 @@
   display: flex;
   gap: 6%;
 
+  .sobre{
+    margin-left: 30px;
+    
+    h2{
+      font-family: var(--titulo);
+      color: var(--verde-escuro)
+    }
+    .conteudo-sobre{
+      display: flex; 
+    
+
+      .sobre-esq{
+        width: 45%;
+        
+        p{
+          font-family: var(--texto);
+          text-align: justify;
+
+        }
+
+      }
+
+      .sub-titulo{
+        display:flex;
+        align-items: center;
+        gap: 10px;
+        img{
+          width:13%;
+        }
+
+        p{
+          font-family: var(--texto);
+          color: var(--verde-escuro)
+        }
+        h2{
+          font-family: var(--titulo);
+          color: var(--verde-escuro)
+        }
+       
+      }
+    }
+
+    
+  }
+
   .content {
     display: flex;
     align-items: center;
@@ -12,17 +57,38 @@
 
     .banner{
       width: 80%;
-      height: 320px;
-      background-color: var(--verde-claro);
+      background-color: var(--verde-escuro);
       border-radius: 10px;
       margin-top: 30px;
+      display: flex;
+      height: 290px;
 
+      .imagem { 
+        flex: 1; 
+        height: 350px; 
+        min-width: 0; 
+        display: flex; 
+        justify-content: center; 
+        
+        .img-banner { 
+          width: 100%; 
+          height: 100%; 
+          object-fit: 
+          contain; 
+          object-position: center; 
+          display: block; 
+        } 
+      }
+      
       .textos{
-        margin: 25px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
         h2{
           font-family: var(--titulo);
           color: var(--branco);
-          font-size: 40px;
+          font-size: 30px;
           }
         span{
           color: var(--laranja);
@@ -35,9 +101,9 @@
         button{
           border: none;
           color: var(--branco);
-          background-color: var(--verde-escuro);
-          width: 200px;
-          height: 30px;
+          background-color: var(--verde-claro);
+          width: 60%;
+          padding: 10px 5px;
           border-radius: 5px;
           font-size: 15px;
           font-weight: bold;
@@ -46,7 +112,44 @@
     
       
     }
+
+    .cards  {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90%;
+      gap: 50px;
+      margin: 40px 0px;
+
+      .card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background-color: var(--verde-escuro);
+        border-radius: 10px;
+        width: 20%;
+        height: 10em;
+        padding: 30px 20px;
+        
+
+
+        img {
+          width: 30%;
+        }
+
+        p {
+          font-size: 13px;
+          color: var(--branco);
+          text-align: justify;
+        }
+
+        h2 {
+          font-size: 15px;
+          text-align: center;
+          color: var(--laranja);
+        }
+      }
+    }
   }
-  
-  
 }
