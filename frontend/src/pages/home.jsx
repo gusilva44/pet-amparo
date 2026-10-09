@@ -98,10 +98,14 @@ export default function Home(){
                             <img src={Pets} alt="" />
                         </div>
                     </div>
-                    
-                    <div className="unidades"><h2>unidades</h2></div>
 
-                    <div className="footer"><h2>footer</h2></div>
+                    <div className="mini-banner">
+                        <img src={Pata} alt="" />
+                        <h2>Porque todo pet merece saúde e cuidado!</h2>
+                        <img src={Pata} alt="" />
+                    </div>
+                    
+                    
                 </div>
 
             </div>

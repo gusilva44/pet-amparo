@@ -9,7 +9,7 @@ export default function Aside() {
                 <img className="img-usuario" src={usuarioLogo}   alt="Img usuario" />
                 <div className="dados-usuario">
                 <h2>Nome S.</h2>
-                <p>Seja bem vindo Nome S.</p>
+                <p>👋 Seja bem vindo(a)</p>
                 </div>
             </div>
             <div className="linha"></div>
