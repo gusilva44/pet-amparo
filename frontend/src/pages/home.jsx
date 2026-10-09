@@ -99,7 +99,7 @@ export default function Home(){
                         </div>
                     </div>
                     
-                    <div className="unidades"></div>
+                    <div className="unidades"><h2>unidades</h2></div>
 
                     <div className="footer"></div>
                 </div>
