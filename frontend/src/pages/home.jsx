@@ -4,6 +4,7 @@ import Banner from '../assets/imagens/img-banner.png'
 import Agendamento from '../assets/imagens/icones/calendario.svg'
 import Pata from '../assets/imagens/icones/pata.svg'
 import Consulta from '../assets/imagens/icones/consulta.svg'
+import Pets from '../assets/imagens/pets.webp'
 import '../scss/home.scss'
 
 
@@ -85,11 +86,22 @@ export default function Home(){
                         )}
                     </div>
 
-                    <div className="mini-banner">
-                        <img src={Pata} alt="" />
-                        <h2>Porque todo pet merece saúde e cuidado!</h2>
-                        <img src={Pata} alt="" />
+                    <div className="criacao">
+                        <div className="text">
+                            <div className="logo">
+                                <img src={Pata} alt="" />
+                                <h2>Porque criamos?</h2>
+                            </div>
+                            <p>A ideia  surgiu  pensando   em  pessoas  que  possuem animais de  estimação, mas que podem ter  dificuldade para  encontrar um   atendimento   veterinário   público. Dessa forma, nosso projeto busca facilitar a localização dos serviços veterinários públicos, ajudando os tutores a   encontrarem    atendimento   para     seus    pets    e contribuindo para o cuidado e o bem-estar dos animais.</p>
+                        </div>
+                        <div className="img">
+                            <img src={Pets} alt="" />
+                        </div>
                     </div>
+                    
+                    <div className="unidades"></div>
+
+                    <div className="footer"></div>
                 </div>
 
             </div>
