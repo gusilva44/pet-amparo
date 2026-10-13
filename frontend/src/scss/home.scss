@@ -3,6 +3,31 @@
   display: flex;
   gap: 6%;
 
+  .cards-unidades{
+    width: 100%;
+    display: flex ;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+    .card{
+      display: flex;
+      align-items: center;
+      width: 80%;
+      height: 50%;
+      background-color: var(--verde-claro);
+      border-radius: 10px;
+      .imagem{
+        img{
+          width: 220px;
+          height: 150px;
+          object-fit: cover;
+        }
+      }
+     
+    }
+
+  }
+
   .mini-banner{
     display: flex;
     align-items: center;
@@ -85,7 +110,7 @@
 
       .imagem { 
         flex: 1; 
-        height: 350px; 
+        height: 300px; 
         min-width: 0; 
         display: flex; 
         justify-content: center; 
@@ -221,5 +246,6 @@
         }
       }
     }
+
   }
 }

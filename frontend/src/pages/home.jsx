@@ -5,6 +5,12 @@ import Agendamento from '../assets/imagens/icones/calendario.svg'
 import Pata from '../assets/imagens/icones/pata.svg'
 import Consulta from '../assets/imagens/icones/consulta.svg'
 import Pets from '../assets/imagens/pets.webp'
+import Leste1 from '../assets/imagens/unidades/Cão-orelha.webp'
+import Leste2 from '../assets/imagens/unidades/São-miguel-paulista.webp'
+import Norte from '../assets/imagens/unidades/Unidade-norte.webp'
+import Oeste from '../assets/imagens/unidades/Unidade-oeste.webp'
+import Sul from '../assets/imagens/unidades/Unidade-sul.webp'
+import { Link } from "react-router-dom"
 import '../scss/home.scss'
 
 
@@ -29,6 +35,39 @@ export default function Home(){
             titulo: "Mais cuidados com os animais",
             texto: "Ajudamos tutores a terem acesso a serviços veterinários essenciais de forma simples e rápida."
         },    
+    ]
+
+    const unidades =[
+        {
+            id: 1,
+            img: Leste1,
+            nome: "Unidade Leste I - Cão Orelha",
+            localizacao: "Rua xxxxxxxx"
+        },
+        {
+            id: 2,
+            img: Leste2,
+            nome: "Unidade Leste II - São Miguel Paulista",
+            localizacao: "Rua xxxxxxxx"
+        },
+        {
+            id: 3,
+            img: Norte,
+            nome: "Unidade Norte",
+            localizacao: "Rua xxxxxxxx"
+        },
+        {
+            id: 4,
+            img: Oeste,
+            nome: "Unidade Oeste",
+            localizacao: "Rua xxxxxxxx"
+        },
+        {
+            id: 5,
+            img: Sul,
+            nome: "Unidade Sul",
+            localizacao: "Rua xxxxxxxx"
+        }
     ]
 
     return(
@@ -103,6 +142,25 @@ export default function Home(){
                         <img src={Pata} alt="" />
                         <h2>Porque todo pet merece saúde e cuidado!</h2>
                         <img src={Pata} alt="" />
+                    </div>
+
+                    <h2>Unidades</h2>
+                    <div className="cards-unidades">
+                        {unidades.map((uni,key)=>
+                        <div className="card">
+                            <div className="imagem">
+                                <img src={uni.img} alt="imagem-unidade" />
+                            </div>
+                            <div className="information">
+                                <h2>{uni.nome}</h2>
+                                <p>{uni.localizacao}</p>
+                                <button>Agende sua consulta</button>
+                            </div>
+                            <div className="seta">
+                                <Link to='#'><img src="" alt="" /></Link>
+                            </div>
+                        </div>
+                        )}
                     </div>
                     
                     
