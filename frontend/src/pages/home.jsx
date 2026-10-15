@@ -12,9 +12,11 @@ import Oeste from '../assets/imagens/unidades/Unidade-oeste.webp'
 import Sul from '../assets/imagens/unidades/Unidade-sul.webp'
 import { Link } from "react-router-dom"
 import '../scss/home.scss'
+import { useNavigate } from "react-router-dom"
 
 
 export default function Home(){
+    const navigate = useNavigate()
 
     const cards = [
         {
@@ -69,6 +71,10 @@ export default function Home(){
             localizacao: "Rua xxxxxxxx"
         }
     ]
+
+    function irParaUnidades(id) {
+        navigate(`/unidades/${id}`)
+    }
 
     return(
         <div className="home-page">
@@ -146,8 +152,8 @@ export default function Home(){
 
                     <h2>Unidades</h2>
                     <div className="cards-unidades">
-                        {unidades.map((uni,key)=>
-                        <div className="card">
+                        {unidades.map((uni, key)=>
+                        <div className="card" key={key}>
                             <div className="imagem">
                                 <img src={uni.img} alt="imagem-unidade" />
                             </div>
@@ -157,7 +163,9 @@ export default function Home(){
                                 <button>Agende sua consulta</button>
                             </div>
                             <div className="seta">
-                                <Link to='#'><img src="" alt="" /></Link>
+                                <button onClick={() => irParaUnidades(uni.id)}>
+                                    Ir para unidade
+                                </button>
                             </div>
                         </div>
                         )}
