@@ -1,10 +1,18 @@
 .comps-aside{
     background-color: var(--verde-escuro);
     width: 23%;
+    flex-shrink: 0;
+
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+
     height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+
     gap: 40px;
     color: var(--branco);
-    position: fixed;
 
     ul{
         display: flex;

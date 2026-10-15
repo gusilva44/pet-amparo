@@ -10,8 +10,8 @@ import Leste2 from '../assets/imagens/unidades/São-miguel-paulista.webp'
 import Norte from '../assets/imagens/unidades/Unidade-norte.webp'
 import Oeste from '../assets/imagens/unidades/Unidade-oeste.webp'
 import Sul from '../assets/imagens/unidades/Unidade-sul.webp'
-import { Link } from "react-router-dom"
 import '../scss/home.scss'
+import sobre2 from '../assets/imagens/sobre2.webp'
 import { useNavigate } from "react-router-dom"
 
 
@@ -101,20 +101,23 @@ export default function Home(){
                     
                     </div>
                     <div className="sobre">
-                        <h2>Sobre</h2> 
-                        <div className="conteudo-sobre" >
+                        <h2>Sobre</h2><hr />
+                        <div className="conteudo-sobre">
                             <section className="sobre-esq">
                                 <section className="sub-titulo" > 
                                     <img src={Pata} alt="icone-pata" />
-                                    <h2>Nosso projeto</h2><hr />
+                                    <h2>Nosso projeto</h2>
                                 </section>
                                 <section>
-                                    <p> Este projeto foi desenvolvido como parte do nosso Trabalho de Conclusão de Curso (TCC) e tem como objetivo facilitar o acesso a informações sobre atendimento veterinário público.</p><br />
+                                    <p> Este projeto foi desenvolvido como parte do nosso Trabalho de Conclusão de Curso (TCC) e tem como objetivo facilitar o acesso a informações sobre atendimento veterinário público.</p>
+                                    
+                                    <br />
+                                    
                                     <p>A plataforma permite que os usuários encontrem locais onde existem veterinários públicos, consultem informações sobre as unidades e encontrem um local adequado para levar seu pet para atendimento.</p>
                                 </section>
                             </section>
                             <section>
-                                <img  className="img-sobre" src="" alt="imagem veterianria cuidando de um cachorro" />
+                                <img  className="img-sobre" src={sobre2} alt="imagem veterianria cuidando de um cachorro" />
                             </section>
                         </div>
 
