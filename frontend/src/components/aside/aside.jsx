@@ -15,13 +15,13 @@ export default function Aside() {
             <div className="linha"></div>
             <ul>
                 <li>
-                    <Link className="nav" to='#'> <img className=""/>Meus Pets</Link>
+                    <Link className="nav" to='/meuspets'> <img className=""/>Meus Pets</Link>
                 </li>
                 <li>
                     <Link className="nav"  to='#'> <img className=""/>Agendamentos</Link>
                 </li>
                 <li>
-                     <Link className="nav"  to='#'> <img className=""/>Início</Link>
+                     <Link className="nav"  to='/'> <img className=""/>Início</Link>
                 </li>
                 <li>
                      <Link className="nav"  to='#'> <img className=""/>Sair</Link>
