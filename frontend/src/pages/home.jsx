@@ -37,7 +37,7 @@ export default function Home(){
         },    
     ]
 
-    const unidades =[
+    const unidades = [
         {
             id: 1,
             img: Leste1,
@@ -163,7 +163,7 @@ export default function Home(){
                         )}
                     </div>
                     
-                    
+                    <div className="footer"></div>
                 </div>
 
             </div>
