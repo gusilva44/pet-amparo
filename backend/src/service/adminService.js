@@ -2,6 +2,7 @@ import { banco } from "../repos/clientesRepo.js"
 import { validarDataNascimento } from "../utils/date.js"
 import { validarId } from "../validation/idCliente.js"
 import * as authService from './authService.js'
+import { regex } from "../utils/regex.js"
 
 const db = new banco()
 
@@ -32,7 +33,7 @@ export async function atualizarCliente(cliente, id) {
     if(!cliente) 
         throw new Error("Os dados para atualização são obrigatórios.")
     
-    if(/\d/.test(cliente.nome)) 
+    if(regex.verificarNome.test(cliente.nome)) 
         throw new Error("Não pode haver números no nome.")
     
     validarDataNascimento(cliente.data_nascimento)
@@ -43,7 +44,7 @@ export async function atualizarCliente(cliente, id) {
     if(cliente.telefone.length > 14) 
         throw new Error("O telefone está maior do que o normal.")
 
-    const cpfLimpo = cliente.cpf.replace(/\D/g, "");
+    const cpfLimpo = cliente.cpf.replace(regex.limparCpf, "");
 
     if(cpfLimpo.length > 11) 
         throw new Error("CPF grande demais.")
@@ -51,7 +52,7 @@ export async function atualizarCliente(cliente, id) {
     if(cpfLimpo.length !== 11) 
         throw new Error("O CPF deve ter 11 números.")
 
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailValido = regex.verificarEmail
 
     if(!emailValido.test(cliente.email)) 
         throw new Error("Digite o email corretamente.")

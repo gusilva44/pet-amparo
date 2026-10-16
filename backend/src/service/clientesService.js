@@ -1,8 +1,8 @@
-import Usuario, { banco } from '../repos/clientesRepo.js'
+import Usuario from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
-import { validarId, autenticacaoUsuario } from '../validation/idCliente.js'
+import { regex } from '../utils/regex.js';
+import { autenticacaoUsuario } from '../validation/idCliente.js'
 
-const db = new banco()
 const dbUser = new Usuario()
 
 // BUSCAR MEUS DADOS
@@ -25,7 +25,7 @@ export function atualizarClientePorUsuario(cliente, idUsuario){
         throw new Error('Todos os campos do cliente são obrigatórios.')
     }
 
-    if (/\d/.test(cliente.nome)) throw new Error('O nome não pode conter números.')
+    if (regex.verificarNome.test(cliente.nome)) throw new Error('O nome não pode conter números.')
     validarDataNascimento(cliente.data_nascimento)
 
     return dbUser.atualizarClientePorUsuario(cliente, idUsuario)

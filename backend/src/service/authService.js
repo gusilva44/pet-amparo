@@ -4,6 +4,7 @@ import * as db from '../repos/authRepo.js'
 
 import { validarDataNascimento } from '../utils/date.js'
 import { gerarToken } from '../utils/jwt.js'
+import { regex } from '../utils/regex.js';
 
 export async function cadastrarCliente(dados) {
     if (!dados) throw new Error('Os dados do cadastro são obrigatórios.')
@@ -13,12 +14,12 @@ export async function cadastrarCliente(dados) {
     if ( !nome || !email || !senha || !data_nascimento || !telefone || !cpf || !endereco )
         throw new Error('Todos os campos são obrigatórios.')
 
-    const cpfNormalizado = cpf.replace(/\D/g, '')
-    const telefoneNormalizado = telefone.replace(/\D/g, '')
+    const cpfNormalizado = cpf.replace(regex.limparCpf, '')
+    const telefoneNormalizado = telefone.replace(regex.limparCpf, '')
     const emailNormalizado = email.trim().toLowerCase()
-    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailValido = regex.verificarEmail
 
-    if (/\d/.test(nome)) throw new Error('O nome não pode conter números.')
+    if (regex.verificarNome.test(nome)) throw new Error('O nome não pode conter números.')
 
     if (!emailValido.test(emailNormalizado)) throw new Error('Digite um email válido.')
     if (senha.length < 6) throw new Error('A senha deve possuir pelo menos 6 caracteres.')  
