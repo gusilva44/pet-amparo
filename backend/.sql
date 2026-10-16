@@ -227,6 +227,12 @@ CREATE TABLE agendamentos (
         CHECK (inicio < fim)
 );
 
+CREATE INDEX idx_agendamentos_veterinario_periodo
+    ON agendamentos (id_veterinario, inicio, fim);
+
+CREATE INDEX idx_agendamentos_cliente_inicio
+    ON agendamentos (id_cliente, inicio);
+
 
 -- =========================================================
 -- 8. MEDICAMENTOS

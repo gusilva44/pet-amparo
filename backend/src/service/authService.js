@@ -10,13 +10,13 @@ export async function cadastrarCliente(dados) {
     
     const { nome, email, senha, data_nascimento, telefone, cpf, endereco } = dados
 
+    if ( !nome || !email || !senha || !data_nascimento || !telefone || !cpf || !endereco )
+        throw new Error('Todos os campos são obrigatórios.')
+
     const cpfNormalizado = cpf.replace(/\D/g, '')
     const telefoneNormalizado = telefone.replace(/\D/g, '')
     const emailNormalizado = email.trim().toLowerCase()
     const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-    if ( !nome || !email || !senha || !data_nascimento || !telefone || !cpf || !endereco ) 
-        throw new Error('Todos os campos são obrigatórios.')
 
     if (/\d/.test(nome)) throw new Error('O nome não pode conter números.')
 

@@ -3,7 +3,10 @@ import { db } from "./connection.js";
 export class banco {
     async buscarTodosClientes() {
         const [resultado] = await db.query(`
-            SELECT * FROM clientes 
+            SELECT c.*, u.email, u.ativo
+            FROM clientes c
+            INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
+            ORDER BY c.nome
         `, [])
 
         return resultado
@@ -11,30 +14,32 @@ export class banco {
 
     async buscarClientePorFiltros({ nome, id, cpf }) {
         let query = `
-            SELECT * FROM clientes
+            SELECT c.*, u.email, u.ativo
+            FROM clientes c
+            INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
             WHERE 1 = 1
         `
 
         let valores = []
 
         if(nome){
-            query += `AND nome LIKE ?`
+            query += ` AND c.nome LIKE ?`
             valores.push(`%${nome}%`)
         }
 
         if(id){
-            query += `AND id_cliente = ?`
+            query += ` AND c.id_cliente = ?`
             valores.push(id)
         }
 
         if(cpf){
-            query += `AND cpf = ?`
+            query += ` AND c.cpf = ?`
             valores.push(cpf)
         }
 
         const [resultado] = await db.query(query, valores)
 
-        return resultado[0]
+        return resultado
     }
 
     async buscarClientePorNome(nome) {
@@ -49,10 +54,10 @@ export class banco {
     async adicionarCliente(cliente) {
         const [resultado] = await db.query(`
             INSERT INTO clientes(nome, data_nascimento, telefone, cpf, endereco)
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?)
         `, [
             cliente.nome,
-            cliente.data_nasc,
+            cliente.data_nascimento,
             cliente.telefone,
             cliente.cpf,
             cliente.endereco
@@ -63,21 +68,22 @@ export class banco {
 
     async atualizarCliente(cliente, id) {
         const [resultado] = await db.query(`
-            UPDATE clientes 
+            UPDATE clientes c
+            INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
             SET nome = ?, 
-                data_nasc = ?, 
+                data_nascimento = ?,
                 telefone = ?, 
                 cpf = ?, 
-                email = ?, 
-                endereco = ?
-            WHERE id_cliente = ?
+                endereco = ?,
+                u.email = ?
+            WHERE c.id_cliente = ?
         `, [
             cliente.nome,
-            cliente.data_nasc,
+            cliente.data_nascimento,
             cliente.telefone,
             cliente.cpf,
-            cliente.email,
             cliente.endereco,
+            cliente.email,
             id
         ])
 
@@ -90,14 +96,10 @@ export class banco {
             WHERE id_cliente = ?
         `, [id])
 
-        await db.query(`
-            DELETE FROM animais
-            WHERE id_cliente =? 
-        `, [id])
-
         const [resultado] = await db.query(`
-            DELETE FROM clientes
-            WHERE id_cliente = ?
+            DELETE u FROM usuarios u
+            INNER JOIN clientes c ON c.id_usuario = u.id_usuario
+            WHERE c.id_cliente = ?
         `, [id])
 
         return resultado.affectedRows
@@ -123,7 +125,7 @@ export class banco {
 
     async Email({ email }) {
         const [res] = await db.query(`
-            SELECT * FROM clientes
+            SELECT * FROM usuarios
             WHERE email = ?
         `, [email])
 
@@ -176,5 +178,21 @@ export default class Usuario {
         ])
 
         return resultado
+    }
+
+    async deletarClientePorUsuario(idUsuario) {
+        await db.query(`
+            DELETE a FROM agendamentos a
+            INNER JOIN clientes c ON c.id_cliente = a.id_cliente
+            WHERE c.id_usuario = ?
+        `, [idUsuario])
+
+        const [resultado] = await db.query(`
+            DELETE u FROM usuarios u
+            INNER JOIN clientes c ON c.id_usuario = u.id_usuario
+            WHERE u.id_usuario = ?
+        `, [idUsuario])
+
+        return resultado.affectedRows
     }
 }

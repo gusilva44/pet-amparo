@@ -5,8 +5,6 @@ export function validarId(id) {
 
 export function autenticacaoUsuario(id){
     if (!id) {
-        return res.status(404).json({
-            mensagem: 'Cliente não encontrado.'
-        })
+        throw new Error('Usuário não autenticado.')
     }
 }

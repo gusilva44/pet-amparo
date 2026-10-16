@@ -1,4 +1,4 @@
-import * as service from '../service/adminService.js'
+import * as service from '../service/clientesService.js'
 import { Router } from 'express'
 import { logError, formatarError } from '../utils/error.js'
 import { autenticar } from '../middleware/authMiddlware.js'
@@ -27,7 +27,7 @@ endpoints.get('/clientes/me', autenticar, exigirCliente, async (req, res) => {
 )
 
 // ATUALIZAR MEUS DADOS
-endpoints.put('/clientes/me', autenticar, async (req, res) => {
+endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario
         const cliente = req.body
@@ -60,7 +60,7 @@ endpoints.put('/clientes/me', autenticar, async (req, res) => {
 })
 
 // DELETAR MEUS DADOS
-endpoints.delete('/clientes/me', autenticar, async (req, res) => {
+endpoints.delete('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario
 
