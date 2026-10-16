@@ -1,12 +1,12 @@
 import { Router } from 'express'
 import * as service from '../service/authService.js'
 import { autenticar } from '../middleware/authMiddlware.js'
-import { gerarToken, opcoesCookie } from '../utils/jwt.js'
+import { opcoesCookie } from '../utils/jwt.js'
 import { logError, formatarError } from '../utils/error.js'
 
 const endpoints = Router()
 
-// CADASTRO
+// CRIAR NOVO CADASTRO DE USUÁRIO
 endpoints.post('/auth/cadastro', async (req, res) => {
     try {
         const resultado = await service.cadastrarCliente(req.body)
@@ -25,7 +25,7 @@ endpoints.post('/auth/cadastro', async (req, res) => {
 })
 
 
-// LOGIN
+// REALIZAR CADASTRO DO USUÁRIO
 endpoints.post('/auth/login', async (req, res) => {
     try {
         const { email, senha } = req.body
@@ -46,7 +46,7 @@ endpoints.post('/auth/login', async (req, res) => {
 })
 
 
-// LOGOUT
+// REALIZAR LOGOUT DO USUÁRIO
 endpoints.post('/auth/logout', (req, res) => {
     res.clearCookie('token', opcoesCookie())
 

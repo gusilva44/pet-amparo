@@ -25,7 +25,11 @@ export async function criarVeterinario(dados) {
     })
 }
 
-export async function listarHorarios(idVeterinario) { validarId(idVeterinario); return veterinariosRepo.listarHorarios(idVeterinario) }
+export async function listarHorarios(idVeterinario) { 
+    validarId(idVeterinario)
+
+    return veterinariosRepo.listarHorarios(idVeterinario)
+}
 
 export async function criarHorario(idVeterinario, dados) {
     validarId(idVeterinario)

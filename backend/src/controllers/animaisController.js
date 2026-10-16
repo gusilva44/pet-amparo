@@ -46,8 +46,7 @@ endpoints.post('/animais', autenticar, exigirCliente, async (req, res) => {
         const resultado = await service.adicionarAnimal(req.body, idCliente)
 
         res.status(201).json({
-            mensagem:
-                'Animal cadastrado com sucesso.',
+            mensagem: 'Animal cadastrado com sucesso.',
             id_animal: resultado
         })
 

@@ -1,5 +1,5 @@
-import * as repo from '../repos/medicamentosRepo.js'
-import * as animaisRepo from '../repos/animaisRepo.js'
+import * as medicamentosDb from '../repos/medicamentosRepo.js'
+import * as animaismedicamentosDb from '../repos/animaisRepo.js'
 
 function validarId(id) {
     if (!Number.isInteger(id) || id <= 0) throw new Error('O ID deve ser um número inteiro e positivo.')
@@ -11,18 +11,19 @@ function normalizarMedicamento(dados) {
     return { nome: dados.nome.trim(), descricao: dados.descricao?.trim() || null, ativo: dados.ativo ?? true }
 }
 
-export function listarMedicamentos(incluirInativos = false) { return repo.listarMedicamentos(incluirInativos) }
-export function criarMedicamento(dados) { return repo.criarMedicamento(normalizarMedicamento(dados)) }
+export function listarMedicamentos(incluirInativos = false) { 
+    return medicamentosDb.listarMedicamentos(incluirInativos)}
+export function criarMedicamento(dados) { return medicamentosDb.criarMedicamento(normalizarMedicamento(dados)) }
 
 export async function atualizarMedicamento(id, dados) {
     validarId(id)
-    if (!await repo.atualizarMedicamento(id, normalizarMedicamento(dados))) throw new Error('Medicamento não encontrado.')
+    if (!await medicamentosDb.atualizarMedicamento(id, normalizarMedicamento(dados))) throw new Error('Medicamento não encontrado.')
 }
 
 export async function listarCarteira(idAnimal, idCliente) {
     validarId(idAnimal); validarId(idCliente)
-    if (!await animaisRepo.buscarAnimalPorId(idAnimal, idCliente)) throw new Error('Animal não encontrado.')
-    return repo.listarCarteira(idAnimal, idCliente)
+    if (!await animaismedicamentosDb.buscarAnimalPorId(idAnimal, idCliente)) throw new Error('Animal não encontrado.')
+    return medicamentosDb.listarCarteira(idAnimal, idCliente)
 }
 
 export async function adicionarNaCarteira(idAnimal, dados) {
@@ -34,9 +35,9 @@ export async function adicionarNaCarteira(idAnimal, dados) {
     if (idVeterinario !== null) validarId(idVeterinario)
     if (!dados.dosagem?.trim() || !dados.frequencia?.trim() || !dados.data_inicio) throw new Error('Dosagem, frequência e data de início são obrigatórias.')
     if (dados.data_fim && dados.data_fim < dados.data_inicio) throw new Error('A data final não pode ser anterior à data inicial.')
-    const medicamento = await repo.buscarMedicamento(idMedicamento)
+    const medicamento = await medicamentosDb.buscarMedicamento(idMedicamento)
     if (!medicamento || !medicamento.ativo) throw new Error('Medicamento não encontrado ou inativo.')
-    return repo.adicionarNaCarteira({
+    return medicamentosDb.adicionarNaCarteira({
         id_animal: idAnimal, id_veterinario: idVeterinario, id_medicamento: idMedicamento,
         dosagem: dados.dosagem.trim(), frequencia: dados.frequencia.trim(),
         data_inicio: dados.data_inicio, data_fim: dados.data_fim || null, observacao: dados.observacao?.trim() || null

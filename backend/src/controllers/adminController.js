@@ -52,14 +52,11 @@ endpoints.post('/clientes', autenticar, verificarAdmin, async (req, res) => {
 // BUSCAR TODOS OS CLIENTES
 endpoints.get('/clientes', autenticar, verificarAdmin, async (req, res) => {
     try {
-        const resultado =
-            await service.buscarTodosClientes()
+        const resultado = await service.buscarTodosClientes()
 
         res.status(200).json(resultado)
-
     } catch (error) {
         logError(error)
-
         res.status(400).json(
             formatarError(error)
         )
@@ -92,16 +89,14 @@ endpoints.delete('/clientes/:id', autenticar, verificarAdmin, async (req, res) =
         })
 
     } catch (error) {
-
         logError(error)
-
         res.status(400).json(
             formatarError(error)
         )
     }
 })
 
-// ATUALIZAR
+// ATUALIZAR CLIENTE 
 endpoints.put('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id)
