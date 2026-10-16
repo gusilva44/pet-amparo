@@ -1,40 +1,18 @@
 import { banco } from "../repos/clientesRepo.js"
 import { validarDataNascimento } from "../utils/date.js"
 import { validarId } from "../validation/idCliente.js"
+import * as authService from './authService.js'
 
 const db = new banco()
 
 // BUSCAR POR FILTROS
-export async function buscarClientePorFiltros(tipo, filtros) { 
-    if(tipo !== 'admin') throw new Error( 'Acesso permitido somente para administradores.')
-
+export async function buscarClientePorFiltros(filtros) {
     return db.buscarClientePorFiltros(filtros)
 }
 
 // CADASTRAR
 export async function cadastrarCliente(cliente){
-    if(!cliente) 
-        throw new Error("Erro ao enviar os dados.")
-
-    const [ 
-        verificarEmail, 
-        verificarCpf, 
-        verificarTelefone
-    ] = await Promise.all([
-        db.Email(cliente),
-        db.Cpf(cliente),
-        db.Telefone(cliente)
-    ])
-
-    if(verificarCpf > 0){
-        throw new Error("Cliente já cadastrado com esse CPF.")
-    } else if (verificarEmail > 0) {
-        throw new Error('Cliente já cadastrado com esse email.')
-    } else if (verificarTelefone > 0) {
-        throw new Error("Cliente já cadastrado com esse telefone.")
-    }
-
-    return db.adicionarCliente(cliente)
+    return authService.cadastrarCliente(cliente)
 }
 
 // BUSCAR TODOS
@@ -57,7 +35,7 @@ export async function atualizarCliente(cliente, id) {
     if(/\d/.test(cliente.nome)) 
         throw new Error("Não pode haver números no nome.")
     
-    validarDataNascimento(cliente.data_nasc)
+    validarDataNascimento(cliente.data_nascimento)
 
     if(!cliente.telefone) 
         throw new Error("O telefone dever ser preenchido.")

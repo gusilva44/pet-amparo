@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: pet_amparo
+      MYSQL_USER: pet_amparo
+      MYSQL_PASSWORD: pet_amparo_dev
+      MYSQL_ROOT_PASSWORD: root_dev_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_dev_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      PORT: 3001
+      DB_HOST: db
+      DB_USER: pet_amparo
+      DB_PASSWORD: pet_amparo_dev
+      DB_DATABASE: pet_amparo
+      JWT_SECRET: altere_esta_chave_no_ambiente_real
+      JWT_EXPIRES_IN: 1h
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
