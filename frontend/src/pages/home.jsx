@@ -11,7 +11,7 @@ import Norte from '../assets/imagens/unidades/Unidade-norte.webp'
 import Oeste from '../assets/imagens/unidades/Unidade-oeste.webp'
 import Sul from '../assets/imagens/unidades/Unidade-sul.webp'
 import '../scss/home.scss'
-import sobre2 from '../assets/imagens/sobre2.webp'
+import sobre2 from '../assets/imagens/image0.png'
 import { useNavigate } from "react-router-dom"
 
 
@@ -101,14 +101,14 @@ export default function Home(){
                     
                     </div>
                     <div className="sobre">
-                        <h2>Sobre</h2><hr />
+                        <h2>Sobre</h2>
                         <div className="conteudo-sobre">
                             <section className="sobre-esq">
-                                <section className="sub-titulo" > 
-                                    <img src={Pata} alt="icone-pata" />
-                                    <h2>Nosso projeto</h2>
-                                </section>
-                                <section>
+                                <section className="texto-sobre">
+                                    <section className="sub-titulo" > 
+                                        <img src={Pata} alt="icone-pata" />
+                                        <h2>Nosso projeto</h2>
+                                    </section>
                                     <p> Este projeto foi desenvolvido como parte do nosso Trabalho de Conclusão de Curso (TCC) e tem como objetivo facilitar o acesso a informações sobre atendimento veterinário público.</p>
                                     
                                     <br />
@@ -116,10 +116,10 @@ export default function Home(){
                                     <p>A plataforma permite que os usuários encontrem locais onde existem veterinários públicos, consultem informações sobre as unidades e encontrem um local adequado para levar seu pet para atendimento.</p>
                                 </section>
                             </section>
-                            <section>
+                            <section className="sobre-img">
                                 <img  className="img-sobre" src={sobre2} alt="imagem veterianria cuidando de um cachorro" />
                             </section>
-                        </div>
+                    </div>
 
                        
                     </div>
@@ -159,15 +159,17 @@ export default function Home(){
                         <div className="card" key={key}>
                             <div className="imagem">
                                 <img src={uni.img} alt="imagem-unidade" />
+
+                                <div className="information">
+                                    <h2>{uni.nome}</h2>
+                                    <p>{uni.localizacao}</p>
+                                    <button>Agende sua consulta</button>
+                                </div>
                             </div>
-                            <div className="information">
-                                <h2>{uni.nome}</h2>
-                                <p>{uni.localizacao}</p>
-                                <button>Agende sua consulta</button>
-                            </div>
+                            
                             <div className="seta">
                                 <button onClick={() => irParaUnidades(uni.id)}>
-                                    Ir para unidade
+                                    <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
                         </div>
