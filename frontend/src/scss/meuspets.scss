@@ -5,5 +5,129 @@
     width: 100%;
     min-height: 100vh;
 
+    .main-pets{
+        width: 100%;
+        .logo{
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            img{
+                width: 15rem;
+            }
+        }
+
+        .meuspets{
+            margin-top: 30px;
+            margin-left: 100px;
+            .ini{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 90%;
+                height: 200px;
+
+                .botao{
+                    display: flex;
+                    justify-content: start;
+                    height: 100px;
+                    margin-right: 30px;
+
+                    button{
+                    border: none;
+                    background-color: var(--verde-escuro);
+                    color: var(--branco);
+                    font-size: 15px;
+                    font-family: var(--textos);
+                    border-radius: 5px;
+                    width: 200px;
+                    height: 40px;
+                }
+                }
+
+                 h2{
+                    font-family: var(--titulo);
+                    color: var(--verde-escuro);
+                    font-size: 30px;
+                }
+                p{
+                    color: var(--verde-escuro);
+                    font-family: var(--textos);
+                    font-size: 15px;
+                }  
+
+                
+            }
+        }
+
+        .meuPerfil{
+            display: flex;
+            flex-direction: column;
+            margin-left: 100px;
+            margin-top: 10px;
+            h2{
+                font-family: var(--titulo);
+                color: var(--verde-escuro);
+                font-size: 30px;
+            }
+            .banner{
+                width: 90%;
+                height: 200px;
+                background-color: var(--verde-claro);
+                border-radius: 15px;
+                display: flex;  
+                justify-content: space-between;
+                align-items: center;
+                
+
+                .sta{
+                    display: flex;
+                    align-items: center;
+                    gap: 60px;
+                    margin-left: 40px;
+                    img{
+                        width: 100px;
+                    }
+                    .infos-pessoais{
+                        h3{
+                            color: var(--laranja);
+                            font-family: var(--titulo);
+                            font-size: 25px;
+                        }
+                        p{
+                            color: var(--branco);
+                            font-family: var(--textos);
+                            font-size: 15px;
+                        }  
+                        
+                }
+
+               
+                }
+                
+                .editar{
+                    display: flex;
+                    justify-content: start;
+                    height: 150px;
+                    margin-right: 30px;
+                    
+                    button{
+                        border: none;
+                        background-color: var(--verde-escuro);
+                        color: var(--branco);
+                        font-size: 15px;
+                        font-family: var(--textos);
+                        border-radius: 5px;
+                        width: 150px;
+                        height: 30px;
+                    }
+                }
+            }
+           
+        }
+       
+    }
    
 }
