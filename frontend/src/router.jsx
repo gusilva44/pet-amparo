@@ -9,7 +9,7 @@ export default function Navigation() {
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/unidades' element={<Unidades />} />
+                <Route path='/unidades/:id' element={<Unidades />} />
                 <Route path='/meuspets' element={<Pets />}/>
                 <Route path='/teste' element={<Teste />}/>
             </Routes>
