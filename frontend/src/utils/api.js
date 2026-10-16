@@ -3,7 +3,7 @@
 // A URL pode ser sobrescrita em `.env` com REACT_APP_API_URL.
 // O backend local roda na porta 3001; o frontend roda na porta 3000.
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3001',
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json'
     },

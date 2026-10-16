@@ -1,3 +1,4 @@
+-- Active: 1790850489930@@127.0.0.1@3306
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
@@ -506,8 +507,8 @@ INSERT INTO unidades (
 (
     1,
     'Unidade Leste I — Tatuapé',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades. Funcionamento 24 horas todos os dias; das 17h às 7h, atendimento exclusivo para urgências e emergências.',
-    NULL,
+    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades.',
+    'a',
     'Avenida Salim Farah Maluf',
     NULL,
     'Esquina com a Rua Ulisses Cruz, lado par',
@@ -525,7 +526,7 @@ INSERT INTO unidades (
 (
     2,
     'Unidade Leste II — Cão Caramelo',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades, incluindo cardiologia, neurologia, ortopedia e dermatologia. Atende urgências e emergências durante o funcionamento. Segunda a sexta-feira, das 7h às 17h, exceto feriados.',
+    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades, incluindo cardiologia, neurologia',
     NULL,
     'Avenida Nordestina',
     '225',
@@ -544,7 +545,7 @@ INSERT INTO unidades (
 (
     3,
     'Unidade Sul — Jurubatuba',
-    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias. Atende urgências e emergências; aos sábados, domingos e feriados, o atendimento é exclusivo para esses casos. Todos os dias, das 7h às 17h.',
+    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
     NULL,
     'Rua Agostino Togneri',
     '153',
@@ -563,7 +564,7 @@ INSERT INTO unidades (
 (
     4,
     'Unidade Norte — Casa Verde',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades, como oftalmologia, cardiologia, oncologia e ortopedia. Recebe urgências e emergências durante o funcionamento. Segunda a sexta-feira, das 7h às 17h, exceto feriados.',
+    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades',
     NULL,
     'Rua Atílio Piffer',
     '687',
@@ -582,7 +583,7 @@ INSERT INTO unidades (
 (
     5,
     'Unidade Oeste — Butantã',
-    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades. Atende urgências e emergências durante o funcionamento. Para casos não emergenciais, o atendimento é por ordem de chegada, após triagem social. Segunda a sexta-feira, das 7h às 17h, exceto feriados.',
+    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades. Atende urgências e emergências durante o funcionamento.',
     NULL,
     'Avenida Professor Orlando Marques de Paiva',
     '87',
