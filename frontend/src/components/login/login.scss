@@ -1,0 +1,28 @@
+.comps-login{
+     .main-pets {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+
+        .banner {
+            width: 600px;
+            height: 600px;
+            background-color: var(--verde-escuro);
+            border-radius: 10px;
+
+            h2 {
+                margin-left: 150px;
+                color: var(--laranja);
+                font-family: var(--titulo);
+            }
+
+            p {
+                margin-left: 220px;
+                color: var(--branco);
+                font-family: var(--textos);
+            }
+        }
+    }
+}
