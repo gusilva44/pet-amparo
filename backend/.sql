@@ -33,7 +33,6 @@ CREATE TABLE usuarios (
         ON UPDATE CURRENT_TIMESTAMP
 );
 
-
 -- =========================================================
 -- 2. CLIENTES
 -- Dados pessoais dos usuários que utilizam o sistema
@@ -316,32 +315,3 @@ VALUES
 	'Receber medicamentos intravenosos',
 	45
 );
-
-INSERT INTO veterinarios
-(
-    id_usuario,
-    nome,
-    crmv,
-    especialidade,
-    unidade,
-    telefone
-)
-VALUES
-(
-    2,
-    'Mariana Oliveira',
-    'CRMV-SP-12345',
-    'Clínica Geral',
-    'Unidade Centro',
-    '11999990001'
-),
-(
-    3,
-    'Carlos Mendes',
-    'CRMV-SP-54321',
-    'Cirurgia Veterinária',
-    'Unidade Norte',
-    '11999990002'
-);
-
-SELECT * from usuarios;
