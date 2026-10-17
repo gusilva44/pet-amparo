@@ -1,25 +1,171 @@
-.comps-cadastro{
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        flex: 1;
-        min-width: 0;
+.comps-cadastro {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
 
-        .banner {
-            background-color: var(--verde-escuro);
-            border-radius: 10px;
+    .container-cadastro {
+        background-color: var(--verde-claro);
+        width: 500px;
+        min-height: 740px;
+        padding: 20px;
+        gap: 4px;
+        border-radius: 10px;
 
+        .cabecalho-formulario {
+            text-align: center;
+            
             h2 {
-                margin-left: 150px;
                 color: var(--laranja);
+                margin-bottom: 15px;
                 font-family: var(--titulo);
+                font-weight: 500;
+                font-size:30px;
+
             }
 
             p {
-                margin-left: 220px;
                 color: var(--branco);
                 font-family: var(--textos);
+                font-size: 14px;
             }
         }
-    
+
+        .campos-formulario {
+            width: 100%;
+
+            p {
+                color: var(--laranja);
+                font-family: var(--titulo);
+            }
+        }
+
+        input[type="text"] {
+            width: 100%;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            padding: 0 10px;
+            background-color: var(--branco);
+            box-sizing: border-box;
+        }
+
+        select {
+            border-radius: 8px;
+            height: 40px;
+            border: none;
+            background-color: var(--branco);
+            padding: 0 8px;
+            box-sizing: border-box;
+        }
+
+        .campo-nome-pet {
+        }
+
+        .grupo-especie-sexo,
+        .grupo-idade-porte {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+
+            .campo-especie {
+                width: 180px;
+
+                select {
+                    width: 100%;
+                }
+            }
+
+            .campo-sexo {
+                flex: 1;
+                min-width: 0;
+                margin-left: 50px;
+
+
+                button {
+                    width: 120px;
+                    height: 40px;
+                    border-radius: 8px;
+                    border: none;
+                    background-color: var(--branco);
+                    color: #222;
+                }
+
+                .botao-femea {
+                    margin-right: 9px;
+                }
+
+                .botao-femea:hover, .botao-macho:hover{
+                    background-color: rgb(216, 213, 213);
+                }
+            }
+
+            .campo-idade {
+                width: 200px;
+
+                select {
+                    width: 100%;
+                }
+            }
+
+            .campo-porte {
+                width: 200px;
+
+                select {
+                    width: 100%;
+                }
+            }
+        }
+
+        .campo-raca {
+
+            input {
+                width: 100%;
+            }
+        }
+
+        .campo-foto-pet {
+            margin-top: 22px;
+            margin-bottom: 22px;
+
+            .area-upload-foto {
+                width: 100%;
+                height: 115px;
+                border: 1px solid #263d30;
+                border-radius: 8px;
+                background-color: #3d5847;
+                color: var(--branco);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 15px;
+                box-sizing: border-box;
+
+                span{
+                    font-family: var(--textos);
+                    font-size: 14px;
+                }
+            }
+
+             p{
+                margin-bottom: 0px;
+            }
+
+        }
+
+        .botao-salvar {
+            display: block;
+            width: 65%;
+            height: 40px;
+            margin: 0 auto;
+            border: none;
+            border-radius: 15px;
+            background-color: var(--laranja);
+            color: var(--branco);
+            font-family: var(--titulo);
+            font-size:20px;
+        }
+    }
 }
+
