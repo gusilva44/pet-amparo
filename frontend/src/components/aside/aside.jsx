@@ -25,8 +25,8 @@ export default function Aside() {
                     <Link className="nav" to='/meuspets'> <img className=""/>Meus Pets</Link>
                 </li>
                 <li>
-                    <Link to='#'><i class="fa-regular fa-calendar" ></i></Link> 
-                    <Link className="nav"  to='#'> <img className=""/>Agendamentos</Link>
+                    <Link to='/agendamentos'><i class="fa-regular fa-calendar" ></i></Link> 
+                    <Link className="nav"  to='/agendamentos'> <img className=""/>Agendamentos</Link>
                 </li>
                 <li>
                     <i class="fa-solid fa-right-from-bracket" ></i>

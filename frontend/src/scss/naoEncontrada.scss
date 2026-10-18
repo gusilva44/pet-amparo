@@ -1,0 +1,28 @@
+.naoEncontrada{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    h1{
+        font-family: var(--titulo);
+        color: var(--laranja);
+       
+        font-size: 40px;
+    }
+    img{
+       width: 50%;
+
+    }
+    button{
+        border: none;
+        background-color: var(--laranja);
+        border-radius: 20px;
+        width: 300px;
+        height: 70px;
+       .link{
+        color: var(--branco);
+        text-decoration: none;
+        font-size: 25px;
+       }
+    }
+}
+
