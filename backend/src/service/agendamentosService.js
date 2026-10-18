@@ -36,16 +36,14 @@ function dentroDoHorario(inicio, fim, horario) {
     return inicio >= inicioHorario && fim <= fimHorario
 }
 
-async function validarVeterinarioEHorario(idVeterinario, unidade, inicio, fim) {
-    const veterinario = await repo.buscarVeterinario(idVeterinario)
+async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim) {
+    const veterinario = await repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade)
 
     if (!veterinario || !veterinario.ativo || !veterinario.usuario_ativo) throw new Error('Veterinário não encontrado ou inativo.')
 
-    if (veterinario.unidade !== unidade) throw new Error('O veterinário não atende nesta unidade.')
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio))
 
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, numeroDiaSemana(inicio))
-
-    if (!horarios.some(horario => horario.unidade === unidade && dentroDoHorario(inicio, fim, horario))) {
+    if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) {
         throw new Error('O horário escolhido está fora do expediente do veterinário.')
     }
 }
@@ -56,6 +54,31 @@ export function listarMeusAgendamentos(idCliente) {
     return repo.listarAgendamentosCliente(idCliente)
 }
 
+export function listarAgendamentosDoVeterinario(idVeterinario) {
+    validarId(idVeterinario)
+    return repo.listarAgendamentosVeterinario(idVeterinario)
+}
+
+export async function atualizarStatusPeloVeterinario(idAgendamento, idVeterinario, statusSolicitado) {
+    validarId(idAgendamento)
+    validarId(idVeterinario)
+
+    const status = statusSolicitado === 'pendente'
+        ? 'agendado'
+        : statusSolicitado === 'concluido'
+            ? 'concluido'
+            : null
+
+    if (!status) throw new Error('O status deve ser pendente ou concluido.')
+
+    const agendamento = await repo.buscarAgendamentoDoVeterinario(idAgendamento, idVeterinario)
+    if (!agendamento) throw new Error('Agendamento não encontrado.')
+    if (agendamento.status === 'cancelado') throw new Error('Não é possível alterar um agendamento cancelado.')
+
+    await repo.atualizarStatusDoAgendamento(idAgendamento, idVeterinario, status)
+    return { status, situacao: status === 'concluido' ? 'concluido' : 'pendente' }
+}
+
 export async function criarAgendamento(dados, idCliente) {
     validarId(idCliente)
 
@@ -63,13 +86,13 @@ export async function criarAgendamento(dados, idCliente) {
 
     const idAnimal = Number(dados.id_animal)
     const idVeterinario = Number(dados.id_veterinario)
+    const idUnidade = Number(dados.id_unidade)
     const idServico = Number(dados.id_servico)
 
     validarId(idAnimal)
     validarId(idVeterinario)
+    validarId(idUnidade)
     validarId(idServico)
-
-    if (!dados.unidade?.trim()) throw new Error('A unidade é obrigatória.')
 
     const animal = await animaisRepo.buscarAnimalPorId(idAnimal, idCliente)
 
@@ -78,18 +101,19 @@ export async function criarAgendamento(dados, idCliente) {
     const servico = await servicosRepo.buscarServicoPorId(idServico)
 
     if (!servico || !servico.ativo) throw new Error('Serviço não encontrado ou inativo.')
+    if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) {
+        throw new Error('O serviço não está disponível nesta unidade.')
+    }
 
     const inicio = lerDataHora(dados.inicio)
     const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
-    const unidade = dados.unidade.trim()
-
-    await validarVeterinarioEHorario(idVeterinario, unidade, inicio, fim)
+    await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)
 
     if (await repo.existeConflito(idVeterinario, inicio, fim)) throw new Error('Este horário não está mais disponível.')
 
     return repo.criarAgendamento({
         id_cliente: idCliente, id_animal: idAnimal, id_veterinario: idVeterinario,
-        id_servico: idServico, unidade, inicio, fim,
+        id_unidade: idUnidade, id_servico: idServico, inicio, fim,
         observacao: dados.observacao?.trim() || null
     })
 }

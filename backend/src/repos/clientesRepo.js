@@ -15,8 +15,9 @@ export class banco {
     async buscarClientePorFiltros({ nome, id, cpf }) {
         let query = `
             SELECT c.*, u.email, u.ativo
-            FROM clientes c
-            INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
+            FROM clientes as c
+            INNER JOIN usuarios as u 
+            ON u.id_usuario = c.id_usuario
             WHERE 1 = 1
         `
 
@@ -68,8 +69,8 @@ export class banco {
 
     async atualizarCliente(cliente, id) {
         const [resultado] = await db.query(`
-            UPDATE clientes c
-            INNER JOIN usuarios u ON u.id_usuario = c.id_usuario
+            UPDATE clientes as c
+            INNER JOIN usuarios as u ON u.id_usuario = c.id_usuario
             SET nome = ?, 
                 data_nascimento = ?,
                 telefone = ?, 
@@ -97,8 +98,8 @@ export class banco {
         `, [id])
 
         const [resultado] = await db.query(`
-            DELETE u FROM usuarios u
-            INNER JOIN clientes c ON c.id_usuario = u.id_usuario
+            DELETE u FROM usuarios as u
+            INNER JOIN clientes as c ON c.id_usuario = u.id_usuario
             WHERE c.id_cliente = ?
         `, [id])
 
@@ -156,8 +157,8 @@ export default class Usuario {
         } = cliente
 
         const [resultado] = await db.query(`
-            UPDATE clientes c
-            INNER JOIN usuarios u
+            UPDATE clientes as c
+            INNER JOIN usuarios as u
                 ON u.id_usuario = c.id_usuario
             SET
                 c.nome = ?,
@@ -182,14 +183,14 @@ export default class Usuario {
 
     async deletarClientePorUsuario(idUsuario) {
         await db.query(`
-            DELETE a FROM agendamentos a
-            INNER JOIN clientes c ON c.id_cliente = a.id_cliente
+            DELETE a FROM agendamentos as a
+            INNER JOIN clientes as c ON c.id_cliente = a.id_cliente
             WHERE c.id_usuario = ?
         `, [idUsuario])
 
         const [resultado] = await db.query(`
-            DELETE u FROM usuarios u
-            INNER JOIN clientes c ON c.id_usuario = u.id_usuario
+            DELETE u FROM usuarios as u
+            INNER JOIN clientes as c ON c.id_usuario = u.id_usuario
             WHERE u.id_usuario = ?
         `, [idUsuario])
 

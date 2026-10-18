@@ -31,6 +31,20 @@ export async function buscarUsuarioPorId(idUsuario) {
     return resultado[0]
 }
 
+export async function buscarUsuarioComSenhaPorId(idUsuario) {
+
+    const [resultado] = await db.query(`
+        SELECT
+            id_usuario,
+            senha_hash,
+            ativo
+        FROM usuarios
+        WHERE id_usuario = ?
+    `, [idUsuario])
+
+    return resultado[0]
+}
+
 export async function buscarClientePorCpf(cpf) {
 
     const [resultado] = await db.query(`
@@ -119,4 +133,14 @@ export async function buscarClientePorUsuario(idUsuario) {
     `, [idUsuario])
 
     return resultado[0]
+}
+
+export async function trocarSenha(idUsuario, senha) {
+    const [resultado] = await db.query(`
+        UPDATE usuarios
+        SET senha_hash = ?
+        WHERE id_usuario = ?
+    `, [senha, idUsuario])
+
+    return resultado.affectedRows
 }

@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import * as service from '../service/medicamentosService.js'
 import { autenticar } from '../middleware/authMiddlware.js'
 import { exigirCliente } from '../middleware/exigirCliente.js'
-import verificarAdmin from '../middleware/verificarAdmin.js'
 import { logError, formatarError } from '../utils/error.js'
+import verificarAdmin from '../middleware/verificarAdmin.js'
+
+import * as service from '../service/medicamentosService.js'
 
 const endpoints = Router()
 
@@ -66,6 +67,7 @@ endpoints.get('/animais/:id/medicacoes', autenticar, exigirCliente, async (req, 
         const resultado = await service.listarCarteira(id_medicamento, id_cliente)
 
         res.status(200).json({
+            sucesso: true,
             resultado: resultado
         }) 
     } catch (error) { 
@@ -85,6 +87,7 @@ endpoints.post('/animais/:id/medicacoes', autenticar, verificarAdmin, async (req
         const resultado = await service.adicionarNaCarteira(id_medicamento, dados)
 
         res.status(201).json({ 
+            sucesso: true,
             id_carteira: resultado 
         }) 
     } catch (error) { 

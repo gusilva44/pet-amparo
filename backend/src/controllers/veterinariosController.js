@@ -1,25 +1,69 @@
 import { Router } from 'express'
-import * as service from '../service/veterinariosService.js'
 import { logError, formatarError } from '../utils/error.js'
 import { autenticar } from '../middleware/authMiddlware.js'
+import { exigirVeterinario } from '../middleware/exigirVeterinario.js'
 import verificarAdmin from '../middleware/verificarAdmin.js'
+
+import * as service from '../service/veterinariosService.js'
+import * as agendamentosService from '../service/agendamentosService.js'
 
 const endpoints = Router()
 
 // LISTAR VETERINARIOS POR UNIDADE
 endpoints.get('/veterinarios', async (req, res) => {
     try {
-        const unidade = req.query.unidade
+        const idUnidade = Number(eq.query.id_unidade)
 
-        const veterinarios = await service.listarVeterinarios(unidade)
+        const veterinarios = await service.listarVeterinarios(idUnidade)
 
         res.status(200).json({ 
+            sucesso: true, 
             quantidade: veterinarios.length, 
             veterinarios 
         })
     } catch (error) {
         logError(error)
         res.status(400).json(formatarError(error))
+    }
+})
+
+// AGENDAMENTOS DO VETERINÁRIO LOGADO
+endpoints.get('/veterinarios/me/agendamentos', autenticar, exigirVeterinario, async (req, res) => {
+    try {
+        const id = Number(req.veterinario.id_veterinario)
+
+        const agendamentos = await agendamentosService.listarAgendamentosDoVeterinario(id)
+
+        res.status(200).json({ 
+            sucesso: true,
+            quantidade: agendamentos.length, 
+            agendamentos
+        })
+    } catch (error) {
+        logError(error)
+        res.status(400).json(formatarError(error))
+    }
+})
+
+// ATUALIZAR SITUAÇÃO DE UM AGENDAMENTO PRÓPRIO
+endpoints.patch('/veterinarios/me/agendamentos/:id/status', autenticar, exigirVeterinario, async (req, res) => {
+    try {
+        const id_agendamento = Number(req.params.id)
+        const status = req.body?.status
+        const id_veterinario = Number(req.veterinario.id_veterinario)
+
+        const resultado = await agendamentosService.atualizarStatusPeloVeterinario(id_agendamento, id_veterinario, status)
+
+        res.status(200).json({ 
+            sucesso: true,
+            mensagem: 'Status do agendamento atualizado.', 
+            ...resultado
+        })
+    } catch (error) {
+        const status = error.message.includes('não encontrado.') ? 404 : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
     }
 })
 
@@ -31,6 +75,7 @@ endpoints.post('/veterinarios', autenticar, verificarAdmin, async (req, res) => 
         const resultado = await service.criarVeterinario(dados)
 
         res.status(201).json({ 
+            sucesso: true,
             id_veterinario: resultado 
         }) 
     } catch (error) { 
@@ -46,7 +91,10 @@ endpoints.get('/veterinarios/:id/horarios', async (req, res) => {
 
         const resultado = await service.listarHorarios(id_veterinario)
 
-        res.json(resultado) 
+        res.status(200).json({
+            sucesso: true,
+            resultado
+        }) 
     } catch (error) { 
         logError(error)
         res.status(400).json(formatarError(error)) 
@@ -61,9 +109,12 @@ endpoints.post('/veterinarios/:id/horarios', autenticar, verificarAdmin, async (
 
         const resultado = await service.criarHorario(id_veterinario, dados)
 
-        res.status(201).json({ id_horario: resultado }) 
+        res.status(201).json({ 
+            sucesso: true,
+            id_horario: resultado
+        }) 
     } catch (error) { 
-        const status = error.message === 'Veterinário não encontrado.' ? 404 : 400
+        const status = error.message.includes('não encontrado.') ? 404 : 400
 
         logError(error)
         res.status(status).json(formatarError(error)) 
@@ -79,11 +130,12 @@ endpoints.delete('/veterinarios/:id/horarios/:idHorario', autenticar, verificarA
         const resultado = await service.apagarHorario(id_veterinario, id_horario)
 
         res.status(200).json({ 
+            sucesso: true,
             mensagem: 'Horário excluído com sucesso.',
             resultado
         }) 
     } catch (error) { 
-        const status = error.message === 'Horário não encontrado.' ? 404 : 400
+        const status = error.message.includes('não encontrado.') ? 404 : 400
 
         logError(error)
         res.status(status).json(formatarError(error)) 

@@ -53,21 +53,33 @@ export async function adicionarAnimal(animal, idCliente) {
     validarId(idCliente)
     validarAnimal(animal)
 
-    const rga = animal.rga.trim()
+    let { nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado } = animal
+
+    const rgaValidado = rga.trim()
     const animalExistente = await db.buscarAnimalPorRga(rga)
 
     if (animalExistente) throw new Error('Já existe um animal cadastrado com esse RGA.')
 
+    if(Number(idade) >= 30 ) throw new Error("Um animal não consegue viver mais que 30 anos")
+
+    if(porte != "pequeno" || porte != "medio" || porte != "grande"){
+        porte = "nao_informado"
+    }
+
+    if(sexo != "M" || sexo != "F"){
+        sexo = "desconhecido"
+    }
+
     const dados = {
-        nome: animal.nome.trim(),
-        especie: animal.especie.trim(),
-        raca: animal.raca.trim(),
-        rga,
-        idade: animal.idade,
-        sexo: animal.sexo,
-        porte: animal.porte.trim(),
-        foto: animal.foto || null,
-        e_vacinado: animal.e_vacinado
+        nome: nome.trim(),
+        especie: especie.trim(),
+        raca: raca.trim(),
+        rga: rgaValidado,
+        idade: idade,
+        sexo: sexo,
+        porte: porte.trim(),
+        foto: foto || null,
+        e_vacinado: e_vacinado
     }
 
     return db.adicionarAnimal(
