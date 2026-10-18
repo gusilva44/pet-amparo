@@ -1,13 +1,14 @@
 import * as repo from '../repos/agendamentosRepo.js'
 import * as veterinariosRepo from '../repos/veterinariosRepo.js'
 import * as authRepo from '../repos/authRepo.js'
+import * as unidadesRepo from '../repos/unidadesRepo.js'
 import bcrypt from 'bcryptjs'
 import { regex } from '../utils/regex.js';
 
-export function listarVeterinarios(unidade) {
-    if (unidade !== undefined && (typeof unidade !== 'string' || !unidade.trim())) throw new Error('A unidade informada é inválida.')
+export function listarVeterinarios(idUnidade) {
+    if (idUnidade !== undefined && (!Number.isInteger(Number(idUnidade)) || Number(idUnidade) <= 0)) throw new Error('A unidade informada é inválida.')
 
-    return repo.listarVeterinarios(unidade?.trim())
+    return repo.listarVeterinarios(idUnidade === undefined ? undefined : Number(idUnidade))
 }
 
 function validarId(id) { 
@@ -15,7 +16,11 @@ function validarId(id) {
 }
 
 export async function criarVeterinario(dados) {
-    if (!dados?.nome?.trim() || !dados?.email?.trim() || !dados?.senha || !dados?.crmv?.trim() || !dados?.unidade?.trim()) throw new Error('Nome, email, senha, CRMV e unidade são obrigatórios.')
+    const idUnidade = Number(dados?.id_unidade)
+
+    if (!dados?.nome?.trim() || !dados?.email?.trim() || !dados?.senha || !dados?.crmv?.trim() || !Number.isInteger(idUnidade) || idUnidade <= 0) {
+        throw new Error('Nome, email, senha, CRMV e id_unidade são obrigatórios.')
+    }
 
     if (!regex.verificarEmail.test(dados.email)) throw new Error('Digite um email válido.')
 
@@ -27,12 +32,17 @@ export async function criarVeterinario(dados) {
 
     if (await veterinariosRepo.buscarPorCrmv(dados.crmv.trim())) throw new Error('Já existe um veterinário cadastrado com esse CRMV.')
 
+    const unidade = await unidadesRepo.buscarUnidadePorId(idUnidade)
+    if (!unidade || !unidade.ativo) throw new Error('Unidade não encontrada ou inativa.')
+
     return veterinariosRepo.criarVeterinario({
         nome: dados.nome.trim(), 
         email, 
         senha_hash: await bcrypt.hash(dados.senha, 12), 
         crmv: dados.crmv.trim(),
-        especialidade: dados.especialidade?.trim() || null, unidade: dados.unidade.trim(), telefone: dados.telefone?.trim() || null
+        especialidade: dados.especialidade?.trim() || null,
+        id_unidade: idUnidade,
+        telefone: dados.telefone?.trim() || null
     })
 }
 
@@ -46,24 +56,22 @@ export async function criarHorario(idVeterinario, dados) {
     validarId(idVeterinario)
 
     const dia = Number(dados?.dia_semana)
+    const idUnidade = Number(dados?.id_unidade)
 
     if (!Number.isInteger(dia) || dia < 1 || dia > 7) throw new Error('O dia da semana deve estar entre 1 e 7.')
+    validarId(idUnidade)
     if (!regex.verificarFormatosHorario.test(dados.hora_inicio || '') || !regex.verificarFormatosHorario.test(dados.hora_fim || '') || dados.hora_inicio >= dados.hora_fim) throw new Error('O intervalo de horários é inválido.')
 
-    const veterinario = await repo.buscarVeterinario(idVeterinario)
-
-    if (!veterinario) throw new Error('Veterinário não encontrado.')
-
-    const unidade = dados.unidade?.trim() || veterinario.unidade
-    
-    if (unidade !== veterinario.unidade) throw new Error('O horário deve pertencer à unidade do veterinário.')
+    if (!await veterinariosRepo.veterinarioAtendeNaUnidade(idVeterinario, idUnidade)) {
+        throw new Error('O veterinário não atende nesta unidade.')
+    }
 
     const horario = { 
         id_veterinario: idVeterinario, 
+        id_unidade: idUnidade,
         dia_semana: dia, 
         hora_inicio: dados.hora_inicio, 
-        hora_fim: dados.hora_fim, 
-        unidade 
+        hora_fim: dados.hora_fim
     }
 
     if (await veterinariosRepo.existeHorarioSobreposto(horario)) throw new Error('Este horário se sobrepõe a outro expediente do veterinário.')

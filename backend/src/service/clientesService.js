@@ -20,8 +20,9 @@ export function atualizarClientePorUsuario(cliente, idUsuario){
         throw new Error('Nenhum dado foi enviado.')
     }
 
-    const campos = ['nome', 'data_nascimento', 'telefone', 'cpf', 'endereco', 'email']
-    if (campos.some(campo => !cliente[campo])) {
+    const { nome, data_nascimento, telefone, cpf, endereco, email } = cliente
+
+    if (!nome || !data_nascimento || !telefone || !cpf || !endereco || !email) {
         throw new Error('Todos os campos do cliente são obrigatórios.')
     }
 

@@ -1,4 +1,5 @@
 import { verificarToken } from '../utils/jwt.js'
+
 import * as db from '../repos/authRepo.js'
 
 export async function autenticar(req, res, next) {

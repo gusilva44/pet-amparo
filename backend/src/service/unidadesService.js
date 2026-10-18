@@ -1,5 +1,7 @@
 ﻿import * as repo from '../repos/unidadesRepo.js'
 
+import * as servicosRepo from '../repos/servicosRepo.js'
+
 function validarId(id) {
     if (!Number.isInteger(id) || id <= 0) throw new Error('O ID deve ser um número inteiro e positivo.')
 }
@@ -25,8 +27,10 @@ function normalizar(unidade) {
     }
 }
 
-export function listarUnidades(incluirInativas = false) {
-    return repo.listarUnidades(incluirInativas)
+export function listarUnidades(incluirInativas = false, incluirServicos = false) {
+    return incluirServicos
+        ? repo.listarUnidadesComServicos(incluirInativas)
+        : repo.listarUnidades(incluirInativas)
 }
 
 export async function buscarUnidadePorId(idUnidade) {
@@ -45,4 +49,28 @@ export async function atualizarUnidade(idUnidade, unidade) {
     const alteradas = await repo.atualizarUnidade(idUnidade, normalizar(unidade))
     if (!alteradas) throw new Error('Unidade não encontrada.')
     return alteradas
+}
+
+export async function vincularServico(idUnidade, idServico) {
+    validarId(idUnidade)
+    validarId(idServico)
+
+    const [unidade, servico] = await Promise.all([
+        repo.buscarUnidadePorId(idUnidade),
+        servicosRepo.buscarServicoPorId(idServico)
+    ])
+
+    if (!unidade) throw new Error('Unidade não encontrada.')
+    if (!servico || !servico.ativo) throw new Error('Serviço não encontrado ou inativo.')
+
+    await repo.vincularServico(idUnidade, idServico)
+}
+
+export async function desvincularServico(idUnidade, idServico) {
+    validarId(idUnidade)
+    validarId(idServico)
+
+    if (!await repo.desvincularServico(idUnidade, idServico)) {
+        throw new Error('Serviço não está vinculado a esta unidade.')
+    }
 }

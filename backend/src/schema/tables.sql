@@ -1,4 +1,4 @@
--- Active: 1790850489930@@127.0.0.1@3306
+-- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
@@ -33,10 +33,6 @@ CREATE TABLE usuarios (
 -- Dados pessoais dos usuários que utilizam o sistema
 -- =========================================================
 
--- =====================================================
--- 2. CLIENTES
--- =====================================================
-
 CREATE TABLE clientes (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL UNIQUE,
@@ -46,7 +42,7 @@ CREATE TABLE clientes (
     telefone VARCHAR(30) NOT NULL UNIQUE,
     cpf VARCHAR(20) NOT NULL UNIQUE,
     endereco VARCHAR(255) NOT NULL,
-
+    
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     atualizado_em DATETIME NOT NULL
@@ -89,12 +85,6 @@ CREATE TABLE veterinarios (
         ON UPDATE CASCADE
 );
 
-
--- =========================================================
--- 4. ANIMAIS
--- Cada animal pertence a um cliente
--- =========================================================
-
 -- =====================================================
 -- 4. UNIDADES
 -- =====================================================
@@ -108,7 +98,7 @@ CREATE TABLE unidades (
     cep VARCHAR(9),
     endereco VARCHAR(150) NOT NULL,
     numero VARCHAR(10),
-    complemento VARCHAR(100),
+    complemento TEXT,
     bairro VARCHAR(100) NOT NULL,
     cidade VARCHAR(100) NOT NULL,
     estado CHAR(2) NOT NULL DEFAULT 'SP',
@@ -133,10 +123,6 @@ CREATE TABLE unidades (
 -- 5. SERVIÇOS
 -- Cada serviço possui uma duração
 -- =========================================================
-
--- =====================================================
--- 5. SERVICOS
--- =====================================================
 
 CREATE TABLE servicos (
     id_servico INT AUTO_INCREMENT PRIMARY KEY,
@@ -268,50 +254,41 @@ CREATE INDEX idx_horarios_unidade_dia
 
 CREATE TABLE animais (
     id_animal INT AUTO_INCREMENT PRIMARY KEY,
-
     id_cliente INT NOT NULL,
-
     nome VARCHAR(150) NOT NULL,
     especie VARCHAR(100) NOT NULL,
     raca VARCHAR(150),
-
     rga VARCHAR(30) UNIQUE,
-
-    data_nascimento DATE,
-
+    idade int,
     sexo ENUM(
         'M',
         'F',
         'desconhecido'
     ) NOT NULL DEFAULT 'desconhecido',
-
     porte ENUM(
         'pequeno',
         'medio',
         'grande',
         'nao_informado'
     ) NOT NULL DEFAULT 'nao_informado',
-
     foto VARCHAR(255),
-
     e_vacinado BOOLEAN NOT NULL DEFAULT FALSE,
-
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
     atualizado_em DATETIME NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
-
     CONSTRAINT fk_animal_cliente
         FOREIGN KEY (id_cliente)
         REFERENCES clientes(id_cliente)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-
     CONSTRAINT uq_animal_cliente
         UNIQUE (id_animal, id_cliente)
 );
 
+DROP Table animais;
+DROP Table carteiras_medicacao;
+DROP Table agendamentos;
 -- =====================================================
 -- 10. AGENDAMENTOS
 -- =====================================================
@@ -599,3 +576,20 @@ INSERT INTO unidades (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 );
+
+DELETE FROM usuarios;
+DELETE FROM clientes;
+DROP DATABASE pet_amparo;
+
+UPDATE usuarios
+SET tipo = "admin"
+where id_usuario = 7;
+
+UPDATE usuarios
+SET tipo = "veterinario"
+where id_usuario = 6;
+
+DELETE FROM usuarios
+WHERE tipo = "veterinario";
+
+SELECT * from clientes;

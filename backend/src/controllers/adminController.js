@@ -1,8 +1,10 @@
-import * as service from '../service/adminService.js'
+import { Router } from "express"
 import { autenticar } from "../middleware/authMiddlware.js"
 import { logError, formatarError } from "../utils/error.js"
 import verificarAdmin from '../middleware/verificarAdmin.js'
-import { Router } from "express"
+
+import * as service from '../service/adminService.js'
+
 const endpoints = Router()
 
 // BUSCAR CLIENTES POR FILTRO
@@ -19,6 +21,7 @@ endpoints.get('/clientes/filtros', autenticar, verificarAdmin, async (req, res) 
         if (resultado.length === 0) throw new Error('Nenhum cliente encontrado.')
 
         res.status(200).json({
+            sucesso: true,
             mensagem: 'Clientes encontrados com sucesso.',
             busca: resultado
         })
@@ -35,17 +38,19 @@ endpoints.post('/clientes', autenticar, verificarAdmin, async (req, res) => {
     try {
         const cliente = req.body
         const resultado = await service.cadastrarCliente(cliente)
-        if (!resultado || resultado < 0) throw new Error('Erro ao cadastrar o cliente.')
+
+        if (!resultado || resultado < 0) throw new Error('Cliente não encontrado.')
 
         res.status(201).json({
+            sucesso: true,
             mensagem: 'Cliente cadastrado com sucesso.',
             resultado: resultado
         })
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(
-            formatarError(error)
-        )
+        res.status(status).json(formatarError(error))
     }
 })
 
@@ -54,12 +59,13 @@ endpoints.get('/clientes', autenticar, verificarAdmin, async (req, res) => {
     try {
         const resultado = await service.buscarTodosClientes()
 
-        res.status(200).json(resultado)
+        res.status(200).json({
+            sucesso: true,
+            resultado
+        })
     } catch (error) {
         logError(error)
-        res.status(400).json(
-            formatarError(error)
-        )
+        res.status(500).json(formatarError(error))
     }
 })
 
@@ -74,8 +80,7 @@ endpoints.delete('/clientes/:id', autenticar, verificarAdmin, async (req, res) =
             })
         }
 
-        const cliente =
-            await service.deletarCliente(id)
+        const cliente = await service.deletarCliente(id)
 
         if (!cliente) {
             return res.status(404).json({
@@ -84,15 +89,16 @@ endpoints.delete('/clientes/:id', autenticar, verificarAdmin, async (req, res) =
         }
 
         res.status(200).json({
+            sucesso: true,
             mensagem: 'Cliente excluído com sucesso.',
             resultado: cliente
         })
 
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(
-            formatarError(error)
-        )
+        res.status(status).json(formatarError(error))
     }
 })
 
@@ -112,14 +118,17 @@ endpoints.put('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
         }
 
         res.status(200).json({
+            sucesso: true,
             mensagem:
                 'Cliente atualizado com sucesso.',
             resultado
         })
 
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 

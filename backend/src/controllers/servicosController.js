@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import * as service from '../service/servicosService.js'
 import { autenticar } from '../middleware/authMiddlware.js'
-import verificarAdmin from '../middleware/verificarAdmin.js'
 import { logError, formatarError } from '../utils/error.js'
+import verificarAdmin from '../middleware/verificarAdmin.js'
+
+import * as service from '../service/servicosService.js'
 
 const endpoints = Router()
 
@@ -12,7 +13,11 @@ endpoints.get('/servicos', async (req, res) => {
         const incluirInativos = req.query.incluir_inativos === 'true' && req.usuario?.tipo === 'admin'
         
         const resultado = await service.listarServicos(incluirInativos)
-        res.status(200).json(resultado)
+
+        res.status(200).json({
+            sucesso: true,
+            resultado
+        })
     } catch (error) {
         logError(error)
         res.status(400).json(formatarError(error))
@@ -26,18 +31,27 @@ endpoints.get('/servicos/:id', async (req, res) => {
 
         const resultado = await service.buscarServicoPorId(id_servico)
 
-        res.status(200).json(resultado)
+        res.status(200).json({
+            sucesso: true,
+            resultado
+        })
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(error.message === 'Serviço não encontrado.' ? 404 : 400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 
 // CRIAR NOVO SERVIÇO
 endpoints.post('/servicos', autenticar, verificarAdmin, async (req, res) => {
     try {
-        const id_servico = await service.criarServico(req.body)
+        const dados = req.body
+
+        const id_servico = await service.criarServico(dados)
+
         res.status(201).json({ 
+            sucesso: true,
             mensagem: 'Serviço cadastrado com sucesso.', 
             id_servico 
         })
@@ -50,11 +64,20 @@ endpoints.post('/servicos', autenticar, verificarAdmin, async (req, res) => {
 // ATUALIZAR SERVIÇO
 endpoints.put('/servicos/:id', autenticar, verificarAdmin, async (req, res) => {
     try {
-        const linhas_afetadas = await service.atualizarServico(Number(req.params.id), req.body)
-        res.status(200).json({ mensagem: 'Serviço atualizado com sucesso.', linhas_afetadas })
+        const dados = req.body
+        const id = Number(req.params.id)
+
+        const linhas_afetadas = await service.atualizarServico(id, dados)
+        res.status(200).json({ 
+            sucesso: true,
+            mensagem: 'Serviço atualizado com sucesso.',
+            linhas_afetadas
+        })
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(error.message === 'Serviço não encontrado.' ? 404 : 400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 

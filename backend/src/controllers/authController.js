@@ -1,26 +1,28 @@
 import { Router } from 'express'
-import * as service from '../service/authService.js'
 import { autenticar } from '../middleware/authMiddlware.js'
 import { opcoesCookie } from '../utils/jwt.js'
 import { logError, formatarError } from '../utils/error.js'
 
+import * as service from '../service/authService.js'
+
 const endpoints = Router()
 
 // CRIAR NOVO CADASTRO DE USUÁRIO
-endpoints.post('/auth/cadastro', async (req, res) => {
+endpoints.post('/auth/cadastrar', async (req, res) => {
     try {
-        const resultado = await service.cadastrarCliente(req.body)
+        const dados = req.body
+
+        const resultado = await service.cadastrarCliente(dados)
 
         res.status(201).json({
+            sucesso: true,
             mensagem: 'Cliente cadastrado com sucesso.',
             resultado
         })
 
     } catch (error) {
         logError(error)
-        res.status(400).json(
-            formatarError(error)
-        )
+        res.status(400).json(formatarError(error))
     }
 })
 
@@ -35,6 +37,7 @@ endpoints.post('/auth/login', async (req, res) => {
         res.cookie('token', resultado.token, opcoesCookie())
 
         res.status(200).json({
+            sucesso: true,
             mensagem: 'Login realizado com sucesso.',
             usuario: resultado.usuario
         })
@@ -42,6 +45,26 @@ endpoints.post('/auth/login', async (req, res) => {
     } catch (error) {
         logError(error)
         res.status(401).json(formatarError(error))
+    }
+})
+
+// TROCAR SENHA DE LOGIN
+endpoints.put('/auth/me', autenticar, async (req, res) => {
+    try {
+        const idUsuario = req.usuario.id_usuario
+        const { senhaAntiga, senhaNova } = req.body
+
+        await service.trocarSenha(senhaAntiga, senhaNova, idUsuario)
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Senha alterada com sucesso.'
+        })
+    } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
     }
 })
 
@@ -69,4 +92,4 @@ endpoints.get('/auth/me', autenticar, async (req, res) => {
     }
 )
 
-export default endpoints
+export default endpoints;
