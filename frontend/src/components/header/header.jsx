@@ -14,17 +14,17 @@ export default function Header(){
             <section className='nav'>
                 <ul>
                     <li>
-                        <Link className='links' to='#' > 
-                        <img className='icone-header' src={Casa} alt="Icone casa" /> Início</Link>
+                        <a className='links' href='#' > 
+                        <img className='icone-header' src={Casa} alt="Icone casa" /> Início</a>
                     </li>
                     <li>
-                        <Link className='links' to='#' > 
-                            <img className='icone-header' src={Localizacao} alt="Icone localização" /> Unidades
-                        </Link>
+                        
+                        <a className="links" href="#unidades">
+                        <img className="icone-header" src={Localizacao} alt="Ícone localização"/> Unidades </a>
                     </li>
                     <li>
-                        <Link className='links' to='#' > 
-                        <img className='icone-header' src={Sobre} alt="Icone sobre" /> Sobre</Link>
+                        <a className='links' href='#sobre' > 
+                        <img className='icone-header' src={Sobre} alt="Icone sobre" /> Sobre</a>
                     </li>
                 </ul>
             </section>

@@ -1,3 +1,10 @@
+html {
+    scroll-behavior: smooth;
+}
+
+#unidades, #sobre {
+    scroll-margin-top: 120px;
+}
 .home-page {
   .main {
     display: flex;
@@ -53,7 +60,7 @@
           }
 
           p {
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 20px;
             color: var(--branco);
           }
@@ -63,10 +70,13 @@
             padding: 10px 5px;
             border: none;
             border-radius: 5px;
-            background-color: var(--verde-claro);
-            color: var(--branco);
+            background-color: var(--verde-claro);  
             font-size: 15px;
             font-weight: bold;
+            a{
+              text-decoration: none;
+              color: var(--branco);
+            }
           }
         }
       }
@@ -128,7 +138,7 @@
 
               p {
                 margin: 5px 0;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 14px;
                 line-height: 1.5;
                 text-align: justify;
@@ -183,12 +193,14 @@
             font-size: 15px;
             text-align: center;
             color: var(--laranja);
+            font-family: var(--titulo);
           }
 
           p {
             font-size: 13px;
             text-align: justify;
             color: var(--branco);
+            font-family: var(--textos);
           }
         }
       }
@@ -225,9 +237,11 @@
           }
 
           p {
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 18px;
             color: var(--branco);
+            text-align:justify;
+            margin-left: 15px;
           }
         }
 
@@ -249,10 +263,15 @@
         align-items: center;
         justify-content: center;
         gap: 30px;
-        width: 75%;
+        width: 82%;
         height: auto;
         background-color: var(--verde-escuro);
         border-radius: 15px;
+
+        i{
+          color: var(--laranja);
+          font-size: 40px;
+        }
 
         h2 {
           font-family: var(--titulo);
@@ -265,14 +284,26 @@
       }
 
       // Cards das unidades
-      .cards-unidades {
+
+      .unidades{
+        width: 100%;
+        margin-top: 50px;
+
+        h2{
+          font-family: var(--titulo);
+          color: var(--verde-escuro);
+          margin-left: 120px;
+          font-size: 40px;
+        }
+        .cards-unidades {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
         gap: 50px;
         width: 100%;
-
+        }
+      
         .card {
           display: flex;
           align-items: center;
@@ -308,13 +339,14 @@
                 font-size: 1.5em;
                 margin: 0px;
                 font-family: var(--titulo);
+                color: var(--laranja);
               }
 
               p {
-                font-family: var(--texto);
-                font-size: 1.2em;
+                font-family: var(--textos);
+                font-size: 0.8em;
                 margin: 0px;
-                
+                color: var(--branco);
               }
 
               button {

@@ -57,6 +57,11 @@
             padding: 0 8px;
             box-sizing: border-box;
         }
+        input:focus, select:focus,button:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
 
         .campo-nome-pet {
         }

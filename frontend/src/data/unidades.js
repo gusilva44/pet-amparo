@@ -8,31 +8,31 @@ export const unidades = [
     {
         id: 1,
         img: Leste1,
-        nome: "Unidade Leste I - Cão Orelha",
-        localizacao: "Rua xxxxxxxx"
+        nome: "Unidade Leste I ",
+        localizacao: "Rua Ulisses Cruz, 285 — Tatuapé, São Paulo."
     },
     {
         id: 2,
         img: Leste2,
-        nome: "Unidade Leste II - São Miguel Paulista",
-        localizacao: "Rua xxxxxxxx"
+        nome: "Unidade Leste II ",
+        localizacao: "Avenida Nordestina, 225, esquina com Rua Daniel Bernardo, 107 — São Miguel Paulista."
     },
     {
         id: 3,
         img: Norte,
         nome: "Unidade Norte",
-        localizacao: "Rua xxxxxxxx"
+        localizacao: "Rua Atílio Piffer, 687 — Casa Verde, São Paulo."
     },
     {
         id: 4,
         img: Oeste,
         nome: "Unidade Oeste",
-        localizacao: "Rua xxxxxxxx"
+        localizacao: "Avenida Professor Orlando Marques de Paiva, 87 — Butantã, dentro da USP, São Paulo."
     },
     {
         id: 5,
         img: Sul,
         nome: "Unidade Sul",
-        localizacao: "Rua xxxxxxxx"
+        localizacao: "Rua Agostino Togneri, 153 — Jurubatuba, São Paulo."
     }
 ]

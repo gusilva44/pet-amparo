@@ -63,9 +63,9 @@ export default function CadastroPet() {
                 <p>Porte:</p>
                 <select>
                     <option value="">Selecione uma opção</option>
-                    <option value="pequeno">Pequeno</option>
-                    <option value="medio">Médio</option>
-                    <option value="grande">Grande</option>
+                    <option value="pequeno">Pequeno (até 10kg)</option>
+                    <option value="medio">Médio (11 kg a 25 kg )</option>
+                    <option value="grande">Grande (26 kg ou mais)</option>
                     <option value="">Não sei informar</option>
 
                 </select>

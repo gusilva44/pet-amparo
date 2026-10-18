@@ -54,8 +54,8 @@ export default function Home(){
                             <p>
                                 Encontre unidades, serviços disponíveis e <br />informações para cuidar do seu pet.
                             </p><br />
-                            <button>
-                                Encontre uma unidade
+                            <button >
+                               <a href="#unidades">Encontre uma unidade</a> 
                             </button>
                         </section>
                         <section className="imagem">
@@ -63,7 +63,7 @@ export default function Home(){
                         </section>
                     
                     </div>
-                    <div className="sobre">
+                    <div className="sobre" id="sobre" >
                         <h2>Sobre</h2>
                         <div className="conteudo-sobre">
                             <section className="sobre-esq">
@@ -111,13 +111,14 @@ export default function Home(){
                     </div>
 
                     <div className="mini-banner">
-                        <img src={Pata} alt="" />
+                        <i class="fa-solid fa-heart"></i>
                         <h2>Porque todo pet merece saúde e cuidado!</h2>
-                        <img src={Pata} alt="" />
+                        <i class="fa-solid fa-heart"></i>
                     </div>
 
-                    <h2>Unidades</h2>
-                    <div className="cards-unidades">
+                    <div className="unidades">
+                      <h2 id="unidades" >Unidades</h2>
+                      <div className="cards-unidades">
                         {unidades.map((uni, key)=>
                         <div className="card" key={key}>
                             <div className="imagem">
@@ -137,7 +138,9 @@ export default function Home(){
                             </div>
                         </div>
                         )}
+                        </div>  
                     </div>
+                    
                     
                     <div className="footer" ></div>
                 </div>

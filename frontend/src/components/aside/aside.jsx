@@ -14,17 +14,23 @@ export default function Aside() {
             </div>
             <div className="linha"></div>
             <ul>
+
+
                 <li>
+                    <Link to='/'><i class="fa-regular fa-house"></i> </Link>
+                    <Link className="nav"  to='/'> <img className=""/>Início</Link>
+                </li>
+                <li>
+                    <Link to='/meuspets'><i class="fa-solid fa-paw"></i></Link>
                     <Link className="nav" to='/meuspets'> <img className=""/>Meus Pets</Link>
                 </li>
                 <li>
+                    <Link to='#'><i class="fa-regular fa-calendar" ></i></Link> 
                     <Link className="nav"  to='#'> <img className=""/>Agendamentos</Link>
                 </li>
                 <li>
-                     <Link className="nav"  to='/'> <img className=""/>Início</Link>
-                </li>
-                <li>
-                     <Link className="nav"  to='#'> <img className=""/>Sair</Link>
+                    <i class="fa-solid fa-right-from-bracket" ></i>
+                    <Link className="nav"  to='#'> <img className=""/>Sair</Link>
                 </li>
                 
             </ul>
