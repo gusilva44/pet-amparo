@@ -1,55 +1,243 @@
+
 .page-Agendamentos {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     width: 100%;
     min-height: 100vh;
+    background-color: var(--fundo, #f2ebdd);
 
-    .main{
-        width: 100%;
-        .logo{
-            margin-top: 20px;
+    .main {
+        flex: 1;
+        min-width: 0;
+        padding: 20px 5%;
+        box-sizing: border-box;
+
+        .logo {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            width: 100%;
-            img{
-                width: 15rem;
-            }   
-        }
-        .banner{
-            margin-top: 60px;
-            margin-left: 10%;
-            border-radius: 15px;
-            width: 80%;
-            height: 200px;
-            background-color: var(--verde-claro);
-            display: flex;
-            justify-content: space-around;
             align-items: center;
-            img{
-                width: 300px;
+            width: 100%;
+
+            img {
+                width: 15rem;
+                max-width: 100%;
+                object-fit: contain;
             }
-            h2{
-                color: var(--laranja);
-                font-family: var(--titulo);
-                font-size: 30px;
-            }
-            p{
-                color: var(--branco);
-                font-family: var(--textos);
-                font-size: 20px;
-            }
-            .icon{
+        }
+
+        .banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 20px;
+
+            width: 100%;
+            min-height: 180px;
+            margin-top: 30px;
+            padding: 20px;
+            box-sizing: border-box;
+
+            border-radius: 10px;
+            background-color: var(--verde-claro);
+
+            .icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+
+                width: 85px;
+                height: 85px;
+                border-radius: 50%;
                 background-color: var(--verde-escuro);
-                width: 150px;
-                height: 150px;
-                border-radius: 100px;
-                i{
+
+                i {
                     color: var(--laranja);
-                    font-size: 100px;
-                   margin-left: 13px;
-                   margin-top: 25px;
+                    font-size: 40px;
+                }
+            }
+
+            .texto-banner {
+                flex: 1;
+                min-width: 0;
+
+                h2 {
+                    margin: 0;
+                    color: var(--laranja);
+                    font-family: var(--titulo);
+                    font-size: 27px;
+                }
+
+                p {
+                    margin: 4px 0 0;
+                    color: var(--branco);
+                    font-family: var(--textos);
+                    font-size: 14px;
+                    line-height: 1.5;
+                }
+            }
+
+            .imagem-banner {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                width: 25%;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    max-width: 190px;
+                    max-height: 140px;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+
+    .conteudo-agendamentos {
+        width: 100%;
+        margin-top: 28px;
+    }
+
+    .legenda-agendamentos {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 7px;
+        background-color: var(--verde-escuro);
+        color: var(--branco);
+        text-align: center;
+
+        h3 {
+            margin: 0;
+            font-family: var(--textos);
+            font-size: 13px;
+            font-weight: normal;
+        }
+
+        .itens-legenda {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 10px;
+
+            span {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: var(--textos);
+                font-size: 11px;
+            }
+
+            .cor {
+                width: 10px;
+                height: 10px;
+                border-radius: 3px;
+            }
+
+            .consulta {
+                background-color: #405f4c;
+            }
+
+            .vacinacao {
+                background-color: #587d72;
+            }
+
+            .retorno {
+                background-color: #a65f50;
+            }
+        }
+    }
+
+    .novo-agendamento {
+        margin: 28px 0 10px;
+        text-align: center;
+
+        h3 {
+            margin: 0 0 8px;
+            color: var(--laranja);
+            font-family: var(--titulo);
+            font-size: 17px;
+        }
+
+        p {
+            margin: 0;
+            color: var(--verde-escuro);
+            font-family: var(--textos);
+            font-size: 12px;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--verde-escuro);
+            font-family: var(--textos);
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            a{
+                text-decoration: none; 
+                color: var(--branco);
+            }
+
+            &:hover {
+                background-color: var(--verde-claro);
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .page-Agendamentos {
+        .main {
+            padding: 16px 12px;
+
+            .logo img {
+                width: 11rem;
+            }
+
+            .banner {
+                gap: 12px;
+                min-height: 130px;
+                margin-top: 24px;
+                padding: 12px;
+
+                .icon {
+                    width: 52px;
+                    height: 52px;
+
+                    i {
+                        font-size: 26px;
+                    }
+                }
+
+                .texto-banner {
+                    h2 {
+                        font-size: 19px;
+                    }
+
+                    p {
+                        font-size: 11px;
+                    }
+                }
+
+                .imagem-banner {
+                    width: 22%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .page-Agendamentos {
+        .main {
+            .banner {
+                .imagem-banner {
+                    display: none;
                 }
             }
         }
