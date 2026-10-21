@@ -18,19 +18,19 @@ export const unidades = [
         localizacao: "Avenida Nordestina, 225, esquina com Rua Daniel Bernardo, 107 — São Miguel Paulista."
     },
     {
-        id: 3,
+        id: 4,
         img: Norte,
         nome: "Unidade Norte",
         localizacao: "Rua Atílio Piffer, 687 — Casa Verde, São Paulo."
     },
     {
-        id: 4,
+        id: 5,
         img: Oeste,
         nome: "Unidade Oeste",
         localizacao: "Avenida Professor Orlando Marques de Paiva, 87 — Butantã, dentro da USP, São Paulo."
     },
     {
-        id: 5,
+        id: 3,
         img: Sul,
         nome: "Unidade Sul",
         localizacao: "Rua Agostino Togneri, 153 — Jurubatuba, São Paulo."
