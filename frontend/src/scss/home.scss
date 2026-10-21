@@ -368,9 +368,90 @@ html {
               cursor: pointer;
               color: var(--laranja);
             }
+
+           
           }
         }
       }
+      
+      .footer{
+              background-color: var(--verde-claro);
+              position: absolute;
+              top: 3097px;
+              left: 0px;
+              width: 100%;
+              height: 280px;
+              display: flex;
+              justify-content: space-around;
+              margin-top: 50px;
+            }
+
+            .footer-info{
+              display: flex;
+              width: 20%;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              padding: 20px;
+
+              img{
+                width: 180px;
+                height: auto;
+                margin-bottom: 10px;
+              }
+
+              p{
+                font-family: var(--textos);
+                font-size: 1.1em;
+                color: var(--branco);
+                text-align: center;
+                
+              }
+            }
+
+            .footer-card{
+              width: 300px;
+              height: 230px;
+              display: flex;
+              flex-direction: column;
+              background-color: var(--branco);
+              margin-top: 20px;
+              padding: 5px;
+             
+
+              h1{
+                text-align: center;
+                font-family: var(--titulo);
+                font-size: 1.8em;
+                color: var(--laranja);
+                margin-bottom: 5px;
+              }
+
+            ul{
+                font-family: var(--textos);
+                font-size: 1.1em;
+                margin-bottom: 2px;
+                transition: 0.2s;
+              }
+
+              ul:hover{
+                color: var(--laranja);
+              }
+          
+            }
+
+            .direitos{
+              position: absolute;
+              top: 3426px;
+              left: 0px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              height: 50px;
+              background-color: var(--verde-escuro);
+              color: var(--branco);
+            }
     }
   }
 }
