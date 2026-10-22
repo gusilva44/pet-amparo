@@ -9,6 +9,7 @@ import { unidades } from "../data/unidades"
 import '../scss/home.scss'
 import sobre2 from '../assets/imagens/image0.png'
 import { useNavigate } from "react-router-dom"
+import Logo from '../assets/imagens/Logo.webp'
 
 
 export default function Home(){
@@ -142,7 +143,39 @@ export default function Home(){
                     </div>
                     
                     
-                    <div className="footer" ></div>
+                    <div className="footer" >
+
+                        <div className="footer-info">
+                            <img src={Logo} alt="logo" />
+                            <p>Encontre atendimento veterinário público 
+                            para cuidar da saúde e do bem-estar do seu pet.</p>
+                        </div>
+
+                            <div className="footer-card">
+                                <h1>Pet-Amparo</h1>
+                                    <ul>Inicio</ul>
+                                    <ul>Unidades</ul>
+                                    <ul>Sobre nós</ul>
+                                    <ul>Agendamentos</ul>
+                            </div>
+                                     <div className="footer-card">
+                                        <h1>Serviços</h1>
+                                            <ul>Atendimento Veterinário</ul>
+                                            <ul>Unidades Públicas</ul>
+                                            <ul>Orientações</ul>
+                                            <ul>Duvidas Frequentes</ul>
+                                    </div>
+                                            <div className="footer-card">
+                                                <h1>Contatos</h1>
+                                                    <ul>Encontre uma Unidade proxima</ul>
+                                                    <ul>Atendimento</ul>
+                                                    <ul>Contato@gmail.com</ul>
+                                            </div>
+                    </div>
+
+                    <div className="direitos">
+                        <p>© 2026 Pet Amparo - Todos os diretos reservados ao Instituto Nossa Senhora de Fátima </p>
+                    </div>
                 </div>
 
             </div>
