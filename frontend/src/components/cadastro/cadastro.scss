@@ -1,0 +1,149 @@
+
+.comps-cadastro {
+    background-color: var(--verde-claro);
+    width: 500px;
+    height: 700px;
+    border-radius: 10px;
+    box-sizing: border-box;
+
+    .container {
+        padding: 30px 50px;
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .titulo {
+        text-align: center;
+
+        h2 {
+            color: var(--laranja);
+            font-family: var(--titulo);
+            font-size: 24px;
+            margin: 10px 0 15px;
+        }
+
+        p {
+            color: var(--branco);
+            font-family: var(--textos);
+            font-size: 14px;
+            margin: 0;
+        }
+    }
+
+    .nav {
+        display: flex;
+        width: 100%;
+        margin-top: 28px;
+
+        button {
+            flex: 1;
+            height: 38px;
+            border: none;
+            border-bottom: 1px solid var(--branco);
+            background-color: transparent;
+            font-family: var(--textos);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cadastro {
+            border-bottom: 2px solid var(--laranja);
+            color: var(--laranja);
+        }
+
+        .entrar {
+            color: var(--branco);
+        }
+    }
+
+    .inputs {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+
+        input:focus {
+            outline: 2px solid var(--laranja);
+        }
+
+        p,label {
+            color: var(--laranja);
+            font-family: var(--textos);
+            font-size: 13px;
+            margin: 0 0 6px;
+        }
+
+        input {
+            
+            width: 100%;
+            height: 28px;
+            border: none;
+            border-bottom: 1px solid #b8c0b8;
+            border-radius: 5px;
+            font-family: var(--textos);
+            font-size: 14px;
+    
+        }
+
+        .campo-nome {
+            margin-bottom: 12px;
+        }
+
+        .linha-data-cpf {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 12px;
+
+            .campo-data, .campo-cpf {
+                display: flex;
+                flex-direction: column;
+                width: 50%;
+
+                input {
+                    background-color: transparent;
+                    color: var(--branco);
+                }
+            }
+
+            .campo-data {
+                input[type="date"] {
+                    accent-color: var(--laranja);
+
+                    &::-webkit-calendar-picker-indicator {
+                        filter: invert(57%) sepia(48%) saturate(800%)
+                            hue-rotate(325deg) brightness(95%) contrast(90%);
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .outros-campos {
+            p {
+                margin: 12px 0 6px;
+            }
+        }
+
+        .area-botao {
+            margin-top: auto;
+            padding-top: 25px;
+
+            button {
+                display: block;
+                width: 75%;
+                height: 38px;
+                margin: 0 auto;
+                border: none;
+                border-radius: 12px;
+                background-color: var(--laranja);
+                color: var(--branco);
+                font-family: var(--textos);
+                font-size: 18px;
+                cursor: pointer;
+            }
+        }
+    }
+}

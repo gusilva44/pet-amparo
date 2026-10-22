@@ -1,80 +1,105 @@
-.comps-login{
-        background-color: var(--verde-claro);
-        width: 500px;
-        height: 700px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
 
+.comps-login {
+    background-color: var(--verde-claro);
+    width: 500px;
+    height: 700px;
+    border-radius: 10px;
+    box-sizing: border-box;
 
-    .container{
-        width: 500px;
-        height: 700px;
-        .titulo{
+    .container {
+        padding: 50px;
+        box-sizing: border-box;
+
+        .titulo {
             text-align: center;
-            height: 0px;
-            h2{
+
+            h2 {
                 color: var(--laranja);
                 font-family: var(--titulo);
+                font-size: 24px;
+                margin: 10px 0 20px;
             }
 
-            p{
+            p {
                 color: var(--branco);
                 font-family: var(--textos);
+                font-size: 16px;
+                margin: 0;
             }
         }
 
-        .nav{
+        .nav {
+            display: flex;
             width: 100%;
-            .entrar{
-                border: none;
-                border-bottom: 3px solid var(--laranja);
-                background-color: transparent;
-                font-family: var(--textos);
-                color: var(--laranja);
-                font-size: 15px;
-                width: 35%;
-            }
+            margin-top: 40px;
 
-            .cadastro{
+            button {
+                flex: 1;
+                height: 45px;
                 border: none;
                 border-bottom: 1px solid var(--branco);
                 background-color: transparent;
                 font-family: var(--textos);
+                font-size: 18px;
+                cursor: pointer;
+            }
+
+            .entrar {
+                border-bottom: 2px solid var(--laranja);
+                color: var(--laranja);
+            }
+
+            .cadastro {
                 color: var(--branco);
-                font-size: 15px;
-                width: 35%;
             }
         }
 
-        .inputs{
-            width: 100%;
-            p{
+        .inputs {
+            margin-top: 45px;
+
+            p {
                 color: var(--laranja);
                 font-family: var(--textos);
+                font-size: 16px;
+                margin: 0 0 12px;
             }
 
-            input{
-                border-radius: 10px;
+            input {
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+                height: 40px;
+                padding: 8px 12px;
+                margin-bottom: 35px;
                 border: none;
-                width: 80%;
-                height: 15%;
+                border-radius: 8px;
+                background-color: var(--branco);
+                outline: none;
+                font-size: 16px;
+            }
+
+            input:focus {
+                outline: 2px solid var(--laranja);
             }
         }
 
-        .botao{
-            width: 100%;
-            button{
+        .botao {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+
+            button {
+                width: 75%;
+                height: 45px;
                 color: var(--branco);
                 font-family: var(--textos);
-                font-size: 16px;
+                font-size: 20px;
                 background-color: var(--laranja);
                 border: none;
-                border-radius: 10px;
-                width: 40%;
-                height: 40px;
+                border-radius: 12px;
+                cursor: pointer;
             }
         }
-
     }
 }
+
