@@ -1,7 +1,8 @@
-import CadastroPet from '../components/cadastroPet/cadastroPet'
+
 import Aside from '../components/aside/aside'
 
 import '../scss/teste.scss'
+import Login from '../components/login/login'
 
 
 export default function Teste(){
@@ -9,7 +10,7 @@ export default function Teste(){
         <div className="teste">
             <Aside/>
             <div className="main-pets">
-                <CadastroPet/>
+                <Login/>
             </div>
            
         </div>

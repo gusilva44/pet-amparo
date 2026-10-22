@@ -1,8 +1,9 @@
-import { db } from './connection.js'
+import { db } from "./connection.js";
 
 // BUSCAR VETERINÁRIO PELO ID
 export async function buscarVeterinarioNaUnidade(idVeterinario, idUnidade) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         SELECT
             v.id_veterinario,
             v.nome,
@@ -15,17 +16,19 @@ export async function buscarVeterinarioNaUnidade(idVeterinario, idUnidade) {
         INNER JOIN veterinarios_unidades as vu
             ON vu.id_veterinario = v.id_veterinario
         WHERE v.id_veterinario = ? AND vu.id_unidade = ? AND vu.ativo = TRUE
-    `, [idVeterinario, idUnidade])
+    `,
+    [idVeterinario, idUnidade],
+  );
 
-    return resultado[0]
+  return resultado[0];
 }
-
 
 // LISTAR VETERINÁRIOS ATIVOS
 export async function listarVeterinarios(idUnidade) {
-    const filtroUnidade = idUnidade === undefined ? '' : 'AND vu.id_unidade = ?'
-    const valores = idUnidade === undefined ? [] : [idUnidade]
-    const [resultado] = await db.query(`
+  const filtroUnidade = idUnidade === undefined ? "" : "AND vu.id_unidade = ?";
+  const valores = idUnidade === undefined ? [] : [idUnidade];
+  const [resultado] = await db.query(
+    `
         SELECT DISTINCT
             v.id_veterinario,
             v.nome,
@@ -43,15 +46,21 @@ export async function listarVeterinarios(idUnidade) {
           AND vu.ativo = TRUE
           ${filtroUnidade}
         ORDER BY v.nome
-    `, valores)
+    `,
+    valores,
+  );
 
-    return resultado
+  return resultado;
 }
 
-
 // BUSCAR HORÁRIOS DO VETERINÁRIO
-export async function buscarHorarioDoVeterinario(idVeterinario, idUnidade, diaSemana) {
-    const [resultado] = await db.query(`
+export async function buscarHorarioDoVeterinario(
+  idVeterinario,
+  idUnidade,
+  diaSemana,
+) {
+  const [resultado] = await db.query(
+    `
         SELECT
             id_horario,
             hora_inicio,
@@ -62,15 +71,17 @@ export async function buscarHorarioDoVeterinario(idVeterinario, idUnidade, diaSe
           AND dia_semana = ?
           AND ativo = TRUE
         ORDER BY hora_inicio
-    `, [idVeterinario, idUnidade, diaSemana])
+    `,
+    [idVeterinario, idUnidade, diaSemana],
+  );
 
-    return resultado
+  return resultado;
 }
-
 
 // LISTAR AGENDAMENTOS DO CLIENTE
 export async function listarAgendamentosCliente(idCliente) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         SELECT
             a.id_agendamento,
             a.inicio,
@@ -81,6 +92,9 @@ export async function listarAgendamentosCliente(idCliente) {
                 WHEN a.status = 'cancelado' THEN 'cancelado'
                 ELSE 'pendente'
             END AS situacao,
+            a.id_unidade,
+            u.nome AS unidade,
+            u.endereco,
             a.observacao,
             an.id_animal,
             an.nome AS animal,
@@ -95,15 +109,20 @@ export async function listarAgendamentosCliente(idCliente) {
             ON s.id_servico = a.id_servico
         INNER JOIN veterinarios as v
             ON v.id_veterinario = a.id_veterinario
+        INNER JOIN unidades as u
+            ON u.id_unidade = a.id_unidade
         WHERE a.id_cliente = ?
         ORDER BY a.inicio DESC
-    `, [idCliente])
+    `,
+    [idCliente],
+  );
 
-    return resultado
+  return resultado;
 }
 
 export async function listarAgendamentosVeterinario(idVeterinario) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         SELECT
             a.id_agendamento,
             a.inicio,
@@ -130,74 +149,90 @@ export async function listarAgendamentosVeterinario(idVeterinario) {
         INNER JOIN unidades as u ON u.id_unidade = a.id_unidade
         WHERE a.id_veterinario = ?
         ORDER BY a.inicio DESC
-    `, [idVeterinario])
-    return resultado
+    `,
+    [idVeterinario],
+  );
+  return resultado;
 }
-
 
 // BUSCAR AGENDAMENTO ESPECÍFICO DO CLIENTE
 export async function buscarAgendamentoDoCliente(idAgendamento, idCliente) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         SELECT *
         FROM agendamentos
         WHERE id_agendamento = ?
           AND id_cliente = ?
-    `, [idAgendamento, idCliente])
+    `,
+    [idAgendamento, idCliente],
+  );
 
-    return resultado[0]
+  return resultado[0];
 }
 
-export async function buscarAgendamentoDoVeterinario(idAgendamento, idVeterinario) {
-    const [resultado] = await db.query(`
+export async function buscarAgendamentoDoVeterinario(
+  idAgendamento,
+  idVeterinario,
+) {
+  const [resultado] = await db.query(
+    `
         SELECT id_agendamento, status
         FROM agendamentos
         WHERE id_agendamento = ? AND id_veterinario = ?
-    `, [idAgendamento, idVeterinario])
-    return resultado[0]
+    `,
+    [idAgendamento, idVeterinario],
+  );
+  return resultado[0];
 }
 
-export async function atualizarStatusDoAgendamento(idAgendamento, idVeterinario, status) {
-    const [resultado] = await db.query(`
+export async function atualizarStatusDoAgendamento(
+  idAgendamento,
+  idVeterinario,
+  status,
+) {
+  const [resultado] = await db.query(
+    `
         UPDATE agendamentos
         SET status = ?
         WHERE id_agendamento = ? AND id_veterinario = ?
-    `, [status, idAgendamento, idVeterinario])
-    return resultado.affectedRows
+    `,
+    [status, idAgendamento, idVeterinario],
+  );
+  return resultado.affectedRows;
 }
-
 
 // VERIFICAR CONFLITO DE HORÁRIO
 export async function existeConflito(
-    idVeterinario,
-    inicio,
-    fim,
-    ignorarId = null
+  idVeterinario,
+  inicio,
+  fim,
+  ignorarId = null,
 ) {
-    let sql = `
+  let sql = `
         SELECT id_agendamento
         FROM agendamentos
         WHERE id_veterinario = ?
           AND status NOT IN ('cancelado', 'concluido')
           AND inicio < ?
           AND fim > ?
-    `
+    `;
 
-    const valores = [idVeterinario, fim, inicio]
+  const valores = [idVeterinario, fim, inicio];
 
-    if (ignorarId) {
-        sql += ' AND id_agendamento <> ?'
-        valores.push(ignorarId)
-    }
+  if (ignorarId) {
+    sql += " AND id_agendamento <> ?";
+    valores.push(ignorarId);
+  }
 
-    const [resultado] = await db.query(sql, valores)
+  const [resultado] = await db.query(sql, valores);
 
-    return Boolean(resultado[0])
+  return Boolean(resultado[0]);
 }
-
 
 // CRIAR AGENDAMENTO
 export async function criarAgendamento(agendamento) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         INSERT INTO agendamentos (
             id_cliente,
             id_animal,
@@ -209,30 +244,34 @@ export async function criarAgendamento(agendamento) {
             observacao
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `, [
-        agendamento.id_cliente,
-        agendamento.id_animal,
-        agendamento.id_veterinario,
-        agendamento.id_unidade,
-        agendamento.id_servico,
-        agendamento.inicio,
-        agendamento.fim,
-        agendamento.observacao
-    ])
+    `,
+    [
+      agendamento.id_cliente,
+      agendamento.id_animal,
+      agendamento.id_veterinario,
+      agendamento.id_unidade,
+      agendamento.id_servico,
+      agendamento.inicio,
+      agendamento.fim,
+      agendamento.observacao,
+    ],
+  );
 
-    return resultado.insertId
+  return resultado.insertId;
 }
-
 
 // CANCELAR AGENDAMENTO
 export async function cancelarAgendamento(idAgendamento, idCliente) {
-    const [resultado] = await db.query(`
+  const [resultado] = await db.query(
+    `
         UPDATE agendamentos
         SET status = 'cancelado'
         WHERE id_agendamento = ?
           AND id_cliente = ?
           AND status IN ('agendado', 'confirmado')
-    `, [idAgendamento, idCliente])
+    `,
+    [idAgendamento, idCliente],
+  );
 
-    return resultado.affectedRows
+  return resultado.affectedRows;
 }

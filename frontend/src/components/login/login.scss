@@ -1,0 +1,80 @@
+.comps-login{
+        background-color: var(--verde-claro);
+        width: 500px;
+        height: 700px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+
+
+    .container{
+        width: 500px;
+        height: 700px;
+        .titulo{
+            text-align: center;
+            height: 0px;
+            h2{
+                color: var(--laranja);
+                font-family: var(--titulo);
+            }
+
+            p{
+                color: var(--branco);
+                font-family: var(--textos);
+            }
+        }
+
+        .nav{
+            width: 100%;
+            .entrar{
+                border: none;
+                border-bottom: 3px solid var(--laranja);
+                background-color: transparent;
+                font-family: var(--textos);
+                color: var(--laranja);
+                font-size: 15px;
+                width: 35%;
+            }
+
+            .cadastro{
+                border: none;
+                border-bottom: 1px solid var(--branco);
+                background-color: transparent;
+                font-family: var(--textos);
+                color: var(--branco);
+                font-size: 15px;
+                width: 35%;
+            }
+        }
+
+        .inputs{
+            width: 100%;
+            p{
+                color: var(--laranja);
+                font-family: var(--textos);
+            }
+
+            input{
+                border-radius: 10px;
+                border: none;
+                width: 80%;
+                height: 15%;
+            }
+        }
+
+        .botao{
+            width: 100%;
+            button{
+                color: var(--branco);
+                font-family: var(--textos);
+                font-size: 16px;
+                background-color: var(--laranja);
+                border: none;
+                border-radius: 10px;
+                width: 40%;
+                height: 40px;
+            }
+        }
+
+    }
+}
