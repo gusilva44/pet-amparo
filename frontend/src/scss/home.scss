@@ -26,6 +26,7 @@ html {
         margin-top: 30px;
         background-color: var(--verde-escuro);
         border-radius: 10px;
+        position: relative;
 
         .imagem {
           display: flex;
@@ -36,10 +37,13 @@ html {
 
           .img-banner {
             display: block;
-            width: 100%;
-            height: 100%;
+            width: 57%;
+            left: 335px;
+            top: 63px;
+            height: 80%;
             object-fit: contain;
             object-position: center;
+            position: absolute;
           }
         }
 
@@ -314,6 +318,10 @@ html {
           background-color: var(--verde-claro);
           border-radius: 10px;
 
+          &:last-child {
+            margin-bottom: 50px;
+          }
+
           .imagem {
             display: flex;
             align-items: center;
@@ -374,16 +382,17 @@ html {
         }
       }
       
-      .footer{
+      
+    }
+  }
+
+  .footer{
               background-color: var(--verde-claro);
-              position: absolute;
-              top: 3097px;
-              left: 0px;
+
               width: 100%;
               height: 280px;
               display: flex;
               justify-content: space-around;
-              margin-top: 50px;
             }
 
             .footer-info{
@@ -441,9 +450,6 @@ html {
             }
 
             .direitos{
-              position: absolute;
-              top: 3426px;
-              left: 0px;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -452,6 +458,4 @@ html {
               background-color: var(--verde-escuro);
               color: var(--branco);
             }
-    }
-  }
 }

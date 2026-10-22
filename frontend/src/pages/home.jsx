@@ -143,7 +143,12 @@ export default function Home(){
                     </div>
                     
                     
-                    <div className="footer" >
+                    
+                </div>
+
+            </div>
+
+            <div className="footer" >
 
                         <div className="footer-info">
                             <img src={Logo} alt="logo" />
@@ -176,9 +181,6 @@ export default function Home(){
                     <div className="direitos">
                         <p>© 2026 Pet Amparo - Todos os diretos reservados ao Instituto Nossa Senhora de Fátima </p>
                     </div>
-                </div>
-
-            </div>
     
         </div>
     )
