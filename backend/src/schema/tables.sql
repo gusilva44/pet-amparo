@@ -1,4 +1,4 @@
--- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
+-- Active: 1790850489930@@127.0.0.1@3306
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
@@ -355,7 +355,8 @@ CREATE INDEX idx_agendamentos_veterinario_periodo
 CREATE INDEX idx_agendamentos_unidade_periodo
     ON agendamentos (id_unidade, inicio, fim);
 
-CREATE INDEX idx_agendamentos_cliente_inicio
+C
+REATE INDEX idx_agendamentos_cliente_inicio
     ON agendamentos (id_cliente, inicio);
 
 CREATE INDEX idx_agendamentos_animal

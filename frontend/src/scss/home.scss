@@ -306,6 +306,7 @@ html {
         justify-content: space-between;
         gap: 50px;
         width: 100%;
+      
         }
       
         .card {
@@ -319,7 +320,7 @@ html {
           border-radius: 10px;
 
           &:last-child {
-            margin-bottom: 50px;
+            margin-bottom: 80px;
           }
 
           .imagem {
@@ -386,13 +387,16 @@ html {
     }
   }
 
-  .footer{
+ .footer{
               background-color: var(--verde-claro);
-
+              position: absolute;
+              top: 3097px;
+              left: 0px;
               width: 100%;
-              height: 280px;
+              height: 299px;
               display: flex;
               justify-content: space-around;
+              margin-top: 50px;
             }
 
             .footer-info{
@@ -400,56 +404,71 @@ html {
               width: 20%;
               flex-direction: column;
               align-items: center;
-              justify-content: center;
+              margin: 15px;
               padding: 20px;
+              margin-top: 30px;
+
+              .footer-img{
+                background-color: var(--creme);
+                padding: 5px;
+                border-radius: 8px;
+                height: 55px;
+              }
 
               img{
-                width: 180px;
+                width: 140px;
                 height: auto;
                 margin-bottom: 10px;
               }
 
               p{
                 font-family: var(--textos);
-                font-size: 1.1em;
+                font-size: 1em;
                 color: var(--branco);
                 text-align: center;
-                
               }
             }
 
             .footer-card{
-              width: 300px;
-              height: 230px;
+              background-color: var(--creme);
+              width: 250px;
+              height: 180px;
               display: flex;
               flex-direction: column;
-              background-color: var(--branco);
-              margin-top: 20px;
-              padding: 5px;
-             
+              margin-top: 35px;
+              border-radius: 3px;
 
+            
+              
               h1{
                 text-align: center;
                 font-family: var(--titulo);
-                font-size: 1.8em;
+                font-size: 25px;
                 color: var(--laranja);
-                margin-bottom: 5px;
+                margin-bottom: 1px;
+                margin-top: 0.2em;
               }
 
             ul{
                 font-family: var(--textos);
-                font-size: 1.1em;
-                margin-bottom: 2px;
+                font-size: 0.9em;
+                margin-bottom: 1px;
                 transition: 0.2s;
+                margin-right: 17px;
+                color: var(--verde-escuro);
               }
 
               ul:hover{
                 color: var(--laranja);
+                font-weight: bold;
               }
           
             }
 
             .direitos{
+              position: absolute;
+              top: 3396px;
+              left: 0px;
               display: flex;
               align-items: center;
               justify-content: center;

@@ -148,10 +148,13 @@ export default function Home(){
 
             </div>
 
-            <div className="footer" >
+           <div className="footer" >
 
                         <div className="footer-info">
-                            <img src={Logo} alt="logo" />
+                            <div className="footer-img">
+                                <img src={Logo} alt="logo" />
+                            </div>
+                            
                             <p>Encontre atendimento veterinário público 
                             para cuidar da saúde e do bem-estar do seu pet.</p>
                         </div>
@@ -163,19 +166,19 @@ export default function Home(){
                                     <ul>Sobre nós</ul>
                                     <ul>Agendamentos</ul>
                             </div>
-                                     <div className="footer-card">
-                                        <h1>Serviços</h1>
-                                            <ul>Atendimento Veterinário</ul>
-                                            <ul>Unidades Públicas</ul>
-                                            <ul>Orientações</ul>
-                                            <ul>Duvidas Frequentes</ul>
-                                    </div>
-                                            <div className="footer-card">
-                                                <h1>Contatos</h1>
-                                                    <ul>Encontre uma Unidade proxima</ul>
-                                                    <ul>Atendimento</ul>
-                                                    <ul>Contato@gmail.com</ul>
-                                            </div>
+                            <div className="footer-card">
+                                <h1>Serviços</h1>
+                                    <ul>Atendimento Veterinário</ul>
+                                    <ul>Unidades Públicas</ul>
+                                    <ul>Orientações</ul>
+                                    <ul>Duvidas Frequentes</ul>
+                            </div>
+                            <div className="footer-card">
+                                <h1>Contatos</h1>
+                                    <ul>Encontre uma Unidade proxima</ul>
+                                    <ul>Atendimento</ul>
+                                    <ul>Contato@gmail.com</ul>
+                            </div>
                     </div>
 
                     <div className="direitos">

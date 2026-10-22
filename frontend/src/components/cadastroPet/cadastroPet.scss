@@ -1,182 +1,50 @@
+﻿.cadastro-pet {
+  margin-top: 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--verde-claro, #506c5b);
+  color: var(--branco, #fff);
 
-.comps-cadastro {
-    padding: 10px;
+  summary {
+    padding: 0.9rem 1rem;
+    color: var(--branco, #fff);
+    font-family: var(--textos);
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+
+.form-cadastro-pet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+
+  label {
+    display: grid;
+    gap: 0.4rem;
+  }
+  input:not([type="checkbox"]),
+  select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.6rem;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid #b8c2b9;
+    border-radius: 0.4rem;
+    background: #fff;
+    color: #243b32;
+    font: inherit;
+  }
+  .pet-vacinado {
     display: flex;
-    justify-content: center;
-
-    .container-cadastro {
-        background-color: var(--verde-claro);
-        width: 500px;
-        height: 700px;
-        padding: 30px;
-        gap: 4px;
-        border-radius: 10px;
-        box-sizing: border-box;
-
-        .cabecalho-formulario {
-            text-align: center;
-
-            h2 {
-                color: var(--laranja);
-                margin: 10px 0 15px;
-                font-family: var(--titulo);
-                font-weight: 500;
-                font-size: 24px;
-            }
-
-            p {
-                color: var(--branco);
-                font-family: var(--textos);
-                font-size: 14px;
-                margin-bottom: 25px;
-            }
-        }
-
-        .campos-formulario {
-            width: 100%;
-
-            p {
-                color: var(--laranja);
-                font-family: var(--titulo);
-                font-size: 14px;
-                margin: 0 0 8px;
-            }
-        }
-
-        input[type="text"] {
-            width: 100%;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
-            padding: 0 10px;
-            background-color: var(--branco);
-            box-sizing: border-box;
-        }
-
-        select {
-            width: 100%;
-            border-radius: 8px;
-            height: 36px;
-            border: none;
-            background-color: var(--branco);
-            padding: 0 8px;
-            box-sizing: border-box;
-        }
-
-        input:focus,
-        select:focus,
-        button:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
-        .campo-nome-pet {
-            margin-bottom: 15px;
-        }
-
-        .grupo-especie-sexo,
-        .grupo-idade-porte {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 15px;
-
-            .campo-especie {
-                width: 180px;
-                flex-shrink: 0;
-
-                select {
-                    width: 100%;
-                }
-            }
-
-            .campo-sexo {
-                flex: 1;
-                min-width: 0;
-                margin-left: 40px;
-
-                button {
-                    width: 100%;
-                    max-width: 100px;
-                    height: 36px;
-                    border-radius: 8px;
-                    border: none;
-                    background-color: var(--branco);
-                    color: #222;
-                    cursor: pointer;
-                }
-
-                .botao-femea {
-                    margin-right: 5px;
-                }
-
-                .botao-femea:hover,
-                .botao-macho:hover {
-                    background-color: rgb(216, 213, 213);
-                }
-            }
-
-            .campo-idade,
-            .campo-porte {
-                flex: 1;
-                min-width: 0;
-
-                select {
-                    width: 100%;
-                }
-            }
-        }
-
-        .campo-raca {
-            margin-bottom: 15px;
-
-            input {
-                width: 100%;
-            }
-        }
-
-        .campo-foto-pet {
-            margin-top: 15px;
-            margin-bottom: 20px;
-
-            .area-upload-foto {
-                width: 100%;
-                height: 90px;
-                border: 1px solid #263d30;
-                border-radius: 8px;
-                background-color: #3d5847;
-                color: var(--branco);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                padding: 10px;
-                box-sizing: border-box;
-
-                span {
-                    font-family: var(--textos);
-                    font-size: 13px;
-                }
-            }
-
-            p {
-                margin-bottom: 8px;
-            }
-        }
-
-        .botao-salvar {
-            display: block;
-            width: 75%;
-            height: 40px;
-            margin: 0 auto;
-            border: none;
-            border-radius: 12px;
-            background-color: var(--laranja);
-            color: var(--branco);
-            font-family: var(--titulo);
-            font-size: 18px;
-            cursor: pointer;
-        }
-    }
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .mensagem-pet {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+  .botao-principal {
+    justify-self: start;
+  }
 }

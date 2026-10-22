@@ -62,11 +62,11 @@ export async function adicionarAnimal(animal, idCliente) {
 
     if(Number(idade) >= 30 ) throw new Error("Um animal não consegue viver mais que 30 anos")
 
-    if(porte != "pequeno" || porte != "medio" || porte != "grande"){
+    if (!["pequeno", "medio", "grande", "nao_informado"].includes(porte)) {
         porte = "nao_informado"
     }
 
-    if(sexo != "M" || sexo != "F"){
+    if (!["M", "F"].includes(sexo)) {
         sexo = "desconhecido"
     }
 

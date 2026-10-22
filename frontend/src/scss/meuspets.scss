@@ -1,133 +1,200 @@
-
 .pages-pets {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
+  background: var(--bege, #f2eadb);
 
-    .main-pets{
-        width: 100%;
-        .logo{
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            img{
-                width: 15rem;
-            }
-        }
+  .main-pets {
+    box-sizing: border-box;
+    flex: 1;
+    min-width: 0;
+    padding: 1.25rem clamp(1rem, 5vw, 5rem) 3rem;
 
-        .meuspets{
-            margin-top: 30px;
-            margin-left: 100px;
-            .ini{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                width: 90%;
-                height: 200px;
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto 2rem;
 
-                .botao{
-                    display: flex;
-                    justify-content: start;
-                    height: 100px;
-                    margin-right: 30px;
-
-                    button{
-                    border: none;
-                    background-color: var(--verde-escuro);
-                    color: var(--branco);
-                    font-size: 15px;
-                    font-family: var(--textos);
-                    border-radius: 5px;
-                    width: 200px;
-                    height: 40px;
-                }
-                }
-
-                 h2{
-                    font-family: var(--titulo);
-                    color: var(--verde-escuro);
-                    font-size: 40px;
-                }
-                p{
-                    color: var(--verde-escuro);
-                    font-family: var(--textos);
-                    font-size: 20px;
-                }  
-
-                
-            }
-        }
-
-        .meuPerfil{
-            display: flex;
-            flex-direction: column;
-            margin-left: 100px;
-            margin-top: 10px;
-            h2{
-                font-family: var(--titulo);
-                color: var(--verde-escuro);
-                font-size: 40px;
-            }
-            .banner{
-                width: 90%;
-                height: 200px;
-                background-color: var(--verde-claro);
-                border-radius: 15px;
-                display: flex;  
-                justify-content: space-between;
-                align-items: center;
-                
-
-                .sta{
-                    display: flex;
-                    align-items: center;
-                    gap: 60px;
-                    margin-left: 40px;
-                    img{
-                        width: 100px;
-                    }
-                    .infos-pessoais{
-                        h3{
-                            color: var(--laranja);
-                            font-family: var(--titulo);
-                            font-size: 25px;
-                        }
-                        p{
-                            color: var(--branco);
-                            font-family: var(--textos);
-                            font-size: 15px;
-                        }  
-                        
-                }
-
-               
-                }
-                
-                .editar{
-                    display: flex;
-                    justify-content: start;
-                    height: 150px;
-                    margin-right: 30px;
-                    
-                    button{
-                        border: none;
-                        background-color: var(--verde-escuro);
-                        color: var(--branco);
-                        font-size: 15px;
-                        font-family: var(--textos);
-                        border-radius: 5px;
-                        width: 150px;
-                        height: 30px;
-                    }
-                }
-            }
-           
-        }
-       
+      img {
+        width: min(15rem, 55vw);
+      }
     }
-   
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    .auth-pets {
+      box-sizing: border-box;
+      width: min(100%, 34rem);
+      margin: 3rem auto;
+      padding: clamp(1.5rem, 4vw, 2.5rem);
+      border-radius: 1rem;
+      background: var(--verde-escuro, #243b32);
+      color: var(--branco, #fff);
+
+      h1 {
+        color: var(--laranja, #ed795d);
+        font-family: var(--titulo);
+      }
+      .auth-intro {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .auth-tabs button,
+    .botao-principal,
+    .botao-secundario {
+      border: 0;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font: inherit;
+      cursor: pointer;
+    }
+    .auth-tabs button {
+      flex: 1;
+      background: var(--verde-claro, #506c5b);
+      color: white;
+    }
+    .auth-tabs button.ativo,
+    .botao-principal {
+      background: var(--laranja, #ed795d);
+      color: white;
+    }
+
+    .form-pets {
+      display: grid;
+      gap: 1rem;
+    }
+    .form-pets label {
+      display: grid;
+      gap: 0.4rem;
+      font-family: var(--textos);
+    }
+    .form-pets input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 2.7rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #b8c2b9;
+      border-radius: 0.45rem;
+      background: white;
+      color: #253b32;
+      font: inherit;
+    }
+    .botao-principal {
+      margin-top: 0.4rem;
+      font-weight: 700;
+    }
+    button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+    }
+    .mensagem-pets {
+      padding: 0.75rem;
+      border-radius: 0.4rem;
+      background: #fff0ed;
+      color: #a33f2b;
+    }
+
+    .meuPerfil,
+    .meuspets {
+      width: min(100%, 62rem);
+      margin: 2rem auto;
+    }
+    .meuPerfil h1,
+    .meuspets h2 {
+      color: var(--verde-escuro, #243b32);
+      font-family: var(--titulo);
+    }
+    .meuPerfil h1,
+    .meuspets h2 {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+    }
+    .banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem;
+      border-radius: 0.9rem;
+      background: var(--verde-claro, #506c5b);
+      color: white;
+    }
+    .sta {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      min-width: 0;
+    }
+    .sta img,
+    .avatar-iniciais {
+      width: 5rem;
+      height: 5rem;
+      flex: 0 0 5rem;
+      border-radius: 50%;
+    }
+    .avatar-iniciais {
+      display: grid;
+      place-items: center;
+      background: var(--bege, #f2eadb);
+      color: var(--verde-escuro, #243b32);
+      font-family: var(--titulo);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .infos-pessoais h2 {
+      margin-bottom: 0.4rem;
+      color: var(--laranja, #ed795d);
+    }
+    .infos-pessoais p {
+      margin-bottom: 0.25rem;
+      overflow-wrap: anywhere;
+    }
+    .botao-secundario {
+      background: var(--verde-escuro, #243b32);
+      color: white;
+    }
+    .pets-cabecalho {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .lista-pets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+      gap: 1rem;
+    }
+    .card-pet,
+    .estado-pets {
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      background: var(--verde-claro, #506c5b);
+      color: white;
+    }
+    .card-pet h3 {
+      margin-bottom: 0.35rem;
+      color: var(--laranja, #ed795d);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .pages-pets .main-pets {
+    padding-inline: 1rem;
+    .banner {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .sta {
+      gap: 0.75rem;
+    }
+  }
 }

@@ -1,107 +1,149 @@
-import './cadastroPet.scss'
+import "./cadastroPet.scss";
+import { useState } from "react";
+import { animaisApi } from "../../services/api";
+import { mensagemErroApi } from "../../utils/api";
 
-export default function CadastroPet() {
-    return (
+const dadosIniciais = {
+  nome: "",
+  especie: "",
+  raca: "",
+  rga: "",
+  idade: "",
+  sexo: "",
+  porte: "",
+  foto: "",
+  e_vacinado: false,
+};
 
-<div className="comps-cadastro">
+export default function CadastroPet({ onSaved }) {
+  const [dados, setDados] = useState(dadosIniciais);
+  const [mensagem, setMensagem] = useState("");
+  const [salvando, setSalvando] = useState(false);
 
-    <div className="container-cadastro">
-        <div className='cabecalho-formulario'>
-        <h2>Cadastre o seu pet aqui!</h2>
-        <p>
-            Preencha os dados do seu animal para <br>
-            </br>cadastrá-lo no sistema.
-        </p>
-        </div>
+  function atualizar(campo, valor) {
+    setDados((atual) => ({ ...atual, [campo]: valor }));
+  }
 
-        <div className="campos-formulario">
+  async function salvar(event) {
+    event.preventDefault();
+    setSalvando(true);
+    setMensagem("");
+    try {
+      await animaisApi.cadastrar({
+        ...dados,
+        idade: Number(dados.idade),
+        foto: dados.foto || null,
+      });
+      setDados(dadosIniciais);
+      setMensagem("Pet cadastrado com sucesso!");
+      await onSaved?.();
+    } catch (error) {
+      setMensagem(mensagemErroApi(error));
+    } finally {
+      setSalvando(false);
+    }
+  }
 
-            <div className="campo-nome-pet">
-                <p>Nome do pet:</p>
-                <input type="text" />
-            </div>
-
-            <div className='grupo-especie-sexo'>
-
-                <div className="campo-especie">
-                    <p>Espécie:</p>
-                    <select>
-                        <option value="">Selecione uma opção</option>
-                        <option value="cachorro">Cachorro</option>
-                        <option value="gato">Gato</option>
-                    </select>
-                </div>
-
-                <div className="campo-sexo">
-                    <div><p>Sexo:</p></div>
-
-                    <button className='botao-femea'>Fêmea</button>
-                    <button className='botao-macho'>Macho</button>
-                </div>
-
-            </div>
-            <div className="campo-raca">
-            <p>Raça:</p>
-            <input type="text" />
-        </div>
-
-        <div className='grupo-idade-porte'>
-
-            <div className="campo-idade">
-                <p>Idade</p>
-                <select>
-                    <option value="">Selecione uma opção</option>
-                    <option value="filhote">Filhote (até 1 ano)</option>
-                    <option value="jovem">Jovem (1 a 3 anos)</option>
-                    <option value="adulto">Adulto (4 a 7 anos)</option>
-                    <option value="idoso">Idoso (8 anos ou mais)</option>
-
-                </select>
-            </div>
-
-            <div className="campo-porte">
-                <p>Porte:</p>
-                <select>
-                    <option value="">Selecione uma opção</option>
-                    <option value="pequeno">Pequeno (até 10kg)</option>
-                    <option value="medio">Médio (11 kg a 25 kg )</option>
-                    <option value="grande">Grande (26 kg ou mais)</option>
-                    <option value="">Não sei informar</option>
-
-                </select>
-            </div>
-
-        </div>
-
-        <div className="campo-foto-pet">
-            <p>Foto do animal</p>
-
-            <br></br>
-
-            <label className="area-upload-foto" htmlFor="foto">
-                <input
-                    type="file"
-                    id="foto"
-                    style={{display:"none"}}
-                />
-
-                <span>
-                    Clique aqui para enviar uma foto
-                    <br />
-                    ou arraste aqui
-                </span>
-            </label>
-        </div>
-
-        <button className='botao-salvar'>
-            Salvar pet
+  return (
+    <details className="cadastro-pet">
+      <summary>+ Adicionar um novo pet</summary>
+      <form className="form-cadastro-pet" onSubmit={salvar}>
+        <label>
+          Nome do pet
+          <input
+            required
+            value={dados.nome}
+            onChange={(event) => atualizar("nome", event.target.value)}
+          />
+        </label>
+        <label>
+          Espécie
+          <input
+            required
+            placeholder="Ex.: cão ou gato"
+            value={dados.especie}
+            onChange={(event) => atualizar("especie", event.target.value)}
+          />
+        </label>
+        <label>
+          Raça
+          <input
+            required
+            value={dados.raca}
+            onChange={(event) => atualizar("raca", event.target.value)}
+          />
+        </label>
+        <label>
+          RGA
+          <input
+            required
+            value={dados.rga}
+            onChange={(event) => atualizar("rga", event.target.value)}
+          />
+        </label>
+        <label>
+          Idade
+          <input
+            type="number"
+            min="0"
+            max="30"
+            step="1"
+            required
+            value={dados.idade}
+            onChange={(event) => atualizar("idade", event.target.value)}
+          />
+        </label>
+        <label>
+          Sexo
+          <select
+            required
+            value={dados.sexo}
+            onChange={(event) => atualizar("sexo", event.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="F">Fêmea</option>
+            <option value="M">Macho</option>
+          </select>
+        </label>
+        <label>
+          Porte
+          <select
+            required
+            value={dados.porte}
+            onChange={(event) => atualizar("porte", event.target.value)}
+          >
+            <option value="">Selecione</option>
+            <option value="pequeno">Pequeno</option>
+            <option value="medio">Médio</option>
+            <option value="grande">Grande</option>
+            <option value="nao_informado">Não informado</option>
+          </select>
+        </label>
+        <label>
+          Foto (URL, opcional)
+          <input
+            type="url"
+            value={dados.foto}
+            onChange={(event) => atualizar("foto", event.target.value)}
+          />
+        </label>
+        <label className="pet-vacinado">
+          <input
+            type="checkbox"
+            checked={dados.e_vacinado}
+            onChange={(event) => atualizar("e_vacinado", event.target.checked)}
+          />{" "}
+          Pet vacinado
+        </label>
+        {mensagem && (
+          <p className="mensagem-pet" role="status">
+            {mensagem}
+          </p>
+        )}
+        <button type="submit" className="botao-principal" disabled={salvando}>
+          {salvando ? "Salvando..." : "Salvar pet"}
         </button>
-
-
-        </div>
-
-
-    </div>
-
-</div>
-)}
+      </form>
+    </details>
+  );
+}

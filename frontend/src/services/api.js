@@ -5,7 +5,7 @@ import { requisicao } from "../utils/api.js";
 export const authApi = {
   // Cadastro público de cliente. Payload: nome, email, senha, data_nascimento, telefone, cpf, endereco.
   cadastrar: (dados) =>
-    requisicao({ method: "POST", url: "/auth/cadastro", data: dados }),
+    requisicao({ method: "POST", url: "/auth/cadastrar", data: dados }),
   // O login grava o cookie HTTP-only de sessão no navegador.
   login: (credenciais) =>
     requisicao({ method: "POST", url: "/auth/login", data: credenciais }),
