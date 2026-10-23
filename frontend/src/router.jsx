@@ -5,6 +5,8 @@ import Pets from './pages/meuspets';
 import Teste from './pages/teste'
 import Agendamentos from './pages/agendamentos';
 import NaoEncontrada from './pages/naoEncontrada'
+import RotaProtegida from './components/rotaProtegida/rotaProtegida';
+import Clientes from './components/admin/clientes';
 
 export default function Navigation() {
     return (
@@ -16,6 +18,9 @@ export default function Navigation() {
                 <Route path='/teste' element={<Teste />}/>
                 <Route path = '/agendamentos' element={<Agendamentos/>}/>
                 <Route path='*' element={<NaoEncontrada/>}/>
+                <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
+                    <Route path="/clientes" element={<Clientes />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )

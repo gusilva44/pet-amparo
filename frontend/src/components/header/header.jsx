@@ -14,7 +14,7 @@ export default function Header(){
             <section className='nav'>
                 <ul>
                     <li>
-                        <a className='links' href='/' > 
+                        <a className='links' href='#' > 
                         <img className='icone-header' src={Casa} alt="Icone casa" /> Início</a>
                     </li>
                     <li>

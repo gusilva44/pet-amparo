@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
 import Calendario from "../components/calendario/calendario";
@@ -11,6 +11,7 @@ import {
   veterinariosApi,
 } from "../services/api";
 import { mensagemErroApi } from "../utils/api";
+import { unidades } from "../data/unidades";
 import "../scss/unidades.scss";
 
 const abas = [
@@ -303,9 +304,13 @@ export default function Unidades() {
         <img className="unidade-logo" src={Logo} alt="Pet Amparo" />
         <article className="unidade-card">
           <section className="unidade-cabecalho">
-            <div className="unidade-foto" aria-hidden="true">
-              <span>&#128062;</span>
-            </div>
+            <div className="unidade-foto" 
+            style={{ 
+              backgroundImage: `url(${unidades.find((card) => String(card.id) === String(id))?.img})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
+            aria-hidden="true"></div>
             <div className="unidade-dados">
               <h1>{unidade.nome}</h1>
               {unidade.descricao && (

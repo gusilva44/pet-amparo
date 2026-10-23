@@ -1,4 +1,4 @@
--- Active: 1790850489930@@127.0.0.1@3306
+-- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
@@ -584,7 +584,7 @@ DROP DATABASE pet_amparo;
 
 UPDATE usuarios
 SET tipo = "admin"
-where id_usuario = 7;
+where id_usuario = 2;
 
 UPDATE usuarios
 SET tipo = "veterinario"
@@ -593,4 +593,4 @@ where id_usuario = 6;
 DELETE FROM usuarios
 WHERE tipo = "veterinario";
 
-SELECT * from clientes;
+SELECT * from usuarios;

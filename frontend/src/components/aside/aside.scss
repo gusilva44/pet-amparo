@@ -11,7 +11,7 @@
   overflow-y: auto;
   box-sizing: border-box;
 
-  gap: 40px;
+  gap: 20px;
   color: var(--branco);
 
   ul {
@@ -24,7 +24,7 @@
     font-size: 25px;
     li {
       display: flex;
-      gap: 40px;
+      gap: 20px;
       i {
         color: var(--laranja);
       }
@@ -61,6 +61,19 @@
     color: var(--branco);
   }
 
+  .dados-usuario button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--laranja);
+    color: white;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
   .img-usuario {
     width: 60px;
     height: 60px;
@@ -73,6 +86,7 @@
     font-family: var(--titulo);
     font-size: 22px;
     font-weight: 700;
+    margin-top: 12px;
   }
   .botao-sair-aside {
     border: 0;

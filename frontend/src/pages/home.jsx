@@ -10,10 +10,35 @@ import '../scss/home.scss'
 import sobre2 from '../assets/imagens/image0.png'
 import { useNavigate } from "react-router-dom"
 import Logo from '../assets/imagens/Logo.webp'
+import { useEffect, useState } from "react"
+import { authApi } from "../services/api"
 
 
 export default function Home(){
     const navigate = useNavigate()
+    const [tipo, setTipo] = useState("cliente")
+
+    useEffect(() => {
+        let ativo = true
+
+        async function carregarTipoUsuario() {
+            try {
+                const resposta = await authApi.usuarioAtual()
+                if (ativo) setTipo(resposta.usuario?.tipo || "cliente")
+                    console.log(resposta.usuario)
+            } catch {
+                if (ativo) setTipo("cliente")
+            }
+        }
+
+        carregarTipoUsuario()
+        window.addEventListener("auth:changed", carregarTipoUsuario)
+
+        return () => {
+            ativo = false
+            window.removeEventListener("auth:changed", carregarTipoUsuario)
+        }
+    }, [])
 
     const cards = [
         {
@@ -44,7 +69,7 @@ export default function Home(){
         <div className="home-page">
             <Header />
             <div className="main">
-                <Aside />
+                <Aside tipo={tipo} />
                 
                 <div className="content">
                     <div className="banner">
@@ -128,7 +153,7 @@ export default function Home(){
                                 <div className="information">
                                     <h2>{uni.nome}</h2>
                                     <p>{uni.localizacao}</p>
-                                    <button>Agende sua consulta</button>
+                                    <button onClick={() => irParaUnidades(uni.id)}>Agende sua consulta</button>
                                 </div>
                             </div>
                             
