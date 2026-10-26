@@ -17,10 +17,7 @@ const cadastroInicial = {
   endereco: "",
 };
 
-/**
- * Formulário reutilizável para entrar ou criar uma conta.
- * onAuthenticated recebe o usuário após o login; a página pode guardá-lo em um state.
- */
+
 export default function Auth({
   onAuthenticated,
   initialMode = "login",
@@ -41,7 +38,6 @@ export default function Auth({
   }
 
   async function concluirLogin(dadosLogin) {
-    // O cookie de sessão é criado pelo backend. O usuário retornado fica disponível à página.
     const resposta = await authApi.login(dadosLogin);
     avisarMudancaAutenticacao();
     onAuthenticated?.(resposta.usuario);
@@ -140,13 +136,71 @@ export default function Auth({
         </form>
       ) : (
         <form className="form-pets" onSubmit={cadastrar}>
-          <label>Nome completo<input name="nome" required value={cadastro.nome} onChange={atualizarCadastro} /></label>
-          <label>Email<input name="email" type="email" autoComplete="email" required value={cadastro.email} onChange={atualizarCadastro} /></label>
-          <label>Senha<input name="senha" type="password" autoComplete="new-password" minLength={6} required value={cadastro.senha} onChange={atualizarCadastro} /></label>
-          <label>Data de nascimento<input name="data_nascimento" type="date" required value={cadastro.data_nascimento} onChange={atualizarCadastro} /></label>
-          <label>Telefone<input name="telefone" type="tel" required value={cadastro.telefone} onChange={atualizarCadastro} /></label>
-          <label>CPF<input name="cpf" inputMode="numeric" required value={cadastro.cpf} onChange={atualizarCadastro} /></label>
-          <label>Endereço<input name="endereco" required value={cadastro.endereco} onChange={atualizarCadastro} /></label>
+          <label>Nome completo
+            <input 
+            name="nome" 
+            required 
+            value={cadastro.nome} 
+            onChange={atualizarCadastro} />
+          </label>
+
+          <div className="en">
+            <label className="ex">Data de nascimento
+              <input 
+              name="data_nascimento" 
+              type="date" 
+              required 
+              value={cadastro.data_nascimento} 
+              onChange={atualizarCadastro} />
+            </label>
+
+            <label className="ex">CPF
+              <input
+              name="cpf"
+              inputMode="numeric"
+              required
+              value={cadastro.cpf}
+              onChange={atualizarCadastro} />
+            </label>
+          </div>
+
+          <label>Email
+            <input 
+            name="email" 
+            type="email" 
+            autoComplete="email" 
+            required 
+            value={cadastro.email} 
+            onChange={atualizarCadastro} />
+          </label>
+
+          <label>Senha
+            <input 
+            name="senha" 
+            type="password" 
+            autoComplete="new-password" 
+            minLength={6} 
+            required 
+            value={cadastro.senha} 
+            onChange={atualizarCadastro} />
+          </label>
+
+          <label>Telefone
+            <input
+            name="telefone"
+            type="tel"
+            required
+            value={cadastro.telefone}
+            onChange={atualizarCadastro} />
+          </label>
+
+          <label>Endereço
+            <input 
+            name="endereco" 
+            required 
+            value={cadastro.endereco} 
+            onChange={atualizarCadastro} />
+          </label>
           <button className="botao-principal" disabled={enviando}>
             {enviando ? "Cadastrando..." : "Criar cadastro"}
           </button>

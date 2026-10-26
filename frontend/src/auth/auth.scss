@@ -17,23 +17,96 @@
   margin: 2rem auto;
   padding: clamp(1.5rem, 4vw, 2.5rem);
   border-radius: 1rem;
-  background: var(--verde-escuro);
+  background: #4f6a57;
   color: var(--branco);
   font-family: var(--textos);
 }
-.auth-pets h1 { color: var(--laranja); font-family: var(--titulo); }
-.auth-pets .auth-intro { margin-bottom: 1.5rem; }
-.auth-pets .auth-tabs { display: flex; gap: .5rem; margin-bottom: 1.25rem; }
-.auth-pets button { border: 0; border-radius: .5rem; padding: .75rem 1rem; font: inherit; cursor: pointer; }
-.auth-pets .auth-tabs button { flex: 1; background: var(--verde-claro); color: white; }
-.auth-pets .auth-tabs button.ativo,
-.auth-pets .botao-principal { background: var(--laranja); color: white; }
-.auth-pets .form-pets { display: grid; gap: 1rem; }
-.auth-pets .form-pets label { display: grid; gap: .4rem; }
-.auth-pets .form-pets input { box-sizing: border-box; width: 100%; min-height: 2.7rem; padding: .6rem .75rem; border: 1px solid #b8c2b9; border-radius: .45rem; background: white; color: #253b32; font: inherit; }
-.auth-pets .botao-principal { margin-top: .4rem; font-weight: 700; }
-.auth-pets button:disabled { cursor: wait; opacity: .7; }
-.auth-pets .mensagem-pets { padding: .75rem; border-radius: .4rem; background: #fff0ed; color: #a33f2b; }
-.auth-pets .auth-cancelar { margin-top: 1rem; background: transparent; color: white; text-decoration: underline; }
+.auth-pets h1 { 
+  color: var(--laranja); 
+  font-family: 
+  var(--titulo); 
+}
 
-body { margin: 0; padding: 0; box-sizing: border-box; background-color: var(--creme); }
+.auth-pets .auth-intro { 
+  margin-bottom: 1.5rem; 
+}
+.auth-pets .auth-tabs { 
+  display: flex; 
+  margin-bottom: 1.25rem; 
+}
+
+.auth-pets button { 
+  border: 0; 
+  border-radius: .5rem; 
+  padding: .75rem 1rem; 
+  font: inherit; 
+  cursor: pointer; 
+}
+
+.auth-pets .auth-tabs button { 
+  flex: 1; 
+  background: var(--verde-claro); 
+  color: white;
+  border-bottom: 2px solid white;
+  border-radius: 0px;
+}
+
+.auth-pets .auth-tabs button.ativo,
+.auth-pets .botao-principal { 
+  border-bottom: 1px solid var(--laranja);
+  color: var(--laranja); 
+}
+
+.auth-pets .form-pets { 
+  display: grid; 
+  gap: 1rem; 
+}
+
+.auth-pets .form-pets label { 
+  display: grid; 
+  gap: .4rem; 
+  color: var(--laranja);
+}
+
+.auth-pets .form-pets input { 
+  box-sizing: border-box; 
+  width: 100%; 
+  min-height: 2.7rem; 
+  padding: .6rem .75rem; 
+  border: 1px solid #b8c2b9; 
+  border-radius: .45rem; 
+  background: white; 
+  color: #253b32; 
+  font: inherit; 
+}
+
+.auth-pets .botao-principal { 
+  margin-top: .4rem; 
+  font-weight: 700; 
+}
+
+.auth-pets button:disabled { 
+  cursor: wait; 
+  opacity: .7; 
+}
+
+.auth-pets .mensagem-pets { 
+  padding: .75rem; 
+  border-radius: .4rem; 
+  background: #fff0ed; 
+  color: #a33f2b; 
+}
+
+.auth-pets .auth-cancelar { 
+  margin-top: 1rem; 
+  background: transparent; 
+  color: white; 
+  text-decoration: underline;
+}
+
+body { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  background-color: var(--creme); 
+}
