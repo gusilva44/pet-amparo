@@ -90,7 +90,7 @@ endpoints.put('/animais/:id', autenticar, exigirCliente, async (req, res) => {
 endpoints.delete('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     try {
         const idAnimal = Number(req.params.id)
-        const idCliente = req.cliente.id_cliente
+        const idCliente = Number(req.cliente.id_cliente)
 
         const resultado = await service.deletarAnimal(idAnimal, idCliente)
 

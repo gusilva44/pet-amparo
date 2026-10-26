@@ -12,10 +12,7 @@ const endpoints = Router();
 // LISTAR VETERINARIOS POR UNIDADE
 endpoints.get("/veterinarios", async (req, res) => {
   try {
-    const idUnidade =
-      req.query.id_unidade === undefined
-        ? undefined
-        : Number(req.query.id_unidade);
+    const idUnidade = req.query.id_unidade === undefined ? undefined : Number(req.query.id_unidade);
 
     const veterinarios = await service.listarVeterinarios(idUnidade);
 
@@ -25,22 +22,19 @@ endpoints.get("/veterinarios", async (req, res) => {
       veterinarios,
     });
   } catch (error) {
+    const status = error.message.includes("não encontrado") ? 404 : 400
+
     logError(error);
-    res.status(400).json(formatarError(error));
+    res.status(status).json(formatarError(error));
   }
 });
 
 // AGENDAMENTOS DO VETERINÁRIO LOGADO
-endpoints.get(
-  "/veterinarios/me/agendamentos",
-  autenticar,
-  exigirVeterinario,
-  async (req, res) => {
+endpoints.get("/veterinarios/me/agendamentos", autenticar, exigirVeterinario, async (req, res) => {
     try {
       const id = Number(req.veterinario.id_veterinario);
 
-      const agendamentos =
-        await agendamentosService.listarAgendamentosDoVeterinario(id);
+      const agendamentos = await agendamentosService.listarAgendamentosDoVeterinario(id);
 
       res.status(200).json({
         sucesso: true,
@@ -48,29 +42,22 @@ endpoints.get(
         agendamentos,
       });
     } catch (error) {
+      const status = error.message.includes("não encontrado") ? 404 : 400
+
       logError(error);
-      res.status(400).json(formatarError(error));
+      res.status(status).json(formatarError(error));
     }
   },
 );
 
 // ATUALIZAR SITUAÇÃO DE UM AGENDAMENTO PRÓPRIO
-endpoints.patch(
-  "/veterinarios/me/agendamentos/:id/status",
-  autenticar,
-  exigirVeterinario,
-  async (req, res) => {
+endpoints.patch("/veterinarios/me/agendamentos/:id/status", autenticar, exigirVeterinario, async (req, res) => {
     try {
       const id_agendamento = Number(req.params.id);
       const status = req.body?.status;
       const id_veterinario = Number(req.veterinario.id_veterinario);
 
-      const resultado =
-        await agendamentosService.atualizarStatusPeloVeterinario(
-          id_agendamento,
-          id_veterinario,
-          status,
-        );
+      const resultado = await agendamentosService.atualizarStatusPeloVeterinario(id_agendamento, id_veterinario, status);
 
       res.status(200).json({
         sucesso: true,
@@ -87,11 +74,7 @@ endpoints.patch(
 );
 
 // CRIAR VETERINARIO
-endpoints.post(
-  "/veterinarios",
-  autenticar,
-  verificarAdmin,
-  async (req, res) => {
+endpoints.post("/veterinarios", autenticar, verificarAdmin, async (req, res) => {
     try {
       const dados = req.body;
 
@@ -102,8 +85,10 @@ endpoints.post(
         id_veterinario: resultado,
       });
     } catch (error) {
+      const status = error.message.includes("não encontrado") ? 404 : 400
+
       logError(error);
-      res.status(400).json(formatarError(error));
+      res.status(status).json(formatarError(error));
     }
   },
 );
@@ -120,17 +105,15 @@ endpoints.get("/veterinarios/:id/horarios", async (req, res) => {
       resultado,
     });
   } catch (error) {
+    const status = error.message.includes("não encontrado") ? 404 : 400
+
     logError(error);
-    res.status(400).json(formatarError(error));
+    res.status(status).json(formatarError(error));
   }
 });
 
 // CRIAR NOVO HORARIO
-endpoints.post(
-  "/veterinarios/:id/horarios",
-  autenticar,
-  verificarAdmin,
-  async (req, res) => {
+endpoints.post("/veterinarios/:id/horarios", autenticar, verificarAdmin, async (req, res) => {
     try {
       const dados = req.body;
       const id_veterinario = Number(req.params.id);
@@ -151,11 +134,7 @@ endpoints.post(
 );
 
 // DELETAR HORARIO
-endpoints.delete(
-  "/veterinarios/:id/horarios/:idHorario",
-  autenticar,
-  verificarAdmin,
-  async (req, res) => {
+endpoints.delete("/veterinarios/:id/horarios/:idHorario", autenticar, verificarAdmin, async (req, res) => {
     try {
       const id_veterinario = Number(req.params.id);
       const id_horario = Number(req.params.idHorario);

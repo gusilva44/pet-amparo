@@ -30,7 +30,7 @@ endpoints.get('/clientes/me', autenticar, exigirCliente, async (req, res) => {
 // ATUALIZAR MEUS DADOS (CLIENTE)
 endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
-        const idUsuario = req.usuario.id_usuario
+        const idUsuario = Number(req.usuario.id_usuario)
         const cliente = req.body
 
         const resultado = await service.atualizarClientePorUsuario(cliente, idUsuario)
@@ -44,8 +44,10 @@ endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
         })
 
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 
@@ -67,8 +69,10 @@ endpoints.delete('/clientes/me', autenticar, exigirCliente, async (req, res) => 
             mensagem: 'Conta excluída com sucesso.' 
         })
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 

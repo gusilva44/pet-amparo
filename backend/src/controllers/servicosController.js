@@ -19,8 +19,10 @@ endpoints.get('/servicos', async (req, res) => {
             resultado
         })
     } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
         logError(error)
-        res.status(400).json(formatarError(error))
+        res.status(status).json(formatarError(error))
     }
 })
 

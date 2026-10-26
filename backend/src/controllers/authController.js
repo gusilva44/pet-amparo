@@ -19,13 +19,11 @@ endpoints.post('/auth/cadastrar', async (req, res) => {
             mensagem: 'Cliente cadastrado com sucesso.',
             resultado
         })
-
     } catch (error) {
         logError(error)
         res.status(400).json(formatarError(error))
     }
 })
-
 
 // REALIZAR CADASTRO DO USUÁRIO
 endpoints.post('/auth/login', async (req, res) => {
@@ -67,7 +65,6 @@ endpoints.put('/auth/me', autenticar, async (req, res) => {
         res.status(status).json(formatarError(error))
     }
 })
-
 
 // REALIZAR LOGOUT DO USUÁRIO
 endpoints.post('/auth/logout', (req, res) => {
