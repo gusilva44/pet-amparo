@@ -28,15 +28,15 @@ function normalizar(unidade) {
 }
 
 export function listarUnidades(incluirInativas = false, incluirServicos = false) {
-    return incluirServicos
-        ? repo.listarUnidadesComServicos(incluirInativas)
-        : repo.listarUnidades(incluirInativas)
+    return incluirServicos ? repo.listarUnidadesComServicos(incluirInativas) : repo.listarUnidades(incluirInativas)
 }
 
 export async function buscarUnidadePorId(idUnidade) {
     validarId(idUnidade)
+
     const unidade = await repo.buscarUnidadePorId(idUnidade)
     if (!unidade) throw new Error('Unidade não encontrada.')
+
     return unidade
 }
 
@@ -46,8 +46,10 @@ export function criarUnidade(unidade) {
 
 export async function atualizarUnidade(idUnidade, unidade) {
     validarId(idUnidade)
+
     const alteradas = await repo.atualizarUnidade(idUnidade, normalizar(unidade))
     if (!alteradas) throw new Error('Unidade não encontrada.')
+
     return alteradas
 }
 

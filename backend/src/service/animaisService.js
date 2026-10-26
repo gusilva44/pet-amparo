@@ -55,6 +55,8 @@ export async function adicionarAnimal(animal, idCliente) {
 
     let { nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado } = animal
 
+    if(!nome || !especie || !raca || !rga || !idade || !sexo || !porte || !foto || !e_vacinado) throw new Error("Todods os campos devem ser preenchidos")
+
     const rgaValidado = rga.trim()
     const animalExistente = await db.buscarAnimalPorRga(rga)
 
@@ -62,14 +64,10 @@ export async function adicionarAnimal(animal, idCliente) {
 
     if(Number(idade) >= 30 ) throw new Error("Um animal não consegue viver mais que 30 anos")
 
-    if (!["pequeno", "medio", "grande", "nao_informado"].includes(porte)) {
-        porte = "nao_informado"
-    }
+    if (!["pequeno", "medio", "grande", "nao_informado"].includes(porte)) porte = "nao_informado"
 
-    if (!["M", "F"].includes(sexo)) {
-        sexo = "desconhecido"
-    }
-
+    if (!["M", "F"].includes(sexo)) sexo = "desconhecido"
+    
     const dados = {
         nome: nome.trim(),
         especie: especie.trim(),
@@ -95,10 +93,10 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
     validarAnimal(animal)
 
     const animalAtual = await db.buscarAnimalPorId(idAnimal, idCliente)
+
     if (!animalAtual) throw new Error('Animal não encontrado.')
 
     const rga = animal.rga.trim()
-
     const animalComRga = await db.buscarAnimalPorRga(rga)
 
     if (animalComRga && animalComRga.id_animal !== idAnimal) throw new Error('Já existe outro animal cadastrado com esse RGA.')

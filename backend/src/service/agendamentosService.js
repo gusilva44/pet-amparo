@@ -13,6 +13,7 @@ function lerDataHora(valor) {
     if (Number.isNaN(data.getTime())) throw new Error('Data e hora de início inválidas.')
 
     if (data <= new Date()) throw new Error('O agendamento deve estar no futuro.')
+
     return data
 }
 
@@ -43,9 +44,8 @@ async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)
 
     const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio))
 
-    if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) {
-        throw new Error('O horário escolhido está fora do expediente do veterinário.')
-    }
+    if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) throw new Error('O horário escolhido está fora do expediente do veterinário.')
+    
 }
 
 export function listarMeusAgendamentos(idCliente) {
@@ -56,6 +56,7 @@ export function listarMeusAgendamentos(idCliente) {
 
 export function listarAgendamentosDoVeterinario(idVeterinario) {
     validarId(idVeterinario)
+
     return repo.listarAgendamentosVeterinario(idVeterinario)
 }
 
@@ -63,15 +64,12 @@ export async function atualizarStatusPeloVeterinario(idAgendamento, idVeterinari
     validarId(idAgendamento)
     validarId(idVeterinario)
 
-    const status = statusSolicitado === 'pendente'
-        ? 'agendado'
-        : statusSolicitado === 'concluido'
-            ? 'concluido'
-            : null
+    const status = statusSolicitado === 'pendente' ? 'agendado' : statusSolicitado === 'concluido' ? 'concluido' : null
 
     if (!status) throw new Error('O status deve ser pendente ou concluido.')
 
     const agendamento = await repo.buscarAgendamentoDoVeterinario(idAgendamento, idVeterinario)
+
     if (!agendamento) throw new Error('Agendamento não encontrado.')
     if (agendamento.status === 'cancelado') throw new Error('Não é possível alterar um agendamento cancelado.')
 
@@ -101,10 +99,8 @@ export async function criarAgendamento(dados, idCliente) {
     const servico = await servicosRepo.buscarServicoPorId(idServico)
 
     if (!servico || !servico.ativo) throw new Error('Serviço não encontrado ou inativo.')
-    if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) {
-        throw new Error('O serviço não está disponível nesta unidade.')
-    }
-
+    if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) throw new Error('O serviço não está disponível nesta unidade.')
+    
     const inicio = lerDataHora(dados.inicio)
     const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
     await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)

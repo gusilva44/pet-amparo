@@ -62,9 +62,8 @@ export async function criarHorario(idVeterinario, dados) {
     validarId(idUnidade)
     if (!regex.verificarFormatosHorario.test(dados.hora_inicio || '') || !regex.verificarFormatosHorario.test(dados.hora_fim || '') || dados.hora_inicio >= dados.hora_fim) throw new Error('O intervalo de horários é inválido.')
 
-    if (!await veterinariosRepo.veterinarioAtendeNaUnidade(idVeterinario, idUnidade)) {
-        throw new Error('O veterinário não atende nesta unidade.')
-    }
+    if (!await veterinariosRepo.veterinarioAtendeNaUnidade(idVeterinario, idUnidade))throw new Error('O veterinário não atende nesta unidade.')
+    
 
     const horario = { 
         id_veterinario: idVeterinario, 

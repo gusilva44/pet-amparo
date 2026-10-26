@@ -51,13 +51,10 @@ export async function adicionarNaCarteira(idAnimal, dados) {
     validarId(idMedicamento)
 
     if (idVeterinario !== null) validarId(idVeterinario)
-
     if (!dados.dosagem?.trim() || !dados.frequencia?.trim() || !dados.data_inicio) throw new Error('Dosagem, frequência e data de início são obrigatórias.')
-
     if (dados.data_fim && dados.data_fim < dados.data_inicio) throw new Error('A data final não pode ser anterior à data inicial.')
 
     const medicamento = await medicamentosDb.buscarMedicamento(idMedicamento)
-
     if (!medicamento || !medicamento.ativo) throw new Error('Medicamento não encontrado ou inativo.')
         
     return medicamentosDb.adicionarNaCarteira({
