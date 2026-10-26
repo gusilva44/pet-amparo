@@ -4,7 +4,5 @@ export function validarId(id) {
 }
 
 export function autenticacaoUsuario(id){
-    if (!id) {
-        throw new Error('Usuário não autenticado.')
-    }
+    if (!id) throw new Error('Usuário não autenticado.')
 }
