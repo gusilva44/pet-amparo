@@ -51,6 +51,7 @@ export default function Auth({
 
     try {
       await concluirLogin({ email, senha });
+      navigate('/')
     } catch (error) {
       setMensagem(mensagemErroApi(error) || "Não foi possível entrar.");
     } finally {

@@ -7,6 +7,7 @@ import Agendamentos from './pages/agendamentos';
 import NaoEncontrada from './pages/naoEncontrada'
 import RotaProtegida from './components/rotaProtegida/rotaProtegida';
 import Clientes from './components/admin/clientes';
+import Auth from './auth/auth';
 
 export default function Navigation() {
     return (
@@ -19,7 +20,7 @@ export default function Navigation() {
                 <Route path = '/agendamentos' element={<Agendamentos/>}/>
                 <Route path='*' element={<NaoEncontrada/>}/>
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
-                    <Route path="/clientes" element={<Clientes />} />
+                    <Route path="/usuarios" element={<Clientes />} />
                 </Route>
             </Routes>
         </BrowserRouter>

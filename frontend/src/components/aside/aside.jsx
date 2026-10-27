@@ -82,10 +82,10 @@
             {!autenticado ? (
               <>
                 <button type="button"
-                  onClick={() => navigate("/meuspets?modo=login")}
+                  onClick={() => navigate("/meusPets?modo=login")}
                 >Fazer login</button>
                 <button type="button"
-                  onClick={() => navigate("/meuspets?modo=cadastro")}
+                  onClick={() => navigate("/meusPets?modo=cadastro")}
                 >Cadastrar</button>
               </>
             ) : (

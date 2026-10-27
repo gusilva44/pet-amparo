@@ -1,7 +1,53 @@
 .content {
     display: flex;
+    width: 100%;
 
     .clientes-page{
-        width: 80%;
+        width: 100%;
+
+        header {
+            display: flex;
+            padding: 20px;
+
+            .info_user{
+                display: flex;
+                padding: 0px;
+                flex-direction: row;
+                gap: 10px;
+
+                i {
+                    background-color: lightgreen;
+                    color: green;
+                    padding: 15px 12px;
+                    font-size: 30px;
+                    border-radius: 50%;
+                }
+
+                .titulo {
+                    display: flex;
+                    flex-direction: column;
+                    
+                    h1 {
+                        font-size: 1.5em;
+                    }
+
+                    p {
+                        font-size: 1em;
+                    }
+
+                    h1, p {
+                        margin: 0px;
+                    }
+
+                    
+                }
+
+                
+
+                p {
+                    font-size: 1.5em;
+                }
+            }
+        }
     }
 }
