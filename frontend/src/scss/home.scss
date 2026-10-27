@@ -409,7 +409,6 @@ html {
               margin-top: 30px;
 
               .footer-img{
-                background-color: var(--creme);
                 padding: 5px;
                 border-radius: 8px;
                 height: 55px;
@@ -430,14 +429,12 @@ html {
             }
 
             .footer-card{
-              background-color: var(--creme);
               width: 250px;
               height: 180px;
               display: flex;
               flex-direction: column;
-              margin-top: 35px;
+              margin-top: 30px;
               border-radius: 3px;
-
             
               
               h1{
@@ -455,14 +452,15 @@ html {
                 margin-bottom: 1px;
                 transition: 0.2s;
                 margin-right: 17px;
-                color: var(--verde-escuro);
+                color: var(--branco);
               }
 
               ul:hover{
                 color: var(--laranja);
                 font-weight: bold;
               }
-          
+                          
+
             }
 
             .direitos{
@@ -476,5 +474,6 @@ html {
               height: 50px;
               background-color: var(--verde-escuro);
               color: var(--branco);
+              font-family: var(--textos);
             }
 }

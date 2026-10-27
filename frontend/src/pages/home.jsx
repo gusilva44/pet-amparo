@@ -205,7 +205,7 @@ export default function Home(){
                                     <ul>Contato@gmail.com</ul>
                             </div>
                     </div>
-
+                          
                     <div className="direitos">
                         <p>© 2026 Pet Amparo - Todos os diretos reservados ao Instituto Nossa Senhora de Fátima </p>
                     </div>
