@@ -20,7 +20,7 @@ export default function Navigation() {
                 <Route path = '/agendamentos' element={<Agendamentos/>}/>
                 <Route path='*' element={<NaoEncontrada/>}/>
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
-                    <Route path="/usuarios" element={<Clientes />} />
+                    <Route path="/usuarios" element={<Clientes />} />n
                 </Route>
             </Routes>
         </BrowserRouter>
