@@ -1,0 +1,135 @@
+header{
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-visao {
+    display: flex;
+    width: 100%;
+
+    .conteudo-visao {
+        flex: 1;
+        min-width: 0;
+        gap: 10px; 
+           
+
+            .texto-admin{
+                margin-left: 35px;
+
+                h1{
+                    font-family: var(--titulo);
+                    margin-bottom: 5px;
+
+                }
+                p{
+                    font-family: var(--texto);
+                    margin-top: 0;
+                }
+            }
+            
+        .cards {
+            display: flex;
+            gap: 20px;
+            width: 95%;
+            box-sizing: border-box;
+            margin: 0 auto;
+
+             .info {
+                flex: 1;
+                min-width: 0;
+                height: 200px;
+                background-color: var(--laranja);
+                border-radius: 10px;
+                display: flex;
+                gap: 10px;
+
+                    h2{
+                        font-family: var(--titulo);
+                    }
+                    p{
+                        font-family: var(--texto);
+                    }
+
+
+                    .i {
+                        background-color: var(--verde);
+                        height: 75px;
+                        border-radius: 50%;
+                        margin-bottom: 15px;
+
+                    img {
+                        width: 75px;
+                        height: auto;
+                        display: block;
+
+                        }
+                    }
+            }
+                
+               
+            }
+            .secao-inferior{
+                .coluna-principal{
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 10px;
+                    margin-left: 30px;
+                    background-color: var(--branco);
+                    padding: 10px;
+                    border-radius: 10px;
+                    width: 62.5rem;
+                     
+                    h2{
+                        font-family: var(--titulo);
+                    }
+
+                    .cards-acesso {
+                        display: flex;
+                        justify-content: space-between;
+                        gap: 10px;
+                        width: 70%;
+                        box-sizing: border-box;
+                        margin-bottom: 10px;
+
+  .info-acesso {
+    flex: 1; 
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: var(--laranja);
+
+    .i-acesso {
+      width: 48px; 
+      height: 48px;
+      margin-bottom: 12px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .texto-card {
+      h2 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0 0 4px 0;
+      }
+
+      p {
+        font-size: 0.8rem;
+        margin: 0;
+        opacity: 0.7; 
+      }
+    }
+  }
+}
+                }
+            }
+        }
+}
+
