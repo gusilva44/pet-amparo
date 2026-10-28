@@ -23,7 +23,7 @@ const links = {
     admin: [
         {
             id: 1,
-            caminho: '/',
+            caminho: '/visao',
             texto: 'Visão Geral',
             icone: 'fa-regular fa-house'
         },
