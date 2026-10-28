@@ -22,6 +22,7 @@ export default function Navigation() {
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
                     <Route path="/usuarios" element={<Clientes />} />
                     <Route path='/visao' element={<VisaoGeral/>} />
+                    
                 </Route>
             </Routes>
         </BrowserRouter>

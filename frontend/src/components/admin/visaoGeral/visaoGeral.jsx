@@ -76,7 +76,7 @@ export default function VisaoGeral() {
             <main className="conteudo-visao">
                 <header>
                     <div className="texto-admin">
-                        <h1>Olá Administrador</h1>
+                        <h1>Olá Administrador!</h1>
                         <p>Acompanhe a situação das unidades veterinarias públicas de São Paulo</p>
                     </div>
                    
@@ -115,16 +115,6 @@ export default function VisaoGeral() {
                         <div className="unidades-recentes">
 
                         </div>
-                        </div>
-
-                        <div className="coluna-secundaria">
-                                <div className="atividades-recentes">
-
-                             </div>
-
-                                <div className="alertas">
-
-                            </div>
                         </div>
                     </section>
 

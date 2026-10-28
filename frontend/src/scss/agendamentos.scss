@@ -1,116 +1,149 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+// ========================================
+// PÁGINA DE AGENDAMENTOS
+// ========================================
+
 .page-Agendamentos {
     display: flex;
-    align-items: stretch;
-    width: 100%;
     min-height: 100vh;
-    background-color: var(--fundo, #f2ebdd);
+    background-color: var(--creme, #f2ebdd);
+    color: var(--verde-escuro, #263a31);
+    font-family: var(--textos, "Nunito Sans", sans-serif);
 
-    .main {
+    // Aplica box-sizing somente nesta página.
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    // ========================================
+    // CONTEÚDO PRINCIPAL
+    // ========================================
+
+    > .main {
         flex: 1;
         min-width: 0;
         padding: 20px 5%;
-        box-sizing: border-box;
+    }
 
-        .logo {
+    // ========================================
+    // LOGO
+    // ========================================
+
+    .logo {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto 2rem;
+
+        img {
+            display: block;
+            width: min(15rem, 55vw);
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    // ========================================
+    // BANNER
+    // ========================================
+
+    > .main > .banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 20px;
+
+        width: 100%;
+        min-height: 180px;
+        margin-top: 30px;
+        padding: 20px;
+
+        border-radius: 10px;
+        background-color: var(--verde-claro, #4f6a57);
+
+        .icon {
             display: flex;
-            justify-content: center;
             align-items: center;
-            width: 100%;
+            justify-content: center;
+            flex-shrink: 0;
+
+            width: 85px;
+            height: 85px;
+
+            border-radius: 50%;
+            background-color: var(--verde-escuro, #263a31);
+
+            i {
+                color: var(--laranja, #d9775b);
+                font-size: 40px;
+            }
+        }
+
+        .texto-banner {
+            flex: 1;
+            min-width: 0;
+
+            h2 {
+                margin: 0;
+                color: var(--laranja, #d9775b);
+                font-family: var(--titulo, "Outfit", sans-serif);
+                font-size: 27px;
+            }
+
+            p {
+                margin: 4px 0 0;
+                color: var(--branco, #ffffff);
+                font-family: var(--textos, "Nunito Sans", sans-serif);
+                font-size: 14px;
+                line-height: 1.5;
+            }
+        }
+
+        .imagem-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 25%;
 
             img {
-                width: 15rem;
-                max-width: 100%;
+                display: block;
+                width: 100%;
+                max-width: 190px;
+                max-height: 140px;
                 object-fit: contain;
             }
         }
-
-        .banner {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            gap: 20px;
-
-            width: 100%;
-            min-height: 180px;
-            margin-top: 30px;
-            padding: 20px;
-            box-sizing: border-box;
-
-            border-radius: 10px;
-            background-color: var(--verde-claro);
-
-            .icon {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-
-                width: 85px;
-                height: 85px;
-                border-radius: 50%;
-                background-color: var(--verde-escuro);
-
-                i {
-                    color: var(--laranja);
-                    font-size: 40px;
-                }
-            }
-
-            .texto-banner {
-                flex: 1;
-                min-width: 0;
-
-                h2 {
-                    margin: 0;
-                    color: var(--laranja);
-                    font-family: var(--titulo);
-                    font-size: 27px;
-                }
-
-                p {
-                    margin: 4px 0 0;
-                    color: var(--branco);
-                    font-family: var(--textos);
-                    font-size: 14px;
-                    line-height: 1.5;
-                }
-            }
-
-            .imagem-banner {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                width: 25%;
-
-                img {
-                    display: block;
-                    width: 100%;
-                    max-width: 190px;
-                    max-height: 140px;
-                    object-fit: contain;
-                }
-            }
-        }
     }
+
+    // ========================================
+    // CONTEÚDO DOS AGENDAMENTOS
+    // ========================================
 
     .conteudo-agendamentos {
         width: 100%;
         margin-top: 28px;
     }
 
+    // ========================================
+    // LEGENDA
+    // ========================================
+
     .legenda-agendamentos {
         margin-top: 16px;
         padding: 14px;
+
         border-radius: 7px;
-        background-color: var(--verde-escuro);
-        color: var(--branco);
+        background-color: var(--verde-escuro, #263a31);
+        color: var(--branco, #ffffff);
         text-align: center;
 
         h3 {
             margin: 0;
-            font-family: var(--textos);
+            font-family: var(--textos, "Nunito Sans", sans-serif);
             font-size: 13px;
             font-weight: normal;
         }
@@ -126,11 +159,14 @@
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                font-family: var(--textos);
+
+                font-family: var(--textos, "Nunito Sans", sans-serif);
                 font-size: 11px;
             }
 
             .cor {
+                display: inline-block;
+                flex-shrink: 0;
                 width: 10px;
                 height: 10px;
                 border-radius: 3px;
@@ -150,95 +186,165 @@
         }
     }
 
+    // ========================================
+    // NOVO AGENDAMENTO
+    // ========================================
+
     .novo-agendamento {
         margin: 28px 0 10px;
         text-align: center;
 
         h3 {
             margin: 0 0 8px;
-            color: var(--laranja);
-            font-family: var(--titulo);
+            color: var(--laranja, #d9775b);
+            font-family: var(--titulo, "Outfit", sans-serif);
             font-size: 17px;
         }
 
         p {
             margin: 0;
-            color: var(--verde-escuro);
-            font-family: var(--textos);
+            color: var(--verde-escuro, #263a31);
+            font-family: var(--textos, "Nunito Sans", sans-serif);
             font-size: 12px;
         }
 
         button {
             margin-top: 12px;
             padding: 12px 28px;
+
             border: none;
             border-radius: 6px;
-            background-color: var(--verde-escuro);
-            font-family: var(--textos);
+
+            background-color: var(--verde-escuro, #263a31);
+            color: var(--branco, #ffffff);
+
+            font-family: var(--textos, "Nunito Sans", sans-serif);
             font-size: 13px;
+
             cursor: pointer;
             transition: background-color 0.2s;
-            a{
-                text-decoration: none; 
-                color: var(--branco);
-            }
 
             &:hover {
-                background-color: var(--verde-claro);
+                background-color: var(--verde-claro, #4f6a57);
+            }
+
+            &:focus-visible {
+                outline: 2px solid var(--laranja, #d9775b);
+                outline-offset: 3px;
             }
         }
     }
 }
+
+// ========================================
+// TABLETS
+// ========================================
 
 @media (max-width: 768px) {
     .page-Agendamentos {
-        .main {
+        > .main {
             padding: 16px 12px;
+        }
 
-            .logo img {
-                width: 11rem;
+        .logo img {
+            width: 11rem;
+        }
+
+        > .main > .banner {
+            gap: 12px;
+            min-height: 130px;
+            margin-top: 24px;
+            padding: 12px;
+
+            .icon {
+                width: 52px;
+                height: 52px;
+
+                i {
+                    font-size: 26px;
+                }
             }
 
-            .banner {
-                gap: 12px;
-                min-height: 130px;
-                margin-top: 24px;
-                padding: 12px;
-
-                .icon {
-                    width: 52px;
-                    height: 52px;
-
-                    i {
-                        font-size: 26px;
-                    }
+            .texto-banner {
+                h2 {
+                    font-size: 19px;
                 }
 
-                .texto-banner {
-                    h2 {
-                        font-size: 19px;
-                    }
-
-                    p {
-                        font-size: 11px;
-                    }
+                p {
+                    font-size: 11px;
                 }
+            }
 
-                .imagem-banner {
-                    width: 22%;
-                }
+            .imagem-banner {
+                width: 22%;
             }
         }
     }
 }
 
+// ========================================
+// CELULARES
+// ========================================
+
 @media (max-width: 480px) {
     .page-Agendamentos {
-        .main {
-            .banner {
-                .imagem-banner {
-                    display: none;
+        > .main {
+            padding: 16px 10px;
+        }
+
+        .logo {
+            margin-bottom: 1.5rem;
+
+            img {
+                width: 10rem;
+            }
+        }
+
+        > .main > .banner {
+            gap: 10px;
+            min-height: auto;
+            padding: 14px;
+
+            .icon {
+                width: 45px;
+                height: 45px;
+
+                i {
+                    font-size: 22px;
                 }
+            }
+
+            .texto-banner {
+                h2 {
+                    font-size: 18px;
+                }
+
+                p {
+                    font-size: 11px;
+                }
+            }
+
+            .imagem-banner {
+                display: none;
+            }
+        }
+
+        .conteudo-agendamentos {
+            margin-top: 20px;
+        }
+
+        .legenda-agendamentos {
+            padding: 12px;
+
+            .itens-legenda {
+                gap: 12px;
+            }
+        }
+
+        .novo-agendamento {
+            button {
+                max-width: 100%;
+                padding: 12px 16px;
             }
         }
     }

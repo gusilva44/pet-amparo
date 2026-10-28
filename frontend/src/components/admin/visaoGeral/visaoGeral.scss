@@ -23,7 +23,7 @@ header{
 
                 }
                 p{
-                    font-family: var(--texto);
+                    font-family: var(--textos);
                     margin-top: 0;
                 }
             }
@@ -37,32 +37,49 @@ header{
 
              .info {
                 flex: 1;
-                min-width: 0;
-                height: 200px;
+                height: 110px;
                 background-color: var(--laranja);
                 border-radius: 10px;
                 display: flex;
-                gap: 10px;
+                gap: 5px;
+                padding: 10px;
 
-                    h2{
+                    
+                    .texto-card{
+                        display: flex;
+                        justify-content: end;
+                        flex-direction: column;
+                        
+                    h2 {
+                        font-size: 14px;
                         font-family: var(--titulo);
                     }
-                    p{
-                        font-family: var(--texto);
+
+                    h1 {
+                        font-size: 25px;
+                        margin: 0;
+                        font-family: var(--titulo);
                     }
+
+                    p {
+                        font-size: 12px;
+                        font-family: var(--textos);
+                    }
+
+                    }
+                    
 
 
                     .i {
-                        background-color: var(--verde);
-                        height: 75px;
-                        border-radius: 50%;
-                        margin-bottom: 15px;
+                        margin-top: 10px;
 
                     img {
-                        width: 75px;
+                        width: 50px;
                         height: auto;
                         display: block;
-
+                        background-color: var(--branco);
+                        padding: 3px;
+                        border-radius: 50%;
                         }
                     }
             }
@@ -78,29 +95,31 @@ header{
                     background-color: var(--branco);
                     padding: 10px;
                     border-radius: 10px;
-                    width: 62.5rem;
+                    width: 92%;
                      
                     h2{
                         font-family: var(--titulo);
                     }
 
-                    .cards-acesso {
-                        display: flex;
-                        justify-content: space-between;
-                        gap: 10px;
-                        width: 70%;
-                        box-sizing: border-box;
-                        margin-bottom: 10px;
+                   .cards-acesso {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+
 
   .info-acesso {
     flex: 1; 
     display: flex;
     flex-direction: column; 
     align-items: flex-start;
-    padding: 16px;
+    padding: 20px;
     border-radius: 12px;
     box-sizing: border-box;
     background-color: var(--laranja);
+    height: 140px;
 
     .i-acesso {
       width: 48px; 
@@ -115,15 +134,16 @@ header{
 
     .texto-card {
       h2 {
-        font-size: 0.95rem;
-        font-weight: 600;
+        font-family: var(--titulo);
         margin: 0 0 4px 0;
+        font-size: 14px;
       }
 
       p {
-        font-size: 0.8rem;
+        font-family: var(--textos);
         margin: 0;
         opacity: 0.7; 
+        font-size: 12px;
       }
     }
   }

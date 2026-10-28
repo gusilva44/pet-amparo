@@ -5,6 +5,41 @@ import Aside from "../aside/aside";
 
 import "./clientes.scss"
 
+const cards = [
+  {
+    id: 1,
+    titulo: "Clientes",
+    valor: 142,
+    icone: "fa-solid fa-user",
+    cor: "#084A38",
+    fundo: "#D3F0E2"
+  }, 
+  {
+    id: 2,
+    titulo: "Veterinários",
+    valor: 28,
+    icone: "fa-solid fa-stethoscope",
+    cor: "#084A38",
+    fundo: "#D3F0E2"
+  }, 
+  {
+    id: 3,
+    titulo: "Administradores",
+    valor: 3,
+    icone: "fa-solid fa-shield-halved",
+    cor: "#FC8C10",
+    fundo: "#FEE5C9"
+  }, 
+  {
+    id: 4,
+    titulo: "Inativados",
+    valor: 5,
+    icone: "fa-solid fa-ban",
+    cor: "#E53D46",
+    fundo: "#FED9DA"
+  }
+]
+
 export default function Clientes() {
   const [carregando, setCarregando] = useState(true);
   const [clientes, setClientes] = useState([]);
@@ -53,11 +88,15 @@ export default function Clientes() {
             </div>
           </header>
           <div className="sub">
-            <div className="clientescad">
-              <i class="fa-solid fa-user-group"></i> 
-              <h1>Usuários</h1>
-              
-            </div>
+            {cards.map((card, key) => (
+              <div className="card" key={key}>
+                <div className="ico"><i style={{ color: `${card.cor}`, backgroundColor: `${card.fundo}`}} className={card.icone}></i></div>
+                  <div className="text">
+                    <p>{card.titulo}</p>
+                    <h2 style={{ color: `${card.cor}`}}>{card.valor}</h2>
+                  </div>
+              </div>
+            ))}
           </div>
           <div className="pesquisa">
 

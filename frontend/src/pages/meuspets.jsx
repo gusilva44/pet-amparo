@@ -10,14 +10,12 @@ import { avisarMudancaAutenticacao } from "../utils/authEvents";
 
 export default function MeusPets() {
   const [searchParams] = useSearchParams();
-  const modoAuth =
-    searchParams.get("modo") === "cadastro" ? "cadastro" : "login";
+  const modoAuth = searchParams.get("modo") === "cadastro" ? "cadastro" : "login";
   const [usuario, setUsuario] = useState(null);
   const [cliente, setCliente] = useState(null);
   const [pets, setPets] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
-  // Carrega os dados usados pela página depois de confirmar a sessão.
   const carregarDados = useCallback(async (conta) => {
     setUsuario(conta);
 
@@ -34,7 +32,6 @@ export default function MeusPets() {
     );
   }, []);
 
-  // Tenta recuperar a sessão salva no cookie quando a página abre.
   useEffect(() => {
     let ativo = true;
 
