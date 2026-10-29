@@ -1,0 +1,70 @@
+.lista-unidades {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 0 auto;
+    gap: 25px;
+    background-color: var(--laranja);
+    padding: 10px;
+    border-radius: 10px;
+
+
+    .coluna {
+        display: flex;
+        flex-direction: column;
+        gap: 23px;
+
+        .acoes-titulo{
+            text-align: center;
+            margin-top: 10px;
+        }
+    }
+
+    h4 {
+        margin: 10px 0;
+        font-family: var(--titulo);
+    }
+
+    .item {
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        font-family: var(--textos);
+        font-size: 14px;
+    }
+
+    .nome-unidade {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 40px;
+        font-family: var(--titulo);
+
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    .acoes-unidade {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 41px;
+            
+    button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+     img {
+    width: 20px;
+    height: 20px;
+}
+    }
+}

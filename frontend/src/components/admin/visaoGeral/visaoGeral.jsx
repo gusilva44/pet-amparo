@@ -8,6 +8,8 @@ import Cadastro from "../../../assets/imagens/icones/cadastrar.svg"
 import Usuario from "../../../assets/imagens/icones/usuario.svg";
 import Serviço from "../../../assets/imagens/icones/servicos.svg"
 import Grafico from "../../../assets/imagens/icones/grafico.svg"
+import UnidadesRecentes from "../unidades";
+
 
 
 export default function VisaoGeral() {
@@ -70,6 +72,10 @@ export default function VisaoGeral() {
     }
 ];
 
+    const unidades = {
+
+    }
+
     return (
         <div className="page-visao">
             <Aside />
@@ -97,8 +103,10 @@ export default function VisaoGeral() {
                     </section>
                    <section className="secao-inferior">
                         <div className="coluna-principal">
-                            <h2>Acesso Rápido</h2>
-                         <div className="cards-acesso">
+                            <div className="acesso">
+                                <h2>Acesso Rápido</h2>
+
+                                  <div className="cards-acesso">
                                 {acesso.map((card) => (
                             <div className="info-acesso" key={card.id}>
                                 <div className="i-acesso">
@@ -110,10 +118,14 @@ export default function VisaoGeral() {
                                     <p>{card.texto}</p>
                                 </div>
                             </div>
-    ))}
-</div>
-                        <div className="unidades-recentes">
+                                    ))}
+                            </div>
+                        </div>
 
+                       
+                        <div className="unidades">
+                            <h2 className="titulo-unidade">Unidades Cadastradas:</h2>
+                                    <UnidadesRecentes/>
                         </div>
                         </div>
                     </section>

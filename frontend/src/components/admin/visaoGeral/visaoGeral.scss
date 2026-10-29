@@ -41,7 +41,7 @@ header{
                 background-color: var(--laranja);
                 border-radius: 10px;
                 display: flex;
-                gap: 5px;
+                gap: 13px;
                 padding: 10px;
 
                     
@@ -87,7 +87,7 @@ header{
                
             }
             .secao-inferior{
-                .coluna-principal{
+                .acesso{
                     display: flex;
                     flex-direction: column;
                     margin-top: 10px;
@@ -96,9 +96,12 @@ header{
                     padding: 10px;
                     border-radius: 10px;
                     width: 92%;
+                    height: 210px;
                      
                     h2{
                         font-family: var(--titulo);
+                        margin: 8px 0px 10px 10px;
+
                     }
 
                    .cards-acesso {
@@ -107,7 +110,7 @@ header{
     gap: 15px;
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    padding: 8px;
 
 
   .info-acesso {
@@ -120,6 +123,7 @@ header{
     box-sizing: border-box;
     background-color: var(--laranja);
     height: 140px;
+    gap: 10px;
 
     .i-acesso {
       width: 48px; 
@@ -129,6 +133,10 @@ header{
       img {
         width: 100%;
         height: 100%;
+        padding: 3px;
+        border-radius: 50%;
+        background-color: var(--branco);
+
       }
     }
 
@@ -153,3 +161,18 @@ header{
         }
 }
 
+.unidades{
+    width: 93%;
+    background-color: var(--branco);
+    border-radius: 10px;
+    margin: 30px;
+    height: 470px;
+
+
+
+    .titulo-unidade{
+        font-family: var(--titulo);
+        padding: 18px;
+        margin: 0px 0px 0px 3px;
+    }
+}
