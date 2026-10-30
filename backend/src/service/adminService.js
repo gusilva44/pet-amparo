@@ -1,10 +1,11 @@
-import { banco } from "../repos/clientesRepo.js"
+import Usuario, { banco } from "../repos/clientesRepo.js"
 import { validarDataNascimento } from "../utils/date.js"
 import { validarId } from "../validation/idCliente.js"
 import * as authService from './authService.js'
 import { regex } from "../utils/regex.js"
 
 const db = new banco()
+const dbU = new Usuario()
 
 // BUSCAR POR FILTROS
 export async function buscarClientePorFiltros(filtros) {
@@ -58,4 +59,53 @@ export async function atualizarCliente(cliente, id) {
     validarId(id)
     
     return db.atualizarCliente(cliente, id)
+}
+
+// ALTERAR STATUS DO USUÁRIO
+export async function alterarStatusUsuario(id, ativo) {
+    validarId(Number(id))
+
+    if (ativo !== 0 && ativo !== 1) {
+        throw new Error("Status inválido.")
+    }
+
+    const usuario = await dbU.buscarUsuarioPorId(id)
+
+    if (!usuario) {
+        throw new Error("Usuário não encontrado.")
+    }
+
+    await dbU.alterarStatusUsuario(id, ativo)
+
+    return {
+        id_usuario: Number(id),
+        ativo
+    }
+}
+
+// ATUALIZAR USUÁRIO
+export async function atualizarUsuario(id, dados) {
+    validarId(Number(id));
+
+    const { email, tipo } = dados;
+
+    if (!email || !tipo) {
+        throw new Error("E-mail e tipo são obrigatórios.");
+    }
+
+    if (!regex.verificarEmail.test(email)) {
+        throw new Error("Digite um e-mail válido.");
+    }
+
+    if (!["cliente", "veterinario", "admin"].includes(tipo)) {
+        throw new Error("Tipo de usuário inválido.");
+    }
+
+    const usuario = await dbU.buscarUsuarioPorId(id);
+
+    if (!usuario) {
+        throw new Error("Usuário não encontrado.");
+    }
+
+    return db.atualizarDadosUsuario(id, email, tipo);
 }

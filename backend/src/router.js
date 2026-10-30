@@ -1,5 +1,6 @@
 import auth from './controllers/authController.js'
 import clientes from './controllers/clientesController.js'
+import usuarios from './controllers/usuariosController.js'
 import animais from './controllers/animaisController.js'
 import admin from './controllers/adminController.js'
 import servicos from './controllers/servicosController.js'
@@ -11,6 +12,7 @@ import unidades from './controllers/unidadesController.js'
 export default function adicionarRotas(api) {
     api.use(auth)
     api.use(clientes)
+    api.use(usuarios)
     api.use(animais)
     api.use(admin)
     api.use(servicos)

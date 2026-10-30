@@ -132,4 +132,68 @@ endpoints.put('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
     }
 })
 
+// ATIVAR USUÁRIO
+endpoints.patch('/admin/usuarios/:id/ativar', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+
+        const resultado = await service.alterarStatusUsuario(id, 1)
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Usuário ativado com sucesso.',
+            resultado
+        })
+
+    } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
+    }
+})
+
+// DESATIVAR USUÁRIO
+endpoints.patch('/admin/usuarios/:id/desativar', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+
+        const resultado = await service.alterarStatusUsuario(id, 0)
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Usuário desativado com sucesso.',
+            resultado
+        })
+
+    } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
+    }
+})
+
+// ATUALIZAR USUÁRIO
+
+endpoints.put('/admin/usuarios/:id', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        const resultado = await service.atualizarUsuario(id, req.body);
+
+        res.status(200).json({
+            sucesso: true,
+            mensagem: 'Usuário atualizado com sucesso.',
+            resultado
+        });
+
+    } catch (error) {
+        const status = error.message.includes("não encontrado") ? 404 : 400;
+
+        logError(error);
+        res.status(status).json(formatarError(error));
+    }
+});
+
 export default endpoints

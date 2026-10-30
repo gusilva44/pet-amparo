@@ -132,6 +132,16 @@ export class banco {
 
         return res
     }
+
+    async atualizarDadosUsuario(id, email, tipo) {
+        const [resultado] = await db.query(`
+            UPDATE usuarios
+            SET email = ?, tipo = ?
+            WHERE id_usuario = ?
+        `, [email, tipo, id]);
+
+        return resultado.affectedRows;
+    }
 }
 
 export default class Usuario {
@@ -195,5 +205,38 @@ export default class Usuario {
         `, [idUsuario])
 
         return resultado.affectedRows
+    }
+
+        // BUSCAR USUÁRIO POR ID
+    async buscarUsuarioPorId(id) {
+        const [resultado] = await db.query(`
+            SELECT id_usuario, email, tipo, ativo
+            FROM usuarios
+            WHERE id_usuario = ?
+        `, [id])
+
+        return resultado[0]
+    }
+
+    // ALTERAR STATUS DO USUÁRIO
+    async alterarStatusUsuario(id, ativo) {
+        const [resultado] = await db.query(`
+            UPDATE usuarios
+            SET ativo = ?
+            WHERE id_usuario = ?
+        `, [ativo, id])
+
+        return resultado.affectedRows
+    }
+
+    async buscarUsuarioPorId(id) {
+        const [resultado] = await db.query(
+            `SELECT id_usuario, email, tipo, ativo
+            FROM usuarios
+            WHERE id_usuario = ?`,
+            [id]
+        );
+
+        return resultado[0];
     }
 }
