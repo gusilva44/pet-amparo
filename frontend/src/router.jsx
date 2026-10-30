@@ -8,6 +8,7 @@ import NaoEncontrada from './pages/naoEncontrada'
 import RotaProtegida from './components/rotaProtegida/rotaProtegida';
 import Clientes from './components/admin/clientes';
 import VisaoGeral from './components/admin/visaoGeral/visaoGeral';
+import Veterinario from './pages/pagVeterinario';
 
 export default function Navigation() {
     return (
@@ -18,12 +19,17 @@ export default function Navigation() {
                 <Route path='/meuspets' element={<Pets />}/>
                 <Route path='/teste' element={<Teste />}/>
                 <Route path = '/agendamentos' element={<Agendamentos/>}/>
-                <Route path='*' element={<NaoEncontrada/>}/>
+
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
                     <Route path="/usuarios" element={<Clientes />} />
                     <Route path='/visao' element={<VisaoGeral/>} />
-                    
                 </Route>
+
+                <Route element={<RotaProtegida tiposPermitidos={['veterinario']} />}>
+                    <Route path='/admveterinario' element={<Veterinario/>} />
+                </Route>
+
+                <Route path='*' element={<NaoEncontrada/>}/>
             </Routes>
         </BrowserRouter>
     )

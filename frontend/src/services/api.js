@@ -1,17 +1,12 @@
 import { requisicao } from "../utils/api.js";
 
-// Cada grupo espelha as rotas disponíveis no backend. As funções retornam o JSON da resposta.
-
 export const authApi = {
-  // Cadastro público de cliente. Payload: nome, email, senha, data_nascimento, telefone, cpf, endereco.
+
   cadastrar: (dados) =>
     requisicao({ method: "POST", url: "/auth/cadastrar", data: dados }),
-  // O login grava o cookie HTTP-only de sessão no navegador.
   login: (credenciais) =>
     requisicao({ method: "POST", url: "/auth/login", data: credenciais }),
-  // Limpa o cookie de sessão.
   logout: () => requisicao({ method: "POST", url: "/auth/logout" }),
-  // Consulta os dados do usuário autenticado; rejeita com 401 se a sessão expirou.
   usuarioAtual: () => requisicao({ method: "GET", url: "/auth/me" }),
 };
 
@@ -95,7 +90,6 @@ export const medicamentosApi = {
   listar: () => requisicao({ method: "GET", url: "/medicamentos" }),
   criar: (dados) =>
     requisicao({ method: "POST", url: "/medicamentos", data: dados }),
-  // A rota existe, mas o controller atual do backend tem erro ao ler o ID e chamar o service.
   atualizar: (id, dados) =>
     requisicao({ method: "PUT", url: `/medicamentos/${id}`, data: dados }),
   listarCarteiraDoAnimal: (idAnimal) =>
@@ -126,4 +120,41 @@ export const unidadesApi = {
     requisicao({ method: "POST", url: "/unidades", data: dados }),
   atualizar: (id, dados) =>
     requisicao({ method: "PUT", url: `/unidades/${id}`, data: dados }),
+};
+
+export const usuariosApi = {
+    listar: () =>
+        requisicao({ method: "GET", url: "/usuarios" }),
+
+    criar: (dados) =>
+        requisicao({ method: "POST", url: "/usuarios" , data: dados }),
+
+    atualizar: (id, dados) =>
+    requisicao({
+        method: "PUT",
+        url: `/admin/usuarios/${id}`,
+        data: dados
+    }),
+
+    alterarStatus: (id, ativo) =>
+        requisicao({
+            method: "PATCH",
+            url: `/usuarios/${id}/status`,
+            data: { ativo }
+        }),
+
+    excluir: (id) =>
+        requisicao({ method: "DELETE", url: `/usuarios/${id}` }),
+
+    ativar: (id) =>
+        requisicao({
+            method: "PATCH",
+            url: `/admin/usuarios/${id}/ativar`
+        }),
+
+    desativar: (id) =>
+        requisicao({
+            method: "PATCH",
+            url: `/admin/usuarios/${id}/desativar`
+        })
 };

@@ -53,7 +53,14 @@ const links = {
         }
     ],
 
-    veterinario: []
+    veterinario: [
+        {
+            id: 1,
+            caminho: '/admveterinario',
+            texto: 'Agendamentos',
+            icone: 'fa-solid fa-stethoscope'
+        },
+    ]
 };
 
 export default links;   
