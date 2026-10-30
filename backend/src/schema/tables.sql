@@ -1,4 +1,3 @@
--- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 
 USE pet_amparo;
@@ -286,9 +285,6 @@ CREATE TABLE animais (
         UNIQUE (id_animal, id_cliente)
 );
 
-DROP Table animais;
-DROP Table carteiras_medicacao;
-DROP Table agendamentos;
 -- =====================================================
 -- 10. AGENDAMENTOS
 -- =====================================================
@@ -355,8 +351,7 @@ CREATE INDEX idx_agendamentos_veterinario_periodo
 CREATE INDEX idx_agendamentos_unidade_periodo
     ON agendamentos (id_unidade, inicio, fim);
 
-C
-REATE INDEX idx_agendamentos_cliente_inicio
+CREATE INDEX idx_agendamentos_cliente_inicio
     ON agendamentos (id_cliente, inicio);
 
 CREATE INDEX idx_agendamentos_animal
@@ -577,20 +572,3 @@ INSERT INTO unidades (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 );
-
-DELETE FROM usuarios;
-DELETE FROM clientes;
-DROP DATABASE pet_amparo;
-
-UPDATE usuarios
-SET tipo = "admin"
-where id_usuario = 2;
-
-UPDATE usuarios
-SET tipo = "veterinario"
-where id_usuario = 6;
-
-DELETE FROM usuarios
-WHERE tipo = "veterinario";
-
-SELECT * from usuarios;
