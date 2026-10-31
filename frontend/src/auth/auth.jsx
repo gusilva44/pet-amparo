@@ -1,11 +1,11 @@
+
 import { useState } from "react";
 import { authApi } from "../services/api";
 import { mensagemErroApi } from "../utils/api";
 import { avisarMudancaAutenticacao } from "../utils/authEvents";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import "./auth.scss";
-
-
 
 const cadastroInicial = {
   nome: "",
@@ -17,43 +17,118 @@ const cadastroInicial = {
   endereco: "",
 };
 
+// Remove tudo que não for número
+function somenteNumeros(valor) {
+  return valor.replace(/\D/g, "");
+}
+
+// Máscara de CPF
+function formatarCPF(valor) {
+  return somenteNumeros(valor)
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+}
+
+// Máscara de telefone
+function formatarTelefone(valor) {
+  const numeros = somenteNumeros(valor).slice(0, 11);
+
+  if (numeros.length <= 2) {
+    return numeros.replace(/^(\d{0,2})/, "($1");
+  }
+
+  if (numeros.length <= 10) {
+    return numeros.replace(
+      /^(\d{2})(\d{0,4})(\d{0,4})$/,
+      "($1) $2-$3"
+    ).replace(/-$/, "");
+  }
+
+  return numeros.replace(
+    /^(\d{2})(\d{5})(\d{0,4})$/,
+    "($1) $2-$3"
+  ).replace(/-$/, "");
+}
+
+// Validação dos dígitos verificadores do CPF
+function validarCPF(cpf) {
+  const numeros = somenteNumeros(cpf);
+
+  if (numeros.length !== 11) return false;
+
+  if (/^(\d)\1{10}$/.test(numeros)) return false;
+
+  let soma = 0;
+
+  for (let i = 0; i < 9; i++) {
+    soma += Number(numeros[i]) * (10 - i);
+  }
+
+  let digito1 = (soma * 10) % 11;
+  if (digito1 === 10) digito1 = 0;
+
+  if (digito1 !== Number(numeros[9])) return false;
+
+  soma = 0;
+
+  for (let i = 0; i < 10; i++) {
+    soma += Number(numeros[i]) * (11 - i);
+  }
+
+  let digito2 = (soma * 10) % 11;
+  if (digito2 === 10) digito2 = 0;
+
+  return digito2 === Number(numeros[10]);
+}
 
 export default function Auth({
   onAuthenticated,
   initialMode = "login",
   onCancel,
 }) {
-
   const [modo, setModo] = useState(initialMode);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [cadastro, setCadastro] = useState(cadastroInicial);
-  const [mensagem, setMensagem] = useState("");
   const [enviando, setEnviando] = useState(false);
-  const navigate = useNavigate()    
+
+  const navigate = useNavigate();
 
   function mudarModo(novoModo) {
     setModo(novoModo);
-    setMensagem("");
   }
 
   async function concluirLogin(dadosLogin) {
     const resposta = await authApi.login(dadosLogin);
+
     avisarMudancaAutenticacao();
     onAuthenticated?.(resposta.usuario);
+
+    return resposta;
   }
 
   async function entrar(event) {
     event.preventDefault();
-    setMensagem("");
+
+    if (enviando) return;
+
     setEnviando(true);
-    navigate('/')
 
     try {
       await concluirLogin({ email, senha });
-      navigate('/')
+
+      toast.success("Login realizado!", {
+        description: "Seja bem-vindo de volta!",
+      });
+
+      navigate("/");
     } catch (error) {
-      setMensagem(mensagemErroApi(error) || "Não foi possível entrar.");
+      toast.error("Não foi possível entrar", {
+        description:
+          mensagemErroApi(error) || "Verifique seu email e sua senha.",
+      });
     } finally {
       setEnviando(false);
     }
@@ -61,14 +136,50 @@ export default function Auth({
 
   async function cadastrar(event) {
     event.preventDefault();
-    setMensagem("");
+
+    if (enviando) return;
+
+    if (!validarCPF(cadastro.cpf)) {
+      toast.error("CPF inválido", {
+        description: "Confira os números digitados.",
+      });
+      return;
+    }
+
+    if (somenteNumeros(cadastro.telefone).length < 10) {
+      toast.error("Telefone inválido", {
+        description: "Informe um telefone com DDD.",
+      });
+      return;
+    }
+
     setEnviando(true);
 
     try {
-      await authApi.cadastrar(cadastro);
-      await concluirLogin({ email: cadastro.email, senha: cadastro.senha });
+      // Envia CPF e telefone sem a máscara para o backend
+      const dadosCadastro = {
+        ...cadastro,
+        cpf: somenteNumeros(cadastro.cpf),
+        telefone: somenteNumeros(cadastro.telefone),
+      };
+
+      await authApi.cadastrar(dadosCadastro);
+
+      await concluirLogin({
+        email: cadastro.email,
+        senha: cadastro.senha,
+      });
+
+      toast.success("Conta criada com sucesso!", {
+        description: "Bem-vindo à nossa clínica veterinária!",
+      });
+
+      navigate("/");
     } catch (error) {
-      setMensagem(mensagemErroApi(error) || "Não foi possível criar a conta.");
+      toast.error("Erro no cadastro", {
+        description:
+          mensagemErroApi(error) || "Não foi possível criar sua conta.",
+      });
     } finally {
       setEnviando(false);
     }
@@ -76,7 +187,21 @@ export default function Auth({
 
   function atualizarCadastro(event) {
     const { name, value } = event.target;
-    setCadastro((atual) => ({ ...atual, [name]: value }));
+
+    let valorFormatado = value;
+
+    if (name === "cpf") {
+      valorFormatado = formatarCPF(value);
+    }
+
+    if (name === "telefone") {
+      valorFormatado = formatarTelefone(value);
+    }
+
+    setCadastro((atual) => ({
+      ...atual,
+      [name]: valorFormatado,
+    }));
   }
 
   return (
@@ -84,6 +209,7 @@ export default function Auth({
       <h1 id="titulo-autenticacao">
         {modo === "login" ? "Acesse sua conta" : "Crie seu cadastro"}
       </h1>
+
       <p className="auth-intro">
         {modo === "login"
           ? "Entre para acessar seus pets e agendamentos."
@@ -98,6 +224,7 @@ export default function Auth({
         >
           Entrar
         </button>
+
         <button
           type="button"
           className={modo === "cadastro" ? "ativo" : ""}
@@ -107,8 +234,6 @@ export default function Auth({
         </button>
       </div>
 
-      {mensagem && <p className="mensagem-pets" role="alert">{mensagem}</p>}
-
       {modo === "login" ? (
         <form className="form-pets" onSubmit={entrar}>
           <label>
@@ -116,92 +241,121 @@ export default function Auth({
             <input
               type="email"
               autoComplete="email"
+              placeholder="seuemail@email.com"
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
             />
           </label>
+
           <label>
             Senha
             <input
               type="password"
               autoComplete="current-password"
+              placeholder="Sua senha"
               required
               value={senha}
               onChange={(event) => setSenha(event.target.value)}
             />
           </label>
+
           <button className="botao-principal" disabled={enviando}>
             {enviando ? "Entrando..." : "Entrar"}
           </button>
         </form>
       ) : (
         <form className="form-pets" onSubmit={cadastrar}>
-          <label>Nome completo
-            <input 
-            name="nome" 
-            required 
-            value={cadastro.nome} 
-            onChange={atualizarCadastro} />
+          <label>
+            Nome completo
+            <input
+              name="nome"
+              placeholder="Digite seu nome completo"
+              required
+              value={cadastro.nome}
+              onChange={atualizarCadastro}
+            />
           </label>
 
           <div className="en">
-            <label className="ex">Data de nascimento
-              <input 
-              name="data_nascimento" 
-              type="date" 
-              required 
-              value={cadastro.data_nascimento} 
-              onChange={atualizarCadastro} />
+            <label className="ex">
+              Data de nascimento
+              <input
+                name="data_nascimento"
+                type="date"
+                required
+                value={cadastro.data_nascimento}
+                onChange={atualizarCadastro}
+              />
             </label>
 
-            <label className="ex">CPF
+            <label className="ex">
+              CPF
               <input
-              name="cpf"
-              inputMode="numeric"
-              required
-              value={cadastro.cpf}
-              onChange={atualizarCadastro} />
+                name="cpf"
+                type="text"
+                inputMode="numeric"
+                placeholder="000.000.000-00"
+                maxLength={14}
+                required
+                value={cadastro.cpf}
+                onChange={atualizarCadastro}
+              />
             </label>
           </div>
 
-          <label>Email
-            <input 
-            name="email" 
-            type="email" 
-            autoComplete="email" 
-            required 
-            value={cadastro.email} 
-            onChange={atualizarCadastro} />
-          </label>
-
-          <label>Senha
-            <input 
-            name="senha" 
-            type="password" 
-            autoComplete="new-password" 
-            minLength={6} 
-            required 
-            value={cadastro.senha} 
-            onChange={atualizarCadastro} />
-          </label>
-
-          <label>Telefone
+          <label>
+            Email
             <input
-            name="telefone"
-            type="tel"
-            required
-            value={cadastro.telefone}
-            onChange={atualizarCadastro} />
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="seuemail@email.com"
+              required
+              value={cadastro.email}
+              onChange={atualizarCadastro}
+            />
           </label>
 
-          <label>Endereço
-            <input 
-            name="endereco" 
-            required 
-            value={cadastro.endereco} 
-            onChange={atualizarCadastro} />
+          <label>
+            Senha
+            <input
+              name="senha"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Mínimo de 6 caracteres"
+              minLength={6}
+              required
+              value={cadastro.senha}
+              onChange={atualizarCadastro}
+            />
           </label>
+
+          <label>
+            Telefone
+            <input
+              name="telefone"
+              type="tel"
+              inputMode="numeric"
+              placeholder="(11) 99999-9999"
+              maxLength={15}
+              required
+              value={cadastro.telefone}
+              onChange={atualizarCadastro}
+            />
+          </label>
+
+          <label>
+            Endereço
+            <input
+              name="endereco"
+              placeholder="Rua, número e bairro"
+              required
+              value={cadastro.endereco}
+              onChange={atualizarCadastro}
+            />
+          </label>
+
           <button className="botao-principal" disabled={enviando}>
             {enviando ? "Cadastrando..." : "Criar cadastro"}
           </button>
@@ -209,7 +363,11 @@ export default function Auth({
       )}
 
       {onCancel && (
-        <button type="button" className="auth-cancelar" onClick={onCancel}>
+        <button
+          type="button"
+          className="auth-cancelar"
+          onClick={onCancel}
+        >
           Fechar
         </button>
       )}

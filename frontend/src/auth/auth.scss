@@ -1,112 +1,39 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap');
+﻿.auth-pets {
+  box-shadow: 0 12px 35px rgba(38, 58, 49, 0.15);
+  transition: box-shadow 0.3s ease;
 
-:root {
-  --verde-claro: #4f6a57;
-  --verde-escuro: #263a31;
-  --laranja: #d9775b;
-  --creme: #f2ebdd;
-  --branco: #ffffff;
-  --titulo: "Outfit", sans-serif;
-  --textos: "Nunito Sans", sans-serif;
-}
+  .form-pets input {
+    transition: border 0.2s ease, box-shadow 0.2s ease;
 
-.auth-pets {
-  box-sizing: border-box;
-  width: min(100%, 34rem);
-  margin: 2rem auto;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: 1rem;
-  background: #4f6a57;
-  color: var(--branco);
-  font-family: var(--textos);
-}
-.auth-pets h1 { 
-  color: var(--laranja); 
-  font-family: 
-  var(--titulo); 
-}
+    &:focus {
+      outline: none;
+      border-color: var(--laranja);
+      box-shadow: 0 0 0 3px rgba(217, 119, 91, 0.2);
+    }
 
-.auth-pets .auth-intro { 
-  margin-bottom: 1.5rem; 
-}
-.auth-pets .auth-tabs { 
-  display: flex; 
-  margin-bottom: 1.25rem; 
-}
+    &::placeholder {
+      color: #a5aaa5;
+      font-size: 0.9rem;
+    }
+  }
 
-.auth-pets button { 
-  border: 0; 
-  border-radius: .5rem; 
-  padding: .75rem 1rem; 
-  font: inherit; 
-  cursor: pointer; 
-}
+  .botao-principal {
+    background: var(--creme);
+    transition: all 0.2s ease;
 
-.auth-pets .auth-tabs button { 
-  flex: 1; 
-  background: var(--verde-claro); 
-  color: white;
-  border-bottom: 2px solid white;
-  border-radius: 0px;
-}
+    &:hover:not(:disabled) {
+      background: var(--laranja);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+  }
 
-.auth-pets .auth-tabs button.ativo,
-.auth-pets .botao-principal { 
-  border-bottom: 1px solid var(--laranja);
-  color: var(--laranja); 
-}
+  .auth-tabs button {
+    transition: all 0.2s ease;
 
-.auth-pets .form-pets { 
-  display: grid; 
-  gap: 1rem; 
-}
-
-.auth-pets .form-pets label { 
-  display: grid; 
-  gap: .4rem; 
-  color: var(--laranja);
-}
-
-.auth-pets .form-pets input { 
-  box-sizing: border-box; 
-  width: 100%; 
-  min-height: 2.7rem; 
-  padding: .6rem .75rem; 
-  border: 1px solid #b8c2b9; 
-  border-radius: .45rem; 
-  background: white; 
-  color: #253b32; 
-  font: inherit; 
-}
-
-.auth-pets .botao-principal { 
-  margin-top: .4rem; 
-  font-weight: 700; 
-}
-
-.auth-pets button:disabled { 
-  cursor: wait; 
-  opacity: .7; 
-}
-
-.auth-pets .mensagem-pets { 
-  padding: .75rem; 
-  border-radius: .4rem; 
-  background: #fff0ed; 
-  color: #a33f2b; 
-}
-
-.auth-pets .auth-cancelar { 
-  margin-top: 1rem; 
-  background: transparent; 
-  color: white; 
-  text-decoration: underline;
-}
-
-body { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-  background-color: var(--creme); 
+    &:hover {
+      background: rgba(61, 97, 60, 0.61);
+    }
+  }
 }
