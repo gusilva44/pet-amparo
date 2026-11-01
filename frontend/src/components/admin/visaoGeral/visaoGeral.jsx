@@ -123,10 +123,7 @@ export default function VisaoGeral() {
                         </div>
 
                        
-                        <div className="unidades">
-                            <h2 className="titulo-unidade">Unidades Cadastradas:</h2>
-                                    <UnidadesRecentes/>
-                        </div>
+                        
                         </div>
                     </section>
 

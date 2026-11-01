@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
 import Calendario from "../components/calendario/calendario";
@@ -11,7 +11,7 @@ import {
   veterinariosApi,
 } from "../services/api";
 import { mensagemErroApi } from "../utils/api";
-import { unidades } from "../data/unidades";
+import unidades from "../data/unidades";
 import "../scss/unidades.scss";
 
 const abas = [
@@ -179,7 +179,7 @@ export default function Unidades() {
     return () => {
       ativo = false;
     };
-  }, [aba, id, servicos]);
+  }, [aba, id, servicos, idPet, idServico, idVeterinario]);
 
   useEffect(() => {
     if (!idVeterinario) {

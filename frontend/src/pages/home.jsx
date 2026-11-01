@@ -5,7 +5,7 @@ import Agendamento from '../assets/imagens/icones/calendario.svg'
 import Pata from '../assets/imagens/icones/pata.svg'
 import Consulta from '../assets/imagens/icones/consulta.svg'
 import Pets from '../assets/imagens/pets.webp'
-import { unidades } from "../data/unidades"
+import unidades from "../data/unidades"
 import '../scss/home.scss'
 import sobre2 from '../assets/imagens/image0.png'
 import { useNavigate } from "react-router-dom"

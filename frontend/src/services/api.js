@@ -103,23 +103,37 @@ export const medicamentosApi = {
 };
 
 export const unidadesApi = {
-  listarComServicos: () =>
-    requisicao({
-      method: "GET",
-      url: "/unidades",
-      params: { incluir_servicos: true },
-    }),
-  listar: (incluirInativas = false) =>
-    requisicao({
-      method: "GET",
-      url: "/unidades",
-      params: incluirInativas ? { incluir_inativas: true } : undefined,
-    }),
-  buscarPorId: (id) => requisicao({ method: "GET", url: `/unidades/${id}` }),
-  criar: (dados) =>
-    requisicao({ method: "POST", url: "/unidades", data: dados }),
-  atualizar: (id, dados) =>
-    requisicao({ method: "PUT", url: `/unidades/${id}`, data: dados }),
+    listarComServicos: () =>
+        requisicao({
+            method: "GET",
+            url: "/admin/unidades",
+            params: { incluir_servicos: true }
+        }),
+
+    listar: (incluirInativas = false) =>
+        requisicao({
+            method: "GET",
+            url: incluirInativas ? "/admin/unidades" : "/unidades"
+        }),
+
+    buscarPorId: (id) =>
+        requisicao({ method: "GET", url: `/unidades/${id}` }),
+
+    criar: (dados) =>
+        requisicao({ method: "POST", url: "/unidades", data: dados }),
+
+    atualizar: (id, dados) =>
+        requisicao({ method: "PUT", url: `/unidades/${id}`, data: dados }),
+
+    alterarStatus: (id, ativo) =>
+        requisicao({
+            method: "PUT",
+            url: `/unidades/${id}/status`,
+            data: { ativo }
+        }),
+
+    excluir: (id) =>
+        requisicao({ method: "DELETE", url: `/unidades/${id}` })
 };
 
 export const usuariosApi = {

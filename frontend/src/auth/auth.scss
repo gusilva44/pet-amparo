@@ -2,18 +2,43 @@
   box-shadow: 0 12px 35px rgba(38, 58, 49, 0.15);
   transition: box-shadow 0.3s ease;
 
-  .form-pets input {
-    transition: border 0.2s ease, box-shadow 0.2s ease;
+  // 1. Regras gerais do formulário
+  .form-pets {
+    
+    // Regras para TODOS os inputs
+    input {
+      transition: border 0.2s ease, box-shadow 0.2s ease;
 
-    &:focus {
-      outline: none;
-      border-color: var(--laranja);
-      box-shadow: 0 0 0 3px rgba(217, 119, 91, 0.2);
+      &:focus {
+        outline: none;
+        border-color: var(--laranja);
+        box-shadow: 0 0 0 3px rgba(217, 119, 91, 0.2);
+      }
+
+      &::placeholder {
+        color: #a5aaa5;
+        font-size: 0.9rem;
+      }
     }
 
-    &::placeholder {
-      color: #a5aaa5;
-      font-size: 0.9rem;
+    // 2. CORREÇÃO AQUI: .pass fica no mesmo nível do input, aplicando-se ao <label>
+    .pass {
+      position: relative;
+      display: flex; 
+      flex-direction: column;
+
+      input {
+        padding-right: 40px;
+      }
+      
+      .mostrar {
+        position: absolute;
+        color: var(--laranja);
+        right: 12px;     
+        bottom: 12px;
+        cursor: pointer; 
+        z-index: 2;     
+      }
     }
   }
 

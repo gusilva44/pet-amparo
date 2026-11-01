@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { authApi } from "../services/api";
 import { mensagemErroApi } from "../utils/api";
@@ -17,12 +16,10 @@ const cadastroInicial = {
   endereco: "",
 };
 
-// Remove tudo que não for número
 function somenteNumeros(valor) {
   return valor.replace(/\D/g, "");
 }
 
-// Máscara de CPF
 function formatarCPF(valor) {
   return somenteNumeros(valor)
     .slice(0, 11)
@@ -31,7 +28,6 @@ function formatarCPF(valor) {
     .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
 }
 
-// Máscara de telefone
 function formatarTelefone(valor) {
   const numeros = somenteNumeros(valor).slice(0, 11);
 
@@ -52,7 +48,6 @@ function formatarTelefone(valor) {
   ).replace(/-$/, "");
 }
 
-// Validação dos dígitos verificadores do CPF
 function validarCPF(cpf) {
   const numeros = somenteNumeros(cpf);
 
@@ -93,11 +88,13 @@ export default function Auth({
   const [senha, setSenha] = useState("");
   const [cadastro, setCadastro] = useState(cadastroInicial);
   const [enviando, setEnviando] = useState(false);
+  const [mostrar, setMostrar] = useState(false);
 
   const navigate = useNavigate();
 
   function mudarModo(novoModo) {
     setModo(novoModo);
+    setMostrar(false);
   }
 
   async function concluirLogin(dadosLogin) {
@@ -156,7 +153,6 @@ export default function Auth({
     setEnviando(true);
 
     try {
-      // Envia CPF e telefone sem a máscara para o backend
       const dadosCadastro = {
         ...cadastro,
         cpf: somenteNumeros(cadastro.cpf),
@@ -248,16 +244,20 @@ export default function Auth({
             />
           </label>
 
-          <label>
+          <label className="pass">
             Senha
             <input
-              type="password"
+              type={mostrar ? "text" : "password"}
               autoComplete="current-password"
               placeholder="Sua senha"
               required
               value={senha}
               onChange={(event) => setSenha(event.target.value)}
             />
+            <i 
+              className={`fa-solid ${mostrar ? "fa-eye-slash" : "fa-eye"} mostrar`}
+              onClick={() => setMostrar(!mostrar)}
+            ></i>
           </label>
 
           <button className="botao-principal" disabled={enviando}>
@@ -305,6 +305,31 @@ export default function Auth({
           </div>
 
           <label>
+            Telefone
+            <input
+              name="telefone"
+              type="text"
+              inputMode="tel"
+              placeholder="(00) 00000-0000"
+              maxLength={15}
+              required
+              value={cadastro.telefone}
+              onChange={atualizarCadastro}
+            />
+          </label>
+
+          <label>
+            Endereço
+            <input
+              name="endereco"
+              placeholder="Rua, número, bairro..."
+              required
+              value={cadastro.endereco}
+              onChange={atualizarCadastro}
+            />
+          </label>
+
+          <label>
             Email
             <input
               name="email"
@@ -317,11 +342,11 @@ export default function Auth({
             />
           </label>
 
-          <label>
+          <label className="pass">
             Senha
             <input
               name="senha"
-              type="password"
+              type={mostrar ? "text" : "password"}
               autoComplete="new-password"
               placeholder="Mínimo de 6 caracteres"
               minLength={6}
@@ -329,47 +354,16 @@ export default function Auth({
               value={cadastro.senha}
               onChange={atualizarCadastro}
             />
-          </label>
-
-          <label>
-            Telefone
-            <input
-              name="telefone"
-              type="tel"
-              inputMode="numeric"
-              placeholder="(11) 99999-9999"
-              maxLength={15}
-              required
-              value={cadastro.telefone}
-              onChange={atualizarCadastro}
-            />
-          </label>
-
-          <label>
-            Endereço
-            <input
-              name="endereco"
-              placeholder="Rua, número e bairro"
-              required
-              value={cadastro.endereco}
-              onChange={atualizarCadastro}
-            />
+            <i 
+              className={`fa-solid ${mostrar ? "fa-eye-slash" : "fa-eye"} mostrar`}
+              onClick={() => setMostrar(!mostrar)}
+            ></i>
           </label>
 
           <button className="botao-principal" disabled={enviando}>
-            {enviando ? "Cadastrando..." : "Criar cadastro"}
+            {enviando ? "Cadastrando..." : "Criar conta"}
           </button>
         </form>
-      )}
-
-      {onCancel && (
-        <button
-          type="button"
-          className="auth-cancelar"
-          onClick={onCancel}
-        >
-          Fechar
-        </button>
       )}
     </section>
   );

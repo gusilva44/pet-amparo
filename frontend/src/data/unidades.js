@@ -4,17 +4,17 @@ import Norte from '../assets/imagens/unidades/Unidade-norte.webp'
 import Oeste from '../assets/imagens/unidades/Unidade-oeste.webp'
 import Sul from '../assets/imagens/unidades/Unidade-sul.webp'
 
-export const unidades = [
+const unidades = [
     {
         id: 1,
         img: Leste1,
-        nome: "Unidade Leste I ",
+        nome: "Unidade Leste I",
         localizacao: "Rua Ulisses Cruz, 285 — Tatuapé, São Paulo."
     },
     {
         id: 2,
         img: Leste2,
-        nome: "Unidade Leste II ",
+        nome: "Unidade Leste II",
         localizacao: "Avenida Nordestina, 225, esquina com Rua Daniel Bernardo, 107 — São Miguel Paulista."
     },
     {
@@ -35,4 +35,6 @@ export const unidades = [
         nome: "Unidade Sul",
         localizacao: "Rua Agostino Togneri, 153 — Jurubatuba, São Paulo."
     }
-]
+];
+
+export default unidades;

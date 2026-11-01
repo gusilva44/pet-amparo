@@ -19,3 +19,11 @@ body{
     --titulo: "Outfit", sans-serif;
     --textos: "Nutito Sans", sans-serif;
 }
+
+h1, h2 , h3, h4 {
+        font-family: var(--titulo);
+    }
+
+p, span, input {
+    font-family: var(--texto);
+}
