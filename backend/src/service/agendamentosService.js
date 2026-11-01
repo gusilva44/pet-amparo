@@ -1,6 +1,7 @@
 import * as repo from '../repos/agendamentosRepo.js'
 import * as animaisRepo from '../repos/animaisRepo.js'
 import * as servicosRepo from '../repos/servicosRepo.js'
+import * as unidadesRepo from '../repos/unidadesRepo.js'
 
 function validarId(id) {
     if (!Number.isInteger(id) || id <= 0) throw new Error('O ID deve ser um número inteiro e positivo.')
@@ -92,24 +93,43 @@ export async function criarAgendamento(dados, idCliente) {
     validarId(idUnidade)
     validarId(idServico)
 
+    const unidade = await unidadesRepo.buscarUnidadePorId(idUnidade)
+
+    if (!unidade || !unidade.ativo) {
+        throw new Error('Unidade não encontrada ou indisponível para agendamentos.')
+    }
+
     const animal = await animaisRepo.buscarAnimalPorId(idAnimal, idCliente)
 
     if (!animal) throw new Error('Animal não encontrado.')
 
     const servico = await servicosRepo.buscarServicoPorId(idServico)
 
-    if (!servico || !servico.ativo) throw new Error('Serviço não encontrado ou inativo.')
-    if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) throw new Error('O serviço não está disponível nesta unidade.')
-    
+    if (!servico || !servico.ativo) {
+        throw new Error('Serviço não encontrado ou inativo.')
+    }
+
+    if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) {
+        throw new Error('O serviço não está disponível nesta unidade.')
+    }
+
     const inicio = lerDataHora(dados.inicio)
     const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
+
     await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)
 
-    if (await repo.existeConflito(idVeterinario, inicio, fim)) throw new Error('Este horário não está mais disponível.')
+    if (await repo.existeConflito(idVeterinario, inicio, fim)) {
+        throw new Error('Este horário não está mais disponível.')
+    }
 
     return repo.criarAgendamento({
-        id_cliente: idCliente, id_animal: idAnimal, id_veterinario: idVeterinario,
-        id_unidade: idUnidade, id_servico: idServico, inicio, fim,
+        id_cliente: idCliente,
+        id_animal: idAnimal,
+        id_veterinario: idVeterinario,
+        id_unidade: idUnidade,
+        id_servico: idServico,
+        inicio,
+        fim,
         observacao: dados.observacao?.trim() || null
     })
 }

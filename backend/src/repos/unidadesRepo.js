@@ -144,3 +144,81 @@ export async function desvincularServico(idUnidade, idServico) {
     `, [idUnidade, idServico])
     return resultado.affectedRows
 }
+
+export async function contarVeterinariosVinculados(idUnidade) {
+    const [resultado] = await db.query(`
+        SELECT COUNT(*) AS total
+        FROM veterinarios_unidades
+        WHERE id_unidade = ?
+    `, [idUnidade])
+
+    return resultado[0].total
+}
+
+export async function contarAgendamentosVinculados(idUnidade) {
+    const [resultado] = await db.query(`
+        SELECT COUNT(*) AS total
+        FROM agendamentos
+        WHERE id_unidade = ?
+    `, [idUnidade])
+
+    return resultado[0].total
+}
+
+export async function excluirUnidade(idUnidade) {
+    validarId(idUnidade)
+
+    const unidade = await repo.buscarUnidadePorId(idUnidade)
+
+    if (!unidade) {
+        throw new Error('Unidade não encontrada.')
+    }
+
+    const [totalVeterinarios, totalAgendamentos] = await Promise.all([
+        repo.contarVeterinariosVinculados(idUnidade),
+        repo.contarAgendamentosVinculados(idUnidade)
+    ])
+
+    if (totalAgendamentos > 0) {
+        throw new Error(
+            `Não é possível excluir esta unidade. Existem ${totalAgendamentos} agendamento(s) vinculado(s).`
+        )
+    }
+
+    if (totalVeterinarios > 0) {
+        throw new Error(
+            `Não é possível excluir esta unidade. Existem ${totalVeterinarios} vínculo(s) com veterinários.`
+        )
+    }
+
+    try {
+        const excluida = await repo.excluirUnidade(idUnidade)
+
+        if (!excluida) {
+            throw new Error('Não foi possível excluir a unidade.')
+        }
+
+        return {
+            mensagem: 'Unidade excluída permanentemente.'
+        }
+
+    } catch (error) {
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            throw new Error(
+                'Não foi possível excluir a unidade porque existem registros vinculados a ela.'
+            )
+        }
+
+        throw error
+    }
+}
+
+export async function atualizarStatusUnidade(idUnidade, ativo) {
+    const [resultado] = await db.query(`
+        UPDATE unidades
+        SET ativo = ?
+        WHERE id_unidade = ?
+    `, [ativo, idUnidade])
+
+    return resultado.affectedRows
+}

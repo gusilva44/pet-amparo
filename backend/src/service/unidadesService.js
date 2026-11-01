@@ -76,3 +76,37 @@ export async function desvincularServico(idUnidade, idServico) {
         throw new Error('Serviço não está vinculado a esta unidade.')
     }
 }
+
+export async function excluirUnidade(idUnidade) {
+    validarId(idUnidade);
+
+    const unidade = await repo.buscarUnidadePorId(idUnidade);
+
+    if (!unidade) {
+        throw new Error('Unidade não encontrada.');
+    }
+
+    return repo.excluirUnidade(idUnidade);
+}
+
+export async function atualizarStatusUnidade(idUnidade, ativo) {
+    validarId(idUnidade)
+
+    if (typeof ativo !== 'boolean') {
+        throw new Error('O status deve ser verdadeiro ou falso.')
+    }
+
+    const unidade = await repo.buscarUnidadePorId(idUnidade)
+
+    if (!unidade) {
+        throw new Error('Unidade não encontrada.')
+    }
+
+    await repo.atualizarStatusUnidade(idUnidade, ativo)
+
+    return {
+        mensagem: ativo
+            ? 'Unidade reativada com sucesso.'
+            : 'Unidade desativada com sucesso.'
+    }
+}

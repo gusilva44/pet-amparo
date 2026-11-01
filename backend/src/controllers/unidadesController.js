@@ -9,20 +9,33 @@ const endpoints = Router()
 
 endpoints.get('/unidades', async (req, res) => {
     try {
-        const incluirInativas = req.query.incluir_inativas === 'true' && req.usuario?.tipo === 'admin'
         const incluirServicos = req.query.incluir_servicos === 'true'
 
-        const resultado = await service.listarUnidades(incluirInativas, incluirServicos)
+        const resultado = await service.listarUnidades(false, incluirServicos)
 
         res.status(200).json({
             sucesso: true,
             resultado
         })
     } catch (error) {
-        const status = error.message.includes("não encontrado") ? 404 : 400
-        
         logError(error)
-        res.status(status).json(formatarError(error))
+        res.status(400).json(formatarError(error))
+    }
+})
+
+endpoints.get('/admin/unidades', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const incluirServicos = req.query.incluir_servicos === 'true'
+
+        const resultado = await service.listarUnidades(true, incluirServicos)
+
+        res.status(200).json({
+            sucesso: true,
+            resultado
+        })
+    } catch (error) {
+        logError(error)
+        res.status(400).json(formatarError(error))
     }
 })
 
@@ -114,6 +127,46 @@ endpoints.delete('/unidades/:id/servicos/:idServico', autenticar, verificarAdmin
         })
     } catch (error) {
         const status = error.message.includes("não está vinculado") ? 404 : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
+    }
+})
+
+endpoints.delete('/unidades/:id', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const id = Number(req.params.id)
+
+        const resultado = await service.excluirUnidade(id)
+
+        res.status(200).json({
+            sucesso: true,
+            ...resultado
+        })
+
+    } catch (error) {
+        const status = error.message.includes('não encontrada')
+            ? 404
+            : 400
+
+        logError(error)
+        res.status(status).json(formatarError(error))
+    }
+})
+
+endpoints.put('/unidades/:id/status', autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const id_unidade = Number(req.params.id)
+        const { ativo } = req.body
+
+        const resultado = await service.atualizarStatusUnidade(id_unidade, ativo)
+
+        res.status(200).json({
+            sucesso: true,
+            ...resultado
+        })
+    } catch (error) {
+        const status = error.message.includes('não encontrada') ? 404 : 400
 
         logError(error)
         res.status(status).json(formatarError(error))

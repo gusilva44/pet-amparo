@@ -1,5 +1,5 @@
+-- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
 CREATE DATABASE IF NOT EXISTS pet_amparo;
-
 USE pet_amparo;
 
 -- =====================================================
@@ -572,3 +572,12 @@ INSERT INTO unidades (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 );
+
+UPDATE usuarios
+set tipo = "admin"
+where id_usuario = 2;
+
+SHOW CREATE TABLE unidades;
+SHOW CREATE TABLE unidades_servicos;
+SHOW CREATE TABLE veterinarios_unidades;
+SHOW CREATE TABLE agendamentos;
