@@ -1,7 +1,6 @@
 import { requisicao } from "../utils/api.js";
 
 export const authApi = {
-
   cadastrar: (dados) =>
     requisicao({ method: "POST", url: "/auth/cadastrar", data: dados }),
   login: (credenciais) =>
@@ -16,7 +15,6 @@ export const clientesApi = {
     requisicao({ method: "PUT", url: "/clientes/me", data: dados }),
   excluirMinhaConta: () =>
     requisicao({ method: "DELETE", url: "/clientes/me" }),
-  // Operações administrativas, exigem sessão de administrador.
   listar: () => requisicao({ method: "GET", url: "/clientes" }),
   buscar: (filtros) =>
     requisicao({ method: "GET", url: "/clientes/filtros", params: filtros }),
@@ -49,6 +47,12 @@ export const servicosApi = {
     requisicao({ method: "POST", url: "/servicos", data: dados }),
   atualizar: (id, dados) =>
     requisicao({ method: "PUT", url: `/servicos/${id}`, data: dados }),
+  alterarStatus: (id, ativo) =>
+    requisicao({
+      method: "PATCH",
+      url: `/servicos/${id}/status`,
+      data: { ativo },
+    }),
 };
 
 export const agendamentosApi = {
@@ -68,6 +72,24 @@ export const veterinariosApi = {
     }),
   criar: (dados) =>
     requisicao({ method: "POST", url: "/veterinarios", data: dados }),
+  meusAgendamentos: (filtros) =>
+    requisicao({
+      method: "GET",
+      url: "/veterinarios/me/agendamentos",
+      params: filtros,
+    }),
+  minhaAgenda: (filtros) =>
+    requisicao({
+      method: "GET",
+      url: "/veterinarios/me/agenda",
+      params: filtros,
+    }),
+  atualizarStatusAgendamento: (id, status) =>
+    requisicao({
+      method: "PATCH",
+      url: `/veterinarios/me/agendamentos/${id}/status`,
+      data: { status },
+    }),
   listarHorarios: (idVeterinario) =>
     requisicao({
       method: "GET",
@@ -103,72 +125,77 @@ export const medicamentosApi = {
 };
 
 export const unidadesApi = {
-    listarComServicos: () =>
-        requisicao({
-            method: "GET",
-            url: "/admin/unidades",
-            params: { incluir_servicos: true }
-        }),
+  listarComServicos: () =>
+    requisicao({
+      method: "GET",
+      url: "/admin/unidades",
+      params: { incluir_servicos: true },
+    }),
 
-    listar: (incluirInativas = false) =>
-        requisicao({
-            method: "GET",
-            url: incluirInativas ? "/admin/unidades" : "/unidades"
-        }),
+  listar: (incluirInativas = false) =>
+    requisicao({
+      method: "GET",
+      url: incluirInativas ? "/admin/unidades" : "/unidades",
+    }),
 
-    buscarPorId: (id) =>
-        requisicao({ method: "GET", url: `/unidades/${id}` }),
+  buscarPorId: (id) => requisicao({ method: "GET", url: `/unidades/${id}` }),
 
-    criar: (dados) =>
-        requisicao({ method: "POST", url: "/unidades", data: dados }),
+  criar: (dados) =>
+    requisicao({ method: "POST", url: "/unidades", data: dados }),
 
-    atualizar: (id, dados) =>
-        requisicao({ method: "PUT", url: `/unidades/${id}`, data: dados }),
+  atualizar: (id, dados) =>
+    requisicao({ method: "PUT", url: `/unidades/${id}`, data: dados }),
 
-    alterarStatus: (id, ativo) =>
-        requisicao({
-            method: "PUT",
-            url: `/unidades/${id}/status`,
-            data: { ativo }
-        }),
+  alterarStatus: (id, ativo) =>
+    requisicao({
+      method: "PUT",
+      url: `/unidades/${id}/status`,
+      data: { ativo },
+    }),
 
-    excluir: (id) =>
-        requisicao({ method: "DELETE", url: `/unidades/${id}` })
+  excluir: (id) => requisicao({ method: "DELETE", url: `/unidades/${id}` }),
 };
 
 export const usuariosApi = {
-    listar: () =>
-        requisicao({ method: "GET", url: "/usuarios" }),
+  listar: () => requisicao({ method: "GET", url: "/usuarios" }),
 
-    criar: (dados) =>
-        requisicao({ method: "POST", url: "/usuarios" , data: dados }),
+  criar: (dados) =>
+    requisicao({ method: "POST", url: "/usuarios", data: dados }),
 
-    atualizar: (id, dados) =>
+  atualizar: (id, dados) =>
     requisicao({
-        method: "PUT",
-        url: `/admin/usuarios/${id}`,
-        data: dados
+      method: "PUT",
+      url: `/admin/usuarios/${id}`,
+      data: dados,
     }),
 
-    alterarStatus: (id, ativo) =>
-        requisicao({
-            method: "PATCH",
-            url: `/usuarios/${id}/status`,
-            data: { ativo }
-        }),
+  alterarStatus: (id, ativo) =>
+    requisicao({
+      method: "PATCH",
+      url: `/usuarios/${id}/status`,
+      data: { ativo },
+    }),
 
-    excluir: (id) =>
-        requisicao({ method: "DELETE", url: `/usuarios/${id}` }),
+  excluir: (id) => requisicao({ method: "DELETE", url: `/usuarios/${id}` }),
 
-    ativar: (id) =>
-        requisicao({
-            method: "PATCH",
-            url: `/admin/usuarios/${id}/ativar`
-        }),
+  ativar: (id) =>
+    requisicao({
+      method: "PATCH",
+      url: `/admin/usuarios/${id}/ativar`,
+    }),
 
-    desativar: (id) =>
-        requisicao({
-            method: "PATCH",
-            url: `/admin/usuarios/${id}/desativar`
-        })
+  desativar: (id) =>
+    requisicao({
+      method: "PATCH",
+      url: `/admin/usuarios/${id}/desativar`,
+    }),
+};
+
+export const relatoriosApi = {
+  obter: (periodo) =>
+    requisicao({
+      method: "GET",
+      url: "/admin/relatorios",
+      params: periodo ? { periodo } : undefined,
+    }),
 };

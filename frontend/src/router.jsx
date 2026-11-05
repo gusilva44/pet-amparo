@@ -10,6 +10,8 @@ import Clientes from './components/admin/clientes';
 import VisaoGeral from './components/admin/visaoGeral/visaoGeral';
 import Veterinario from './pages/pagVeterinario';
 import UnidadesAdmin from './components/admin/unidades';
+import Servicos from './components/admin/servicos/servicos';
+import Relatorios from './components/admin/relatorios/relatorios';
 
 export default function Navigation() {
     return (
@@ -25,6 +27,8 @@ export default function Navigation() {
                     <Route path="/usuarios" element={<Clientes />} />
                     <Route path='/visao' element={<VisaoGeral/>} />
                     <Route path='/unidades' element={<UnidadesAdmin />} />
+                    <Route path='/servicos' element={<Servicos />} />
+                    <Route path='/relatorios' element={<Relatorios />} />
                 </Route>
 
                 <Route element={<RotaProtegida tiposPermitidos={['veterinario']} />}>

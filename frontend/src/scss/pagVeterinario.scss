@@ -1,31 +1,165 @@
-
-.main {
+.pagina-veterinario {
     display: flex;
     width: 100%;
     min-height: 100vh;
-    
-}
+    background: #F7F9F7;
 
-.info {
-    
-    min-width: 0;
-    padding: 30px;
-}
+    .conteudo-veterinario {
+        flex: 1;
+        min-width: 0;
+        padding: 22px 24px 45px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
 
-.card-consultas {
-    background-color: darkcyan;
-    height: 150px;
-    width: 290px;
-    border-radius: 10px;
-    display: flex;
+        .cabecalho-veterinario {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
 
-    h3 {
-        margin: 15px;
+            .identificacao {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+
+                .avatar-veterinario {
+                    width: 54px;
+                    height: 54px;
+                    border-radius: 50%;
+                    background: #85f8bf50;
+                    color: #084D39;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 22px;
+                    flex-shrink: 0;
+                }
+
+                h1 {
+                    margin: 0;
+                    font-size: 1.7em;
+                    font-family: var(--titulo);
+                    color: #263A31;
+                }
+
+                p {
+                    margin: 2px 0 0;
+                    font-size: 13px;
+                    color: #7d8a82;
+                }
+            }
+
+            .numero-atendimentos {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                background: white;
+                border: 1px solid #e5e9e5;
+                border-radius: 14px;
+                padding: 10px 16px;
+
+                strong {
+                    font-size: 22px;
+                    color: #084A38;
+                    font-family: var(--titulo);
+                }
+
+                span {
+                    font-size: 11px;
+                    color: #8c958e;
+                }
+            }
+        }
+
+        .abas-veterinario {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid #e5e9e5;
+            padding-bottom: 2px;
+            flex-wrap: wrap;
+
+            .aba {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                border: none;
+                background: transparent;
+                color: #6b7a71;
+                padding: 10px 16px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                border-radius: 10px 10px 0 0;
+                border-bottom: 2px solid transparent;
+                transition: .15s;
+
+                i {
+                    font-size: 14px;
+                }
+
+                &:hover {
+                    background: #f1f6f2;
+                    color: #28543F;
+                }
+
+                &.ativa {
+                    color: #084D39;
+                    border-bottom-color: #084D39;
+                    background: #f1f6f2;
+                }
+            }
+        }
     }
 }
 
-.dados {
-    display: flex;
-    justify-content: space-around;
+@media (max-width: 900px) {
+    .pagina-veterinario .conteudo-veterinario {
+        padding: 18px 16px 40px;
+
+        .cabecalho-veterinario {
+            .numero-atendimentos {
+                align-items: flex-start;
+            }
+        }
+    }
 }
 
+@media (max-width: 620px) {
+    .pagina-veterinario .conteudo-veterinario {
+        padding: 14px 12px 36px;
+
+        .cabecalho-veterinario {
+            .identificacao {
+                gap: 11px;
+
+                .avatar-veterinario {
+                    width: 44px;
+                    height: 44px;
+                    font-size: 18px;
+                }
+
+                h1 {
+                    font-size: 1.35em;
+                }
+
+                p {
+                    font-size: 12px;
+                }
+            }
+
+            .numero-atendimentos {
+                width: 100%;
+                align-items: flex-start;
+            }
+        }
+
+        .abas-veterinario .aba {
+            flex: 1;
+            justify-content: center;
+            padding: 10px 8px;
+            font-size: 12px;
+        }
+    }
+}
