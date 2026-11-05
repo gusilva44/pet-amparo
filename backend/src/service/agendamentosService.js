@@ -55,10 +55,46 @@ export function listarMeusAgendamentos(idCliente) {
     return repo.listarAgendamentosCliente(idCliente)
 }
 
-export function listarAgendamentosDoVeterinario(idVeterinario) {
+function normalizarFiltros(filtros = {}) {
+    const mes = typeof filtros.mes === 'string' && /^\d{4}-\d{2}$/.test(filtros.mes) ? filtros.mes : null
+
+    const situacao = ['pendente', 'concluido', 'cancelado'].includes(filtros.situacao) ? filtros.situacao : null
+
+    return { mes, situacao }
+}
+
+export function listarAgendamentosDoVeterinario(idVeterinario, filtros) {
     validarId(idVeterinario)
 
-    return repo.listarAgendamentosVeterinario(idVeterinario)
+    return repo.listarAgendamentosVeterinario(idVeterinario, normalizarFiltros(filtros))
+}
+
+export async function montarAgendaDoVeterinario(idVeterinario, filtros) {
+    const agendamentos = await listarAgendamentosDoVeterinario(idVeterinario, filtros)
+
+    const dias = new Map()
+
+    for (const agendamento of agendamentos) {
+        const dia = dataLocalISO(new Date(agendamento.inicio))
+
+        if (!dias.has(dia)) {
+            dias.set(dia, { dia, total: 0, pendentes: 0, concluidos: 0, cancelados: 0, agendamentos: [] })
+        }
+
+        const registro = dias.get(dia)
+
+        registro.total += 1
+        registro.agendamentos.push(agendamento)
+
+        if (agendamento.situacao === 'concluido') registro.concluidos += 1
+        else if (agendamento.situacao === 'cancelado') registro.cancelados += 1
+        else registro.pendentes += 1
+    }
+
+    return {
+        total: agendamentos.length,
+        dias: [...dias.values()]
+    }
 }
 
 export async function atualizarStatusPeloVeterinario(idAgendamento, idVeterinario, statusSolicitado) {

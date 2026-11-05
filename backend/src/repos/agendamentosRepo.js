@@ -120,7 +120,32 @@ export async function listarAgendamentosCliente(idCliente) {
   return resultado;
 }
 
-export async function listarAgendamentosVeterinario(idVeterinario) {
+export async function listarAgendamentosVeterinario(
+  idVeterinario,
+  filtros = {},
+) {
+  const condicoes = ["a.id_veterinario = ?"];
+  const valores = [idVeterinario];
+
+  if (filtros.mes) {
+    condicoes.push("DATE_FORMAT(a.inicio, '%Y-%m') = ?");
+    valores.push(filtros.mes);
+  }
+
+  if (filtros.situacao === "pendente") {
+    condicoes.push(
+      "a.status IN ('agendado', 'confirmado', 'em_atendimento')",
+    );
+  }
+
+  if (filtros.situacao === "concluido") {
+    condicoes.push("a.status = 'concluido'");
+  }
+
+  if (filtros.situacao === "cancelado") {
+    condicoes.push("a.status = 'cancelado'");
+  }
+
   const [resultado] = await db.query(
     `
         SELECT
@@ -136,10 +161,21 @@ export async function listarAgendamentosVeterinario(idVeterinario) {
             a.observacao,
             c.id_cliente,
             c.nome AS cliente,
+            c.telefone AS cliente_telefone,
+            c.cpf AS cliente_cpf,
             an.id_animal,
             an.nome AS animal,
+            an.especie,
+            an.raca,
+            an.porte,
+            an.sexo,
+            an.idade,
+            an.rga,
+            an.e_vacinado,
+            an.foto AS animal_foto,
             s.id_servico,
             s.nome AS servico,
+            s.duracao_minutos,
             u.id_unidade,
             u.nome AS unidade
         FROM agendamentos a
@@ -147,11 +183,12 @@ export async function listarAgendamentosVeterinario(idVeterinario) {
         INNER JOIN animais as an ON an.id_animal = a.id_animal
         INNER JOIN servicos as s ON s.id_servico = a.id_servico
         INNER JOIN unidades as u ON u.id_unidade = a.id_unidade
-        WHERE a.id_veterinario = ?
-        ORDER BY a.inicio DESC
+        WHERE ${condicoes.join(" AND ")}
+        ORDER BY a.inicio
     `,
-    [idVeterinario],
+    valores,
   );
+
   return resultado;
 }
 

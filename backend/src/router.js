@@ -8,6 +8,7 @@ import agendamentos from './controllers/agendamentosController.js'
 import veterinarios from './controllers/veterinariosController.js'
 import medicamentos from './controllers/medicamentosController.js'
 import unidades from './controllers/unidadesController.js'
+import relatorios from './controllers/relatoriosController.js'
 
 export default function adicionarRotas(api) {
     api.use(auth)
@@ -20,4 +21,5 @@ export default function adicionarRotas(api) {
     api.use(veterinarios)
     api.use(medicamentos)
     api.use(unidades)
+    api.use(relatorios)
 }
