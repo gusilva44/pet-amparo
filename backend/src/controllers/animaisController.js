@@ -7,7 +7,6 @@ import * as service from '../service/animaisService.js'
 
 const endpoints = Router()
 
-// BUSCAR MEUS ANIMAIS
 endpoints.get('/animais', autenticar, exigirCliente, async (req, res) => {
     try {
         const idCliente = Number(req.cliente.id_cliente)
@@ -25,7 +24,6 @@ endpoints.get('/animais', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// BUSCAR MEU ANIMAL POR ID
 endpoints.get('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     try {
         const idAnimal = Number(req.params.id)
@@ -44,7 +42,6 @@ endpoints.get('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// CADASTRAR ANIMAL
 endpoints.post('/animais', autenticar, exigirCliente, async (req, res) => {
     try {
         const dados = req.body
@@ -63,7 +60,6 @@ endpoints.post('/animais', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// ATUALIZAR ANIMAL
 endpoints.put('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     try {
         const idAnimal = Number(req.params.id)
@@ -86,7 +82,6 @@ endpoints.put('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// DELETAR ANIMAL
 endpoints.delete('/animais/:id', autenticar, exigirCliente, async (req, res) => {
     try {
         const idAnimal = Number(req.params.id)

@@ -11,7 +11,6 @@ export default function RotaProtegida({ tiposPermitidos }) {
 
     async function verificarUsuario() {
       try {
-        // usuarioAtual ja retorna o corpo da resposta: { usuario }.
         const resposta = await authApi.usuarioAtual();
         if (ativo) setUsuario(resposta.usuario);
       } catch {

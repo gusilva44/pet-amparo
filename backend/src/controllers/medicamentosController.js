@@ -8,7 +8,6 @@ import * as service from '../service/medicamentosService.js'
 
 const endpoints = Router()
 
-// BUSCAR TODOS OS MEDICAMENTOS
 endpoints.get('/medicamentos', async (req, res) => {
     try {         
         const resultado = await service.listarMedicamentos(false)
@@ -22,7 +21,6 @@ endpoints.get('/medicamentos', async (req, res) => {
     }
 })
 
-// CRIAR NOVO MEDICAMENTO 
 endpoints.post('/medicamentos', autenticar, verificarAdmin, async (req, res) => {
     try { 
         const dados = req.body
@@ -38,10 +36,9 @@ endpoints.post('/medicamentos', autenticar, verificarAdmin, async (req, res) => 
     }
 })
 
-// ATUALIZAR MEDICAMENTO
 endpoints.put('/medicamentos/:id', autenticar, verificarAdmin, async (req, res) => {
     try { 
-        const id_medicamento = Number(id.params.id)
+        const id_medicamento = Number(req.params.id)
         const dados = req.body
 
         const resultado = await service.atualizarMedicamento(dados, id_medicamento)
@@ -58,7 +55,6 @@ endpoints.put('/medicamentos/:id', autenticar, verificarAdmin, async (req, res) 
     }
 })
 
-// LISTAR CARTEIRA DO ANIMAL
 endpoints.get('/animais/:id/medicacoes', autenticar, exigirCliente, async (req, res) => {
     try { 
         const id_medicamento = Number(req.params.id)
@@ -78,7 +74,6 @@ endpoints.get('/animais/:id/medicacoes', autenticar, exigirCliente, async (req, 
     }
 })
 
-// ADICIONAR MEDICAMENTO À CARTEIRA
 endpoints.post('/animais/:id/medicacoes', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id_medicamento = Number(req.params.id)

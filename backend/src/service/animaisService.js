@@ -26,7 +26,6 @@ function validarAnimal(animal) {
     if (animal.e_vacinado !== true && animal.e_vacinado !== false) throw new Error('O campo e_vacinado deve ser verdadeiro ou falso.igual')
 }
 
-// BUSCAR TODOS OS MEUS ANIMAIS
 export async function buscarTodosAnimais(idCliente) {
     validarId(idCliente)
 
@@ -36,7 +35,6 @@ export async function buscarTodosAnimais(idCliente) {
 }
 
 
-// BUSCAR UM DOS MEUS ANIMAIS
 export async function buscarAnimalPorId(idAnimal, idCliente) {
     validarId(idAnimal)
     validarId(idCliente)
@@ -48,14 +46,11 @@ export async function buscarAnimalPorId(idAnimal, idCliente) {
 }
 
 
-// CADASTRAR ANIMAL
 export async function adicionarAnimal(animal, idCliente) {
     validarId(idCliente)
     validarAnimal(animal)
 
     let { nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado } = animal
-
-    if(!nome || !especie || !raca || !rga || !idade || !sexo || !porte || !foto || !e_vacinado) throw new Error("Todods os campos devem ser preenchidos")
 
     const rgaValidado = rga.trim()
     const animalExistente = await db.buscarAnimalPorRga(rga)
@@ -86,7 +81,6 @@ export async function adicionarAnimal(animal, idCliente) {
     )
 }
 
-// ATUALIZAR ANIMAL
 export async function atualizarAnimal(animal, idAnimal, idCliente) {
     validarId(idAnimal)
     validarId(idCliente)
@@ -116,7 +110,6 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
     return db.atualizarAnimal(dados, idAnimal, idCliente)
 }
 
-// DELETAR ANIMAL
 export async function deletarAnimal(idAnimal, idCliente){
     validarId(idAnimal)
     validarId(idCliente)

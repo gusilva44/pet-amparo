@@ -7,7 +7,6 @@ import * as service from '../service/adminService.js'
 
 const endpoints = Router()
 
-// BUSCAR CLIENTES POR FILTRO
 endpoints.get('/clientes/filtros', autenticar, verificarAdmin, async (req, res) => {
     try {
         const filtros = {
@@ -33,7 +32,6 @@ endpoints.get('/clientes/filtros', autenticar, verificarAdmin, async (req, res) 
     }
 )
 
-// CADASTRAR CLIENTES
 endpoints.post('/clientes', autenticar, verificarAdmin, async (req, res) => {
     try {
         const cliente = req.body
@@ -54,7 +52,6 @@ endpoints.post('/clientes', autenticar, verificarAdmin, async (req, res) => {
     }
 })
 
-// BUSCAR TODOS OS CLIENTES
 endpoints.get('/clientes', autenticar, verificarAdmin, async (req, res) => {
     try {
         const resultado = await service.buscarTodosClientes()
@@ -69,7 +66,6 @@ endpoints.get('/clientes', autenticar, verificarAdmin, async (req, res) => {
     }
 })
 
-// DELETAR CLIENTE
 endpoints.delete('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -102,7 +98,6 @@ endpoints.delete('/clientes/:id', autenticar, verificarAdmin, async (req, res) =
     }
 })
 
-// ATUALIZAR CLIENTE 
 endpoints.put('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -132,7 +127,6 @@ endpoints.put('/clientes/:id', autenticar, verificarAdmin, async (req, res) => {
     }
 })
 
-// ATIVAR USUÁRIO
 endpoints.patch('/admin/usuarios/:id/ativar', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -153,7 +147,6 @@ endpoints.patch('/admin/usuarios/:id/ativar', autenticar, verificarAdmin, async 
     }
 })
 
-// DESATIVAR USUÁRIO
 endpoints.patch('/admin/usuarios/:id/desativar', autenticar, verificarAdmin, async (req, res) => {
     try {
         const id = Number(req.params.id)
@@ -173,8 +166,6 @@ endpoints.patch('/admin/usuarios/:id/desativar', autenticar, verificarAdmin, asy
         res.status(status).json(formatarError(error))
     }
 })
-
-// ATUALIZAR USUÁRIO
 
 endpoints.put('/admin/usuarios/:id', autenticar, verificarAdmin, async (req, res) => {
     try {

@@ -7,7 +7,6 @@ import * as service from "../service/usuariosService.js";
 
 const endpoints = Router();
 
-// LISTAR TODOS OS USUÁRIOS
 endpoints.get("/usuarios", autenticar, verificarAdmin, async (req, res) => {
     try {
         const resultado = await service.buscarTodosUsuarios();
@@ -25,7 +24,6 @@ endpoints.get("/usuarios", autenticar, verificarAdmin, async (req, res) => {
     }
 });
 
-// CADASTRAR ADMINISTRADOR
 endpoints.post("/usuarios", autenticar, verificarAdmin, async (req, res) => {
     try {
         const resultado = await service.cadastrarUsuario(req.body);
@@ -44,7 +42,6 @@ endpoints.post("/usuarios", autenticar, verificarAdmin, async (req, res) => {
     }
 });
 
-// ATUALIZAR E-MAIL
 endpoints.put("/usuarios/:id", autenticar, verificarAdmin, async (req, res) => {
     try {
         const resultado = await service.atualizarUsuario(
@@ -66,7 +63,6 @@ endpoints.put("/usuarios/:id", autenticar, verificarAdmin, async (req, res) => {
     }
 });
 
-// ATIVAR OU DESATIVAR USUÁRIO
 endpoints.patch("/usuarios/:id/status", autenticar, verificarAdmin, async (req, res) => {
     try {
         const { ativo } = req.body;

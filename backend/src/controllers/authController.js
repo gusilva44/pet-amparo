@@ -7,7 +7,6 @@ import * as service from '../service/authService.js'
 
 const endpoints = Router()
 
-// CRIAR NOVO CADASTRO DE USUÁRIO
 endpoints.post('/auth/cadastrar', async (req, res) => {
     try {
         const dados = req.body
@@ -25,7 +24,6 @@ endpoints.post('/auth/cadastrar', async (req, res) => {
     }
 })
 
-// REALIZAR CADASTRO DO USUÁRIO
 endpoints.post('/auth/login', async (req, res) => {
     try {
         const { email, senha } = req.body
@@ -46,7 +44,6 @@ endpoints.post('/auth/login', async (req, res) => {
     }
 })
 
-// TROCAR SENHA DE LOGIN
 endpoints.put('/auth/me', autenticar, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario
@@ -66,7 +63,6 @@ endpoints.put('/auth/me', autenticar, async (req, res) => {
     }
 })
 
-// REALIZAR LOGOUT DO USUÁRIO
 endpoints.post('/auth/logout', (req, res) => {
     res.clearCookie('token', opcoesCookie())
 
@@ -75,7 +71,6 @@ endpoints.post('/auth/logout', (req, res) => {
     })
 })
 
-// USUÁRIO AUTENTICADO
 endpoints.get('/auth/me', autenticar, async (req, res) => {
         try {
             const idUsuario = req.usuario.id_usuario

@@ -7,29 +7,24 @@ import { regex } from "../utils/regex.js"
 const db = new banco()
 const dbU = new Usuario()
 
-// BUSCAR POR FILTROS
 export async function buscarClientePorFiltros(filtros) {
     return db.buscarClientePorFiltros(filtros)
 }
 
-// CADASTRAR
 export async function cadastrarCliente(cliente){
     return authService.cadastrarCliente(cliente)
 }
 
-// BUSCAR TODOS
 export async function buscarTodosClientes() {
     return db.buscarTodosClientes()
 }
 
-// DELETAR
 export async function deletarCliente(id) {
     validarId(id)
 
     return db.deletarCliente(id)
 }
 
-// ATUALIZAR
 export async function atualizarCliente(cliente, id) {
     if(!cliente) throw new Error("Os dados para atualização são obrigatórios.")
 
@@ -61,7 +56,6 @@ export async function atualizarCliente(cliente, id) {
     return db.atualizarCliente(cliente, id)
 }
 
-// ALTERAR STATUS DO USUÁRIO
 export async function alterarStatusUsuario(id, ativo) {
     validarId(Number(id))
 
@@ -83,7 +77,6 @@ export async function alterarStatusUsuario(id, ativo) {
     }
 }
 
-// ATUALIZAR USUÁRIO
 export async function atualizarUsuario(id, dados) {
     validarId(Number(id));
 

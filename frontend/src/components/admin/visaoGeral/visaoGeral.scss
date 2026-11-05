@@ -175,4 +175,125 @@ header{
         padding: 18px;
         margin: 0px 0px 0px 3px;
     }
+}.page-visao .conteudo-visao {
+    .mensagem-erro {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 92%;
+        margin: 0 auto 12px;
+        padding: 13px;
+        border-radius: 10px;
+        background: #fee2e2;
+        color: #b42318;
+        font-size: 13px;
+
+        span {
+            flex: 1;
+        }
+
+        button {
+            border: none;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+        }
+    }
+
+    .cards .info.esqueleto {
+        background-color: #eef2ef;
+
+        .i {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ffffff90;
+        }
+
+        .texto-card h2 {
+            color: #9aa39c;
+        }
+    }
+
+    .secao-inferior .acesso .cards-acesso .info-acesso {
+        text-decoration: none;
+        color: inherit;
+        transition: transform .15s, box-shadow .15s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px #00000012;
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .page-visao .conteudo-visao {
+        .cards {
+            flex-wrap: wrap;
+
+            .info {
+                flex: 1 1 45%;
+            }
+        }
+
+        .secao-inferior .acesso {
+            height: auto;
+            width: 95%;
+            margin-left: 0;
+            box-sizing: border-box;
+
+            .cards-acesso {
+                flex-wrap: wrap;
+
+                .info-acesso {
+                    flex: 1 1 45%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 620px) {
+    .page-visao .conteudo-visao {
+        .texto-admin {
+            margin-left: 16px;
+
+            h1 {
+                font-size: 1.4em;
+            }
+
+            p {
+                font-size: 13px;
+            }
+        }
+
+        .cards {
+            gap: 10px;
+            width: calc(100% - 24px);
+
+            .info {
+                flex: 1 1 100%;
+                height: auto;
+                padding: 12px;
+            }
+        }
+
+        .secao-inferior .acesso {
+            width: calc(100% - 24px);
+            margin: 10px auto 20px;
+            padding: 10px;
+
+            .cards-acesso {
+                flex-direction: column;
+                padding: 4px;
+
+                .info-acesso {
+                    width: 100%;
+                    height: auto;
+                    padding: 14px;
+                }
+            }
+        }
+    }
 }

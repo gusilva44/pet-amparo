@@ -145,7 +145,7 @@ export default function MeusPets() {
                     <article className="card-pet" key={pet.id_animal}>
                       <h3>{pet.nome}</h3>
                       <p>
-                        {[pet.especie, pet.raca].filter(Boolean).join(" Â· ")}
+                        {[pet.especie, pet.raca].filter(Boolean).join(" · ")}
                       </p>
                     </article>
                   ))}

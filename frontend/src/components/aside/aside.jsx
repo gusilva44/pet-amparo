@@ -1,117 +1,134 @@
-  import { useEffect, useState } from "react";
-  import { Link, useNavigate } from "react-router-dom";
-  import links from "../../data/links";
-  import { authApi, clientesApi } from "../../services/api";
-  import { avisarMudancaAutenticacao } from "../../utils/authEvents";
-  import "./aside.scss";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import links from "../../data/links";
+import { authApi, clientesApi } from "../../services/api";
+import { avisarMudancaAutenticacao } from "../../utils/authEvents";
+import "./aside.scss";
 
-  export default function Aside({ tipo }) {
-    const [nomeUsuario, setNomeUsuario] = useState("");
-    const [autenticado, setAutenticado] = useState(false);
-    const [tipoUsuario, setTipoUsuario] = useState(tipo || "cliente");
-    const linksUsuario = links[tipo || tipoUsuario] || links.cliente;
-    const navigate = useNavigate();
+const ROTULOS_TIPO = {
+  cliente: "Cliente",
+  admin: "Administrador",
+  veterinario: "Veterinário"
+};
 
-    useEffect(() => {
-      let ativo = true;
+export default function Aside({ tipo }) {
+  const [nomeUsuario, setNomeUsuario] = useState("");
+  const [autenticado, setAutenticado] = useState(false);
+  const [tipoUsuario, setTipoUsuario] = useState(tipo || "cliente");
+  const navigate = useNavigate();
 
-      async function carregarUsuario() {
-        try {
-          const { usuario } = await authApi.usuarioAtual();
-          let nome = usuario?.nome || usuario?.email || "";
-          if (ativo) {
-            setAutenticado(true);
-            setTipoUsuario(usuario?.tipo || "cliente");
-          }
+  const tipoAtual = tipo || tipoUsuario;
+  const linksUsuario = links[tipoAtual] || links.cliente;
 
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarUsuario() {
+      try {
+        const { usuario } = await authApi.usuarioAtual();
+
+        if (!ativo) return;
+
+        const tipoConta = usuario?.tipo || "cliente";
+
+        setAutenticado(true);
+        setTipoUsuario(tipoConta);
+
+        let nome = usuario?.nome || usuario?.email || "";
+
+        if (tipoConta === "cliente") {
           try {
             const perfil = await clientesApi.meusDados();
             nome = perfil.cliente?.nome || nome;
           } catch {
-            // Usa o nome da sessao quando o perfil nao estiver disponivel.
-          }
-
-          if (ativo) setNomeUsuario(nome);
-        } catch {
-          if (ativo) {
-            setNomeUsuario("");
-            setAutenticado(false);
-            setTipoUsuario("cliente");
+            nome = usuario?.nome || usuario?.email || "";
           }
         }
-      }
 
-      carregarUsuario();
-      window.addEventListener("auth:changed", carregarUsuario);
-
-      return () => {
-        ativo = false;
-        window.removeEventListener("auth:changed", carregarUsuario);
-      };
-    }, []);
-
-    const iniciais = nomeUsuario
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((parte) => parte[0].toLocaleUpperCase("pt-BR"))
-      .join("");
-
-    async function sair() {
-      try {
-        await authApi.logout();
-        avisarMudancaAutenticacao();
-      } finally {
-        navigate("/");
+        if (ativo) setNomeUsuario(nome);
+      } catch {
+        if (ativo) {
+          setNomeUsuario("");
+          setAutenticado(false);
+          setTipoUsuario("cliente");
+        }
       }
     }
 
-    return (
-      <div className="comps-aside">
-        <div className="usuario">
-          <div
-            className="img-usuario"
-            aria-label={
-              nomeUsuario ? `Iniciais de ${nomeUsuario}` : "Perfil do usuário"
-            }
-          >
-            {iniciais || "?"}
-          </div>
-          <div className="dados-usuario">
-            {!autenticado ? (
-              <>
-                <button type="button"
-                  onClick={() => navigate("/meusPets?modo=login")}
-                >Fazer login</button>
-                <button type="button"
-                  onClick={() => navigate("/meusPets?modo=cadastro")}
-                >Cadastrar</button>
-              </>
-            ) : (
-              <>
-                <h2>{nomeUsuario}</h2>
-                <p>Seja bem-vindo,  {nomeUsuario}</p>
-                <h2 style={{ paddingTop: '10px',
-                color: "orange"
-                }}>{tipoUsuario.toUpperCase()}</h2>
-              </>
-            )}
-          </div>
+    carregarUsuario();
+    window.addEventListener("auth:changed", carregarUsuario);
+
+    return () => {
+      ativo = false;
+      window.removeEventListener("auth:changed", carregarUsuario);
+    };
+  }, []);
+
+  const iniciais = nomeUsuario
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0].toLocaleUpperCase("pt-BR"))
+    .join("");
+
+  async function sair() {
+    try {
+      await authApi.logout();
+      avisarMudancaAutenticacao();
+    } finally {
+      navigate("/");
+    }
+  }
+
+  return (
+    <aside className="comps-aside">
+      <div className="usuario">
+        <div
+          className="img-usuario"
+          aria-label={nomeUsuario ? `Iniciais de ${nomeUsuario}` : "Perfil do usuário"}
+        >
+          {iniciais || "?"}
         </div>
-        <div className="linha" />
+
+        <div className="dados-usuario">
+          {!autenticado ? (
+            <>
+              <button type="button" onClick={() => navigate("/meusPets?modo=login")}>
+                Fazer login
+              </button>
+              <button type="button" onClick={() => navigate("/meusPets?modo=cadastro")}>
+                Cadastrar
+              </button>
+            </>
+          ) : (
+            <>
+              <h2>{nomeUsuario}</h2>
+              <span className="tipo-usuario">
+                {ROTULOS_TIPO[tipoAtual] || "Cliente"}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="linha" />
+
+      <nav aria-label="Menu principal">
         <ul>
           {linksUsuario.map((link) => (
-          <li key={link.id}>
-            <Link to={link.caminho}>
-              <i className={link.icone} aria-hidden="true" />
-            </Link>
-            <Link className="nav" to={link.caminho}>
-              {link.texto}
-            </Link>
-          </li>
-        ))}
-        {autenticado && (
+            <li key={link.id}>
+              <Link to={link.caminho} aria-hidden="true" tabIndex={-1}>
+                <i className={link.icone} />
+              </Link>
+
+              <Link className="nav" to={link.caminho}>
+                {link.texto}
+              </Link>
+            </li>
+          ))}
+
+          {autenticado && (
             <li>
               <i className="fa-solid fa-right-from-bracket" />
               <button type="button" className="nav botao-sair-aside" onClick={sair}>
@@ -120,6 +137,7 @@
             </li>
           )}
         </ul>
-      </div>
-    );
-  }
+      </nav>
+    </aside>
+  );
+}

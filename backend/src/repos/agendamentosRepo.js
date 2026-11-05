@@ -1,6 +1,5 @@
 import { db } from "./connection.js";
 
-// BUSCAR VETERINÁRIO PELO ID
 export async function buscarVeterinarioNaUnidade(idVeterinario, idUnidade) {
   const [resultado] = await db.query(
     `
@@ -23,7 +22,6 @@ export async function buscarVeterinarioNaUnidade(idVeterinario, idUnidade) {
   return resultado[0];
 }
 
-// LISTAR VETERINÁRIOS ATIVOS
 export async function listarVeterinarios(idUnidade) {
   const filtroUnidade = idUnidade === undefined ? "" : "AND vu.id_unidade = ?";
   const valores = idUnidade === undefined ? [] : [idUnidade];
@@ -53,7 +51,6 @@ export async function listarVeterinarios(idUnidade) {
   return resultado;
 }
 
-// BUSCAR HORÁRIOS DO VETERINÁRIO
 export async function buscarHorarioDoVeterinario(
   idVeterinario,
   idUnidade,
@@ -78,7 +75,6 @@ export async function buscarHorarioDoVeterinario(
   return resultado;
 }
 
-// LISTAR AGENDAMENTOS DO CLIENTE
 export async function listarAgendamentosCliente(idCliente) {
   const [resultado] = await db.query(
     `
@@ -192,7 +188,6 @@ export async function listarAgendamentosVeterinario(
   return resultado;
 }
 
-// BUSCAR AGENDAMENTO ESPECÍFICO DO CLIENTE
 export async function buscarAgendamentoDoCliente(idAgendamento, idCliente) {
   const [resultado] = await db.query(
     `
@@ -238,7 +233,6 @@ export async function atualizarStatusDoAgendamento(
   return resultado.affectedRows;
 }
 
-// VERIFICAR CONFLITO DE HORÁRIO
 export async function existeConflito(
   idVeterinario,
   inicio,
@@ -266,7 +260,6 @@ export async function existeConflito(
   return Boolean(resultado[0]);
 }
 
-// CRIAR AGENDAMENTO
 export async function criarAgendamento(agendamento) {
   const [resultado] = await db.query(
     `
@@ -297,7 +290,6 @@ export async function criarAgendamento(agendamento) {
   return resultado.insertId;
 }
 
-// CANCELAR AGENDAMENTO
 export async function cancelarAgendamento(idAgendamento, idCliente) {
   const [resultado] = await db.query(
     `

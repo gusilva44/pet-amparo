@@ -28,15 +28,11 @@ export default function Agendamentos() {
 
     const [agendamentos, setAgendamentos] = useState([]);
 
-    // Carrega os dados do usuário.
     const carregarDados = useCallback(async (dadosUsuario) => {
         setUsuario(dadosUsuario);
-
-        // A busca dos agendamentos reais será conectada à API aqui.
         setAgendamentos([]);
     }, []);
 
-    // Verifica se existe uma sessão salva.
     useEffect(() => {
         let ativo = true;
 
@@ -66,7 +62,6 @@ export default function Agendamentos() {
         };
     }, [carregarDados]);
 
-    // Executada quando o login ou cadastro é concluído.
     async function autenticar(dadosUsuario) {
         setCarregando(true);
 
@@ -77,7 +72,6 @@ export default function Agendamentos() {
         }
     }
 
-    // Muda o mês do calendário.
     function mudarMes(direcao) {
         setMesAtual(mes => new Date(
             mes.getFullYear(),

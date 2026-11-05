@@ -7,7 +7,6 @@ import * as service from '../service/clientesService.js'
 
 const endpoints = Router()
 
-// BUSCAR MEUS DADOS (CLIENTE)
 endpoints.get('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = Number(req.usuario.id_usuario)
@@ -27,7 +26,6 @@ endpoints.get('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// ATUALIZAR MEUS DADOS (CLIENTE)
 endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = Number(req.usuario.id_usuario)
@@ -51,7 +49,6 @@ endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// DELETAR MEUS DADOS (CLIENTE)
 endpoints.delete('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario

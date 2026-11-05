@@ -2,10 +2,7 @@
   box-shadow: 0 12px 35px rgba(38, 58, 49, 0.15);
   transition: box-shadow 0.3s ease;
 
-  // 1. Regras gerais do formulário
   .form-pets {
-    
-    // Regras para TODOS os inputs
     input {
       transition: border 0.2s ease, box-shadow 0.2s ease;
 
@@ -21,7 +18,6 @@
       }
     }
 
-    // 2. CORREÇÃO AQUI: .pass fica no mesmo nível do input, aplicando-se ao <label>
     .pass {
       position: relative;
       display: flex; 

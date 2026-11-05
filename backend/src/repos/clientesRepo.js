@@ -207,18 +207,6 @@ export default class Usuario {
         return resultado.affectedRows
     }
 
-        // BUSCAR USUÁRIO POR ID
-    async buscarUsuarioPorId(id) {
-        const [resultado] = await db.query(`
-            SELECT id_usuario, email, tipo, ativo
-            FROM usuarios
-            WHERE id_usuario = ?
-        `, [id])
-
-        return resultado[0]
-    }
-
-    // ALTERAR STATUS DO USUÁRIO
     async alterarStatusUsuario(id, ativo) {
         const [resultado] = await db.query(`
             UPDATE usuarios

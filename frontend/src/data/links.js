@@ -42,7 +42,7 @@ const links = {
         {
             id: 4,
             caminho: '/usuarios',
-            texto: 'Usuarios',
+            texto: 'Usuários',
             icone: 'fa-regular fa-user'
         },
         {
@@ -57,10 +57,10 @@ const links = {
         {
             id: 1,
             caminho: '/admveterinario',
-            texto: 'Agendamentos',
-            icone: 'fa-solid fa-stethoscope'
-        },
+            texto: 'Atendimentos',
+            icone: 'fa-solid fa-clipboard-list'
+        }
     ]
 };
 
-export default links;   
+export default links;

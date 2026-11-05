@@ -1,54 +1,89 @@
-import Aside from "../components/aside/aside"
-import '../scss/pagVeterinario.scss'
+import { useMemo, useState } from "react";
+import Aside from "../components/aside/aside";
+import CabecalhoVeterinario from "../components/veterinario/cabecalhoVeterinario";
+import AgendamentosVeterinario from "../components/veterinario/agendamentos";
+import AgendaVeterinario from "../components/veterinario/agenda";
+import useAgendamentosVeterinario from "../components/veterinario/useAgendamentosVeterinario";
+import usePerfilVeterinario from "../components/veterinario/usePerfilVeterinario";
+import "../scss/pagVeterinario.scss";
 
+const ABAS = [
+    {
+        id: "atendimentos",
+        rotulo: "Atendimentos",
+        icone: "fa-solid fa-clipboard-list"
+    },
+    {
+        id: "agenda",
+        rotulo: "Agenda do mês",
+        icone: "fa-regular fa-calendar-days"
+    }
+];
 
 export default function Veterinario() {
-    return(
+    const [abaAtiva, setAbaAtiva] = useState("atendimentos");
+    const nome = usePerfilVeterinario();
 
+    const {
+        agendamentos,
+        carregando,
+        mensagem,
+        atualizandoId,
+        recarregar,
+        alterarSituacao,
+        limparMensagem
+    } = useAgendamentosVeterinario();
 
-         <div className="main">
+    const totais = useMemo(() => ({
+        total: agendamentos.length,
+        pendentes: agendamentos.filter((item) => item.situacao === "pendente").length
+    }), [agendamentos]);
+
+    return (
+        <div className="pagina-veterinario">
             <Aside />
-            
 
-            <div className="infor"> 
-                
-                 <h1>Agenda de consultas </h1>
-                    <h3>Confira seus atendimentos </h3>
+            <main className="conteudo-veterinario">
+                <CabecalhoVeterinario
+                    nome={nome}
+                    pendentes={totais.pendentes}
+                    total={totais.total}
+                />
 
-                    <div className="card-consultas">
-                        <h3>Consultas de Hoje: </h3> 
+                <nav className="abas-veterinario" aria-label="Seções do painel">
+                    {ABAS.map((aba) => (
+                        <button
+                            type="button"
+                            key={aba.id}
+                            className={`aba ${abaAtiva === aba.id ? "ativa" : ""}`}
+                            aria-current={abaAtiva === aba.id ? "page" : undefined}
+                            onClick={() => setAbaAtiva(aba.id)}
+                        >
+                            <i className={aba.icone}></i>
+                            {aba.rotulo}
+                        </button>
+                    ))}
+                </nav>
 
-                            <div className="dados">
-                                <h3>Pendenetes </h3>
-                                  <p>6</p>
-                                <h3>Concluidas </h3>
-                                 <p>7</p>
-                             </div>
-
-                             <div className="dias"> 
-                                <h1>Consultas do dia: </h1>
-
-                                <div className='cards'>
-                                    <p>8:00 </p>
-                                    
-                                    <p>Ana </p>
-
-                                    <p>Consulta de rotina </p>
-
-                                       <button>
-                                            <p> Concluir consulta </p>
-                                        </button>
-                                 </div>
-                                
-                                
-                             </div>
-                     </div>
-
-
-
-            </div>
-              
-         </div>
+                {abaAtiva === "atendimentos" ? (
+                    <AgendamentosVeterinario
+                        agendamentos={agendamentos}
+                        carregando={carregando}
+                        mensagem={mensagem}
+                        atualizandoId={atualizandoId}
+                        alterarSituacao={alterarSituacao}
+                        recarregar={recarregar}
+                        limparMensagem={limparMensagem}
+                    />
+                ) : (
+                    <AgendaVeterinario
+                        agendamentos={agendamentos}
+                        carregando={carregando}
+                        atualizandoId={atualizandoId}
+                        alterarSituacao={alterarSituacao}
+                    />
+                )}
+            </main>
+        </div>
     );
-
 }

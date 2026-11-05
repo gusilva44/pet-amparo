@@ -7,7 +7,6 @@ import * as service from '../service/agendamentosService.js'
 
 const endpoints = Router()
 
-// BUSCAR TODOS AGENDAMENTOS
 endpoints.get('/agendamentos', autenticar, exigirCliente, async (req, res) => {
     try {
         const id_cliente = Number(req.cliente.id_cliente)
@@ -24,7 +23,6 @@ endpoints.get('/agendamentos', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// CRIAR NOVO AGENDAMENTO
 endpoints.post('/agendamentos', autenticar, exigirCliente, async (req, res) => {
     try {
         const dados = req.body
@@ -43,7 +41,6 @@ endpoints.post('/agendamentos', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
-// CANCELAR AGENDAMENTO
 endpoints.delete('/agendamentos/:id', autenticar, exigirCliente, async (req, res) => {
     try {
         const id_agendamento = Number(req.params.id)

@@ -1,0 +1,370 @@
+.agenda-mensal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .controles-mes {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        background: white;
+        border: 1px solid #e5e9e5;
+        border-radius: 14px;
+        padding: 12px 16px;
+
+        .navegacao {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                border: 1px solid #e5e9e5;
+                background: white;
+                color: #28543F;
+                border-radius: 9px;
+                cursor: pointer;
+                transition: .15s;
+                font-size: 12px;
+
+                &:hover {
+                    background: #f1f6f2;
+                    border-color: #cfe3d7;
+                }
+            }
+
+            h2 {
+                margin: 0 6px;
+                font-size: 16px;
+                color: #263A31;
+                font-family: var(--titulo);
+                min-width: 150px;
+                text-align: center;
+            }
+
+            .hoje {
+                width: auto;
+                padding: 0 14px;
+                font-size: 12px;
+                font-weight: 600;
+                background: #084D39;
+                color: white;
+                border-color: #084D39;
+
+                &:hover {
+                    background: #063a2b;
+                }
+            }
+        }
+
+        .resumo-mes {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 12px;
+
+            span {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: #f4f7f5;
+                color: #5c6b62;
+                padding: 6px 11px;
+                border-radius: 20px;
+            }
+
+            strong {
+                color: #084A38;
+            }
+
+            .pendente {
+                background: #FEE5C9;
+                color: #B66A12;
+
+                strong {
+                    color: #B66A12;
+                }
+            }
+
+            .concluido {
+                background: #D3F0E2;
+                color: #084D39;
+
+                strong {
+                    color: #084D39;
+                }
+            }
+        }
+    }
+
+    .calendario {
+        background: white;
+        border: 1px solid #e5e9e5;
+        border-radius: 16px;
+        padding: 14px;
+
+        .cabecalho-semana {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+
+            span {
+                text-align: center;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+                color: #9aa39c;
+                padding: 6px 0;
+            }
+        }
+
+        .grade-dias {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+
+            .celula {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                min-height: 92px;
+                border: 1px solid #eef2ef;
+                border-radius: 11px;
+                padding: 7px;
+                background: white;
+                text-align: left;
+                cursor: pointer;
+                transition: .15s;
+                overflow: hidden;
+
+                &:hover {
+                    border-color: #cfe3d7;
+                    background: #fafdfb;
+                }
+
+                &.vazia {
+                    background: transparent;
+                    border: none;
+                    cursor: default;
+                    min-height: 0;
+                }
+
+                &.hoje {
+                    border-color: #FEE5C9;
+                    background: #fffdfa;
+                }
+
+                &.selecionado {
+                    border-color: #084D39;
+                    box-shadow: 0 0 0 1px #084D39 inset;
+                }
+
+                &.com-atendimento .numero-dia {
+                    color: #084D39;
+                }
+
+                .topo-celula {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 4px;
+
+                    .numero-dia {
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: #6b7a71;
+                    }
+
+                    .marcador-pendente {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 17px;
+                        height: 17px;
+                        padding: 0 4px;
+                        border-radius: 20px;
+                        background: #FEE5C9;
+                        color: #B66A12;
+                        font-size: 10px;
+                        font-weight: 700;
+                    }
+                }
+
+                .eventos {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+                    min-width: 0;
+
+                    .evento {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        font-size: 10px;
+                        padding: 3px 5px;
+                        border-radius: 5px;
+                        background: #FEE5C9;
+                        color: #B66A12;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+
+                        i {
+                            font-size: 4px;
+                            flex-shrink: 0;
+                        }
+
+                        &.concluido {
+                            background: #D3F0E2;
+                            color: #084D39;
+                        }
+
+                        &.cancelado {
+                            background: #FED9DA;
+                            color: #C22D36;
+                            text-decoration: line-through;
+                        }
+                    }
+
+                    .mais-eventos {
+                        font-size: 10px;
+                        color: #9aa39c;
+                        padding-left: 3px;
+                    }
+                }
+            }
+        }
+    }
+
+    .detalhe-dia {
+        background: white;
+        border: 1px solid #e5e9e5;
+        border-radius: 16px;
+        padding: 16px;
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+
+            h3 {
+                margin: 0;
+                font-size: 15px;
+                color: #263A31;
+                text-transform: capitalize;
+            }
+
+            span {
+                font-size: 12px;
+                color: #888;
+                background: #f1f5f2;
+                padding: 4px 10px;
+                border-radius: 20px;
+            }
+        }
+
+        .estado-dia {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 34px 16px;
+            color: #888;
+
+            i {
+                font-size: 20px;
+                color: #084D39;
+            }
+
+            p {
+                margin: 0;
+                font-size: 13px;
+            }
+        }
+
+        .lista-dia {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .agenda-mensal .calendario .grade-dias .celula {
+        min-height: 72px;
+        padding: 5px;
+
+        .eventos .evento {
+            font-size: 9px;
+        }
+    }
+}
+
+@media (max-width: 700px) {
+    .agenda-mensal {
+        .controles-mes {
+            flex-direction: column;
+            align-items: stretch;
+
+            .navegacao {
+                justify-content: space-between;
+
+                h2 {
+                    min-width: 0;
+                    flex: 1;
+                    font-size: 15px;
+                }
+            }
+        }
+
+        .calendario {
+            padding: 9px;
+
+            .cabecalho-semana span {
+                font-size: 9px;
+            }
+
+            .grade-dias {
+                gap: 3px;
+
+                .celula {
+                    min-height: 54px;
+                    padding: 4px;
+                    border-radius: 8px;
+
+                    .topo-celula .numero-dia {
+                        font-size: 11px;
+                    }
+
+                    .eventos {
+                        .evento {
+                            padding: 2px 3px;
+                            font-size: 0;
+
+                            i {
+                                font-size: 5px;
+                            }
+                        }
+
+                        .mais-eventos {
+                            font-size: 9px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

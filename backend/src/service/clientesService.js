@@ -5,14 +5,12 @@ import { autenticacaoUsuario } from '../validation/idCliente.js'
 
 const dbUser = new Usuario()
 
-// BUSCAR MEUS DADOS
 export function buscarClientePorUsuario(idUsuario){
     autenticacaoUsuario(idUsuario)
 
     return dbUser.buscarDadosCliente(idUsuario)
 }
 
-// ATUALIZAR MEUS DADOS
 export function atualizarClientePorUsuario(cliente, idUsuario){
     autenticacaoUsuario(idUsuario)
     if (!cliente) throw new Error('Nenhum dado foi enviado.')
@@ -27,7 +25,6 @@ export function atualizarClientePorUsuario(cliente, idUsuario){
     return dbUser.atualizarClientePorUsuario(cliente, idUsuario)
 }
 
-// DELETAR MINHA CONTA
 export function deletarClientePorUsuario(idUsuario){
     autenticacaoUsuario(idUsuario)
     

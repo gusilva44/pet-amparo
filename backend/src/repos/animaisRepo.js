@@ -1,7 +1,6 @@
 import { db } from './connection.js'
 
 
-    // BUSCAR TODOS OS ANIMAIS DO CLIENTE
 export async function buscarTodosAnimaisPorCliente(idCliente) {
     const [resultado] = await db.query(`
         SELECT * FROM animais
@@ -13,7 +12,6 @@ export async function buscarTodosAnimaisPorCliente(idCliente) {
 }
 
 
-// BUSCAR UM ANIMAL DO CLIENTE
 export async function buscarAnimalPorId(idAnimal, idCliente) {
     const [resultado] = await db.query(`
         SELECT * FROM animais
@@ -28,7 +26,6 @@ export async function buscarAnimalPorId(idAnimal, idCliente) {
 }
 
 
-// VERIFICAR RGA
 export async function buscarAnimalPorRga(rga) {
     const [resultado] = await db.query(`
         SELECT id_animal, id_cliente FROM animais
@@ -39,7 +36,6 @@ export async function buscarAnimalPorRga(rga) {
 }
 
 
-// CADASTRAR ANIMAL
 export async function adicionarAnimal(animal, idCliente) {
     const [resultado] = await db.query(`
         INSERT INTO animais (id_cliente, nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado)
@@ -60,7 +56,6 @@ export async function adicionarAnimal(animal, idCliente) {
     return resultado.insertId
 }
 
-// ATUALIZAR ANIMAL
 export async function atualizarAnimal(animal, idAnimal, idCliente) {
     const [resultado] = await db.query(`
         UPDATE animais
@@ -92,7 +87,6 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
     return resultado.affectedRows
 }
 
-// EXCLUIR ANIMAL
 export async function deletarAnimal(idAnimal, idCliente) {
     const [resultado] = await db.query(`
         DELETE FROM animais

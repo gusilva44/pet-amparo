@@ -3,31 +3,32 @@ import Logo from '../../assets/imagens/Logo.webp'
 import Casa from '../../assets/imagens/icones/icone-casa.png'
 import Localizacao from '../../assets/imagens/icones/icone-localizacao.png'
 import Sobre from '../../assets/imagens/icones/icone-sobre.png'
-import { Link } from 'react-router-dom'
 
-export default function Header(){
-    return(
+const ITENS_NAVEGACAO = [
+    { id: 1, href: '#inicio', texto: 'Início', icone: Casa, alt: 'Ícone casa' },
+    { id: 2, href: '#unidades', texto: 'Unidades', icone: Localizacao, alt: 'Ícone localização' },
+    { id: 3, href: '#sobre', texto: 'Sobre', icone: Sobre, alt: 'Ícone sobre' }
+]
+
+export default function Header() {
+    return (
         <header className='comps-header'>
             <section className="logo">
                 <img className='comps-logo' src={Logo} alt="Logo Pet Amparo" />
             </section>
-            <section className='nav'>
+
+            <nav className='nav'>
                 <ul>
-                    <li>
-                        <a className='links' href='#' > 
-                        <img className='icone-header' src={Casa} alt="Icone casa" /> Início</a>
-                    </li>
-                    <li>
-                        
-                        <a className="links" href="#unidades">
-                        <img className="icone-header" src={Localizacao} alt="Ícone localização"/> Unidades </a>
-                    </li>
-                    <li>
-                        <a className='links' href='#sobre' > 
-                        <img className='icone-header' src={Sobre} alt="Icone sobre" /> Sobre</a>
-                    </li>
+                    {ITENS_NAVEGACAO.map((item) => (
+                        <li key={item.id}>
+                            <a className='links' href={item.href}>
+                                <img className='icone-header' src={item.icone} alt={item.alt} />
+                                {item.texto}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
-            </section>
+            </nav>
         </header>
     )
 }
