@@ -13,6 +13,8 @@ export const clientesApi = {
   meusDados: () => requisicao({ method: "GET", url: "/clientes/me" }),
   atualizarMeusDados: (dados) =>
     requisicao({ method: "PUT", url: "/clientes/me", data: dados }),
+  atualizarFoto: (foto) =>
+    requisicao({ method: "PATCH", url: "/clientes/me/foto", data: { foto } }),
   excluirMinhaConta: () =>
     requisicao({ method: "DELETE", url: "/clientes/me" }),
   listar: () => requisicao({ method: "GET", url: "/clientes" }),

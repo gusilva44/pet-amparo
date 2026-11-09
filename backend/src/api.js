@@ -12,7 +12,7 @@ const origensPermitidas = (process.env.CORS_ORIGINS
     .map(origem => origem.trim())
     .filter(Boolean)
 
-app.use(express.json())
+app.use(express.json({ limit: '8mb' }))
 
 app.use(cors({
     origin: origensPermitidas,

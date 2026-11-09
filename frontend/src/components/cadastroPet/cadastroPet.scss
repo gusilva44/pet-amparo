@@ -44,6 +44,14 @@
     grid-column: 1 / -1;
     margin: 0;
   }
+  .pet-foto-campo { align-content: start; }
+  .erro-foto { color: #ffe0d8; font-size: 0.85rem; }
+  .pet-foto-previa {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 0.75rem;
+  }
   .botao-principal {
     justify-self: start;
   }

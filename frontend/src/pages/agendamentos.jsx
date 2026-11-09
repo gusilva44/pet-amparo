@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import '../scss/agendamentos.scss';
 import Aside from '../components/aside/aside';
@@ -11,14 +11,8 @@ import Logo from '../assets/imagens/Logo.webp';
 import Cachorro from '../assets/imagens/cachorro-agendamentos.png';
 
 import { authApi } from '../services/api';
-import Auth from '../auth/auth';
 
 export default function Agendamentos() {
-    const [searchParams] = useSearchParams();
-
-    const modoAuth =
-        searchParams.get('modo') === 'cadastro' ? 'cadastro' : 'login';
-
     const [usuario, setUsuario] = useState(null);
     const [carregando, setCarregando] = useState(true);
 
@@ -62,16 +56,6 @@ export default function Agendamentos() {
         };
     }, [carregarDados]);
 
-    async function autenticar(dadosUsuario) {
-        setCarregando(true);
-
-        try {
-            await carregarDados(dadosUsuario);
-        } finally {
-            setCarregando(false);
-        }
-    }
-
     function mudarMes(direcao) {
         setMesAtual(mes => new Date(
             mes.getFullYear(),
@@ -94,6 +78,10 @@ export default function Agendamentos() {
         );
     }
 
+    if (!usuario) {
+        return <Navigate to="/meuspets?modo=login&redirect=%2Fagendamentos" replace />;
+    }
+
     return (
         <div className="page-Agendamentos">
             <Aside />
@@ -102,18 +90,6 @@ export default function Agendamentos() {
                 <div className="logo">
                     <img src={Logo} alt="PetAmparo" />
                 </div>
-
-                {!usuario ? (
-                    <Auth
-                        key={modoAuth}
-                        initialMode={modoAuth}
-                        onAuthenticated={autenticar}
-                    />
-                ) : (
-                    <>
-                        <div className="logo">
-                            <img src={Logo} alt="PetAmparo" />
-                        </div>
 
                         <div className="banner">
                             <section className="icon">
@@ -192,8 +168,6 @@ export default function Agendamentos() {
                                 </button>
                             </section>
                         </div>
-                    </>
-                )}
             </main>
         </div>
     );

@@ -1,479 +1,799 @@
+
 html {
     scroll-behavior: smooth;
 }
 
-#unidades, #sobre {
+#unidades,
+#sobre {
     scroll-margin-top: 120px;
 }
+
 .home-page {
-  .main {
-    display: flex;
-    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
 
-    .content {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      flex: 1;
-      width: 100%;
-      min-width: 0;
-
-      // Banner principal
-      .banner {
+    .main {
         display: flex;
-        width: 80%;
-        height: 290px;
-        margin-top: 30px;
-        background-color: var(--verde-escuro);
-        border-radius: 10px;
-        position: relative;
+        align-items: flex-start;
+        width: 100%;
 
-        .imagem {
-          display: flex;
-          flex: 1;
-          justify-content: center;
-          height: 300px;
-          min-width: 0;
-
-          .img-banner {
-            display: block;
-            width: 57%;
-            left: 335px;
-            top: 63px;
-            height: 80%;
-            object-fit: contain;
-            object-position: center;
-            position: absolute;
-          }
-        }
-
-        .textos {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 20px;
-
-          h2 {
-            font-family: var(--titulo);
-            font-size: 30px;
-            color: var(--branco);
-          }
-
-          span {
-            color: var(--laranja);
-          }
-
-          p {
-            font-family: var(--textos);
-            font-size: 20px;
-            color: var(--branco);
-          }
-
-          button {
-            width: 60%;
-            padding: 10px 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--verde-claro);  
-            font-size: 15px;
-            font-weight: bold;
-            a{
-              text-decoration: none;
-              color: var(--branco);
-            }
-          }
-        }
-      }
-
-      // Seção sobre o projeto
-      .sobre {
-        display: flex;
-        flex-direction: column;
-        width: 80%;
-        margin-top: 50px;
-        box-sizing: border-box;
-
-        h2 {
-          margin: 0 0 10px;
-          font-family: var(--titulo);
-          font-size: 40px;
-          color: var(--verde-escuro);
-        }
-
-        .conteudo-sobre {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 25px;
-          width: 100%;
-
-          .sobre-esq {
+        .content {
             display: flex;
             align-items: center;
-            width: 50%;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
             min-width: 0;
+            height: auto;
 
-            .texto-sobre {
-              display: flex;
-              flex-direction: column;
-              width: 100%;
-
-              .sub-titulo {
+            // Banner principal
+            .banner {
                 display: flex;
                 align-items: center;
-                gap: 10px;
-                margin-bottom: 15px;
+                justify-content: space-between;
+                width: 80%;
+                min-height: 290px;
+                margin-top: 30px;
+                background-color: var(--verde-escuro);
+                border-radius: 10px;
+                overflow: hidden;
 
-                img {
-                  width: 30px;
-                  height: 30px;
-                  object-fit: contain;
+                .textos {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    width: 50%;
+                    padding: 25px;
+                    box-sizing: border-box;
+
+                    h2 {
+                        font-family: var(--titulo);
+                        font-size: 30px;
+                        color: var(--branco);
+                        margin: 0 0 15px;
+                    }
+
+                    span {
+                        color: var(--laranja);
+                    }
+
+                    p {
+                        font-family: var(--textos);
+                        font-size: 18px;
+                        color: var(--branco);
+                        margin: 0 0 20px;
+                    }
+
+                    button {
+                        width: 60%;
+                        padding: 10px 5px;
+                        border: none;
+                        border-radius: 5px;
+                        background-color: var(--verde-claro);
+                        font-size: 15px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: 0.3s;
+
+                        &:hover {
+                            transform: translateY(-3px);
+                            opacity: 0.9;
+                        }
+
+                        a {
+                            text-decoration: none;
+                            color: var(--branco);
+                        }
+                    }
+                }
+
+                .imagem {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 50%;
+                    height: 290px;
+                    min-width: 0;
+
+                    .img-banner {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        object-position: center;
+                    }
+                }
+            }
+
+            // Seção sobre o projeto
+            .sobre {
+                display: flex;
+                flex-direction: column;
+                width: 80%;
+                margin-top: 50px;
+                box-sizing: border-box;
+
+                > h2 {
+                    margin: 0 0 20px;
+                    font-family: var(--titulo);
+                    font-size: 40px;
+                    color: var(--verde-escuro);
+                }
+
+                .conteudo-sobre {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 25px;
+                    width: 100%;
+
+                    .sobre-esq {
+                        display: flex;
+                        align-items: center;
+                        width: 50%;
+                        min-width: 0;
+
+                        .texto-sobre {
+                            display: flex;
+                            flex-direction: column;
+                            width: 100%;
+
+                            .sub-titulo {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                margin-bottom: 15px;
+
+                                img {
+                                    width: 30px;
+                                    height: 30px;
+                                    object-fit: contain;
+                                }
+
+                                h2 {
+                                    margin: 0;
+                                    padding-bottom: 5px;
+                                    border-bottom: 2px solid var(--laranja);
+                                    font-family: var(--titulo);
+                                    font-size: 30px;
+                                    color: var(--verde-escuro);
+                                }
+                            }
+
+                            p {
+                                margin: 5px 0;
+                                font-family: var(--textos);
+                                font-size: 14px;
+                                line-height: 1.6;
+                                text-align: justify;
+                                color: var(--verde-escuro);
+                            }
+                        }
+                    }
+
+                    .sobre-img {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 50%;
+                        min-width: 0;
+
+                        .img-sobre {
+                            display: block;
+                            width: 100%;
+                            max-width: 400px;
+                            height: auto;
+                            object-fit: contain;
+                        }
+                    }
+                }
+            }
+
+            // Cards informativos
+            .cards {
+                display: flex;
+                align-items: stretch;
+                justify-content: center;
+                gap: 30px;
+                width: 90%;
+                margin: 50px 0;
+
+                .card {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    flex: 1;
+                    min-width: 0;
+                    padding: 25px 20px;
+                    background-color: var(--verde-escuro);
+                    border-radius: 10px;
+                    box-sizing: border-box;
+                    transition: 0.3s;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                    }
+
+                    img {
+                        width: 55px;
+                        height: 55px;
+                        object-fit: contain;
+                    }
+
+                    h2 {
+                        font-size: 15px;
+                        text-align: center;
+                        color: var(--laranja);
+                        font-family: var(--titulo);
+                    }
+
+                    p {
+                        font-size: 13px;
+                        line-height: 1.5;
+                        text-align: justify;
+                        color: var(--branco);
+                        font-family: var(--textos);
+                    }
+                }
+            }
+
+            // Seção: por que criamos?
+            .criacao {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                width: 80%;
+                margin: 30px 0;
+                padding: 20px;
+                background-color: var(--verde-claro);
+                border-radius: 10px;
+                box-sizing: border-box;
+
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    width: 50%;
+                    min-width: 0;
+
+                    .logo {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+
+                        img {
+                            width: 60px;
+                            height: 60px;
+                            object-fit: contain;
+                        }
+
+                        h2 {
+                            font-family: var(--titulo);
+                            font-size: 2em;
+                            color: var(--laranja);
+                        }
+                    }
+
+                    p {
+                        font-family: var(--textos);
+                        font-size: 18px;
+                        line-height: 1.6;
+                        color: var(--branco);
+                        text-align: justify;
+                        margin-left: 15px;
+                    }
+                }
+
+                .img {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 50%;
+                    min-width: 0;
+
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                        object-fit: cover;
+                    }
+                }
+            }
+
+            // Banner intermediário
+            .mini-banner {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 30px;
+                width: 82%;
+                min-height: 100px;
+                padding: 15px;
+                box-sizing: border-box;
+                background-color: var(--verde-escuro);
+                border-radius: 15px;
+
+                i {
+                    color: var(--laranja);
+                    font-size: 35px;
                 }
 
                 h2 {
-                  margin: 0;
-                  padding-bottom: 5px;
-                  border-bottom: 2px solid var(--laranja);
-                  font-family: var(--titulo);
-                  font-size: 30px;
-                  color: var(--verde-escuro);
+                    font-family: var(--titulo);
+                    font-size: 22px;
+                    text-align: center;
+                    color: var(--branco);
                 }
-              }
-
-              p {
-                margin: 5px 0;
-                font-family: var(--textos);
-                font-size: 14px;
-                line-height: 1.5;
-                text-align: justify;
-                color: var(--verde-escuro);
-              }
-            }
-          }
-
-          .sobre-img {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50%;
-            min-width: 0;
-
-            .img-sobre {
-              display: block;
-              width: 100%;
-              max-width: 400px;
-              height: auto;
-              object-fit: contain;
-            }
-          }
-        }
-      }
-
-      // Cards informativos
-      .cards {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 50px;
-        width: 90%;
-        margin: 40px 0;
-
-        .card {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          width: 20%;
-          height: 10em;
-          padding: 30px 20px;
-          background-color: var(--verde-escuro);
-          border-radius: 10px;
-
-          img {
-            width: 30%;
-          }
-
-          h2 {
-            font-size: 15px;
-            text-align: center;
-            color: var(--laranja);
-            font-family: var(--titulo);
-          }
-
-          p {
-            font-size: 13px;
-            text-align: justify;
-            color: var(--branco);
-            font-family: var(--textos);
-          }
-        }
-      }
-
-      // Seção: por que criamos?
-      .criacao {
-        display: flex;
-        align-items: center;
-        width: 80%;
-        margin: 30px 0;
-        padding: 10px;
-        background-color: var(--verde-claro);
-        border-radius: 10px;
-
-        .text {
-          display: flex;
-          flex-direction: column;
-          width: 50%;
-
-          .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            img {
-              width: 60px;
             }
 
-            h2 {
-              font-family: var(--titulo);
-              font-size: 2em;
-              color: var(--laranja);
+            // Cards das unidades
+            .unidades {
+                width: 100%;
+                margin-top: 50px;
+
+                > h2 {
+                    font-family: var(--titulo);
+                    color: var(--verde-escuro);
+                    margin-left: 10%;
+                    font-size: 40px;
+                }
+
+                .cards-unidades {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 30px;
+                    width: 100%;
+                }
+
+                .card {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 20px;
+                    width: 80%;
+                    min-height: 210px;
+                    padding: 15px;
+                    background-color: var(--verde-claro);
+                    border-radius: 10px;
+                    box-sizing: border-box;
+
+                    &:last-child {
+                        margin-bottom: 80px;
+                    }
+
+                    .imagem {
+                        display: flex;
+                        align-items: center;
+                        gap: 25px;
+                        flex: 1;
+                        min-width: 0;
+
+                        > img {
+                            display: block;
+                            width: 250px;
+                            height: 180px;
+                            padding: 0;
+                            border-radius: 15px;
+                            object-fit: cover;
+                        }
+
+                        .information {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 15px;
+                            min-width: 0;
+
+                            h2 {
+                                font-size: 1.5em;
+                                margin: 0;
+                                font-family: var(--titulo);
+                                color: var(--laranja);
+                            }
+
+                            p {
+                                font-family: var(--textos);
+                                font-size: 0.9em;
+                                margin: 0;
+                                color: var(--branco);
+                            }
+
+                            button {
+                                font-size: 0.9em;
+                                border-radius: 5px;
+                                border: none;
+                                background-color: var(--laranja);
+                                color: var(--branco);
+                                padding: 8px 12px;
+                                cursor: pointer;
+                                transition: 0.3s;
+
+                                &:hover {
+                                    opacity: 0.85;
+                                    transform: translateY(-2px);
+                                }
+                            }
+                        }
+                    }
+
+                    .seta {
+                        button {
+                            border: none;
+                            background-color: transparent;
+                            font-size: 3em;
+                            cursor: pointer;
+                            color: var(--laranja);
+                            transition: 0.3s;
+
+                            &:hover {
+                                transform: translateX(5px);
+                            }
+                        }
+                    }
+                }
             }
-          }
-
-          p {
-            font-family: var(--textos);
-            font-size: 18px;
-            color: var(--branco);
-            text-align:justify;
-            margin-left: 15px;
-          }
         }
-
-        .img {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 50%;
-
-          img {
-            width: 100%;
-          }
-        }
-      }
-
-      // Banner intermediário
-      .mini-banner {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 30px;
-        width: 82%;
-        height: auto;
-        background-color: var(--verde-escuro);
-        border-radius: 15px;
-
-        i{
-          color: var(--laranja);
-          font-size: 40px;
-        }
-
-        h2 {
-          font-family: var(--titulo);
-          color: var(--branco);
-        }
-
-        img {
-          width: 8%;
-        }
-      }
-
-      // Cards das unidades
-
-      .unidades{
-        width: 100%;
-        margin-top: 50px;
-
-        h2{
-          font-family: var(--titulo);
-          color: var(--verde-escuro);
-          margin-left: 120px;
-          font-size: 40px;
-        }
-        .cards-unidades {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        gap: 50px;
-        width: 100%;
-      
-        }
-      
-        .card {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-          width: 80%;
-          height: 210px;
-          background-color: var(--verde-claro);
-          border-radius: 10px;
-
-          &:last-child {
-            margin-bottom: 80px;
-          }
-
-          .imagem {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            img {
-              display: block;
-              padding: 0px 30px 0px 30px;
-              width: 250px;
-              height: 180px;
-              object-fit: cover;
-              border-radius: 15px;
-            }
-
-            .information {
-              display: flex;
-              flex-direction: column;
-              align-items: flex-start;
-              gap: 20px;
-              padding: 0px;
-              margin: 0px;
-
-              h2 {
-                font-size: 1.5em;
-                margin: 0px;
-                font-family: var(--titulo);
-                color: var(--laranja);
-              }
-
-              p {
-                font-family: var(--textos);
-                font-size: 0.8em;
-                margin: 0px;
-                color: var(--branco);
-              }
-
-              button {
-                font-size: 0.9em;
-                border-radius: 5px;
-                border: none;
-                background-color: var(--laranja);
-                color: var(--branco);
-                padding: 5px 12px;
-              }
-            }
-          }
-
-          .seta {
-            button {
-              border: none;
-              background-color: transparent;
-              font-size: 3.5em;
-              cursor: pointer;
-              color: var(--laranja);
-            }
-
-           
-          }
-        }
-      }
-      
-      
     }
-  }
 
- .footer{
-              background-color: var(--verde-claro);
-              position: absolute;
-              top: 3097px;
-              left: 0px;
-              width: 100%;
-              height: 299px;
-              display: flex;
-              justify-content: space-around;
-              margin-top: 50px;
-            }
+    // Rodapé
+    .footer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 100%;
+        min-height: 299px;
+        padding: 30px 20px;
+        margin-top: 50px;
+        background-color: var(--verde-claro);
+        box-sizing: border-box;
 
-            .footer-info{
-              display: flex;
-              width: 20%;
-              flex-direction: column;
-              align-items: center;
-              margin: 15px;
-              padding: 20px;
-              margin-top: 30px;
+        .footer-info {
+            display: flex;
+            width: 20%;
+            min-width: 180px;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
 
-              .footer-img{
+            .footer-img {
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 padding: 5px;
                 border-radius: 8px;
-                height: 55px;
-              }
+            }
 
-              img{
+            img {
                 width: 140px;
                 height: auto;
                 margin-bottom: 10px;
-              }
-
-              p{
-                font-family: var(--textos);
-                font-size: 1em;
-                color: var(--branco);
-                text-align: center;
-              }
             }
 
-            .footer-card{
-              width: 250px;
-              height: 180px;
-              display: flex;
-              flex-direction: column;
-              margin-top: 30px;
-              border-radius: 3px;
-            
-              
-              h1{
+            p {
+                font-family: var(--textos);
+                font-size: 1em;
+                line-height: 1.5;
+                color: var(--branco);
+                text-align: center;
+            }
+        }
+
+        .footer-card {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+
+            h1 {
                 text-align: center;
                 font-family: var(--titulo);
                 font-size: 25px;
                 color: var(--laranja);
-                margin-bottom: 1px;
+                margin-bottom: 10px;
                 margin-top: 0.2em;
-              }
+            }
 
-            ul{
+            ul {
                 font-family: var(--textos);
                 font-size: 0.9em;
-                margin-bottom: 1px;
+                margin: 5px 0;
                 transition: 0.2s;
-                margin-right: 17px;
                 color: var(--branco);
-              }
+                cursor: pointer;
 
-              ul:hover{
-                color: var(--laranja);
-                font-weight: bold;
-              }
-                          
+                &:hover {
+                    color: var(--laranja);
+                    font-weight: bold;
+                }
+            }
+        }
+    }
 
+    // Direitos autorais
+    .direitos {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 50px;
+        padding: 10px 15px;
+        background-color: var(--verde-escuro);
+        color: var(--branco);
+        font-family: var(--textos);
+        box-sizing: border-box;
+
+        p {
+            margin: 0;
+            text-align: center;
+            font-size: 13px;
+        }
+    }
+}
+
+// Responsividade para tablets
+@media (max-width: 1024px) {
+    .home-page {
+        .main {
+            .content {
+                .banner,
+                .sobre,
+                .criacao {
+                    width: 90%;
+                }
+
+                .cards {
+                    width: 90%;
+                    gap: 15px;
+                }
+
+                .unidades {
+                    .card {
+                        width: 90%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Responsividade para celulares
+@media (max-width: 768px) {
+    .home-page {
+        .main {
+            .content {
+                .banner {
+                    flex-direction: column;
+                    height: auto;
+                    padding: 20px;
+                    box-sizing: border-box;
+
+                    .textos {
+                        width: 100%;
+                        padding: 10px;
+
+                        h2 {
+                            font-size: 25px;
+                        }
+
+                        p {
+                            font-size: 15px;
+                        }
+
+                        button {
+                            width: 100%;
+                            max-width: 250px;
+                        }
+                    }
+
+                    .imagem {
+                        width: 100%;
+                        height: 200px;
+
+                        .img-banner {
+                            width: 100%;
+                        }
+                    }
+                }
+
+                .sobre {
+                    .conteudo-sobre {
+                        flex-direction: column;
+
+                        .sobre-esq,
+                        .sobre-img {
+                            width: 100%;
+                        }
+
+                        .sobre-img {
+                            .img-sobre {
+                                max-width: 350px;
+                            }
+                        }
+                    }
+                }
+
+                .cards {
+                    flex-direction: column;
+                    align-items: center;
+
+                    .card {
+                        width: 100%;
+                    }
+                }
+
+                .criacao {
+                    flex-direction: column;
+
+                    .text,
+                    .img {
+                        width: 100%;
+                    }
+
+                    .text {
+                        .logo {
+                            h2 {
+                                font-size: 1.5em;
+                            }
+                        }
+
+                        p {
+                            font-size: 15px;
+                            margin-left: 0;
+                        }
+                    }
+                }
+
+                .mini-banner {
+                    gap: 12px;
+
+                    i {
+                        font-size: 22px;
+                    }
+
+                    h2 {
+                        font-size: 16px;
+                    }
+                }
+
+                .unidades {
+                    > h2 {
+                        margin-left: 5%;
+                        font-size: 32px;
+                    }
+
+                    .card {
+                        width: 90%;
+                        height: auto;
+                        flex-direction: column;
+                        align-items: stretch;
+
+                        .imagem {
+                            flex-direction: column;
+                            align-items: flex-start;
+
+                            > img {
+                                width: 100%;
+                                height: 200px;
+                                box-sizing: border-box;
+                            }
+
+                            .information {
+                                width: 100%;
+                            }
+                        }
+
+                        .seta {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer {
+            justify-content: center;
+            gap: 20px;
+
+            .footer-info {
+                width: 100%;
             }
 
-            .direitos{
-              position: absolute;
-              top: 3396px;
-              left: 0px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              width: 100%;
-              height: 50px;
-              background-color: var(--verde-escuro);
-              color: var(--branco);
-              font-family: var(--textos);
+            .footer-card {
+                width: 40%;
+                min-width: 130px;
+
+                h1 {
+                    font-size: 20px;
+                }
+
+                ul {
+                    font-size: 12px;
+                }
             }
+        }
+    }
+}
+
+// Celulares menores
+@media (max-width: 480px) {
+    .home-page {
+        .main {
+            .content {
+                .banner,
+                .sobre,
+                .criacao,
+                .mini-banner {
+                    width: 92%;
+                }
+
+                .sobre {
+                    > h2 {
+                        font-size: 32px;
+                    }
+
+                    .conteudo-sobre {
+                        .texto-sobre {
+                            .sub-titulo {
+                                h2 {
+                                    font-size: 24px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .criacao {
+                    .text {
+                        .logo {
+                            img {
+                                width: 45px;
+                                height: 45px;
+                            }
+
+                            h2 {
+                                font-size: 1.3em;
+                            }
+                        }
+                    }
+                }
+
+                .mini-banner {
+                    h2 {
+                        font-size: 14px;
+                    }
+                }
+
+                .unidades {
+                    .card {
+                        width: 92%;
+
+                        .imagem {
+                            > img {
+                                height: 160px;
+                            }
+
+                            .information {
+                                h2 {
+                                    font-size: 1.2em;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .direitos {
+            p {
+                font-size: 11px;
+            }
+        }
+    }
 }

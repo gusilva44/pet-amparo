@@ -2,6 +2,7 @@ import "./cadastroPet.scss";
 import { useState } from "react";
 import { animaisApi } from "../../services/api";
 import { mensagemErroApi } from "../../utils/api";
+import { lerImagem } from "../../utils/imagem";
 
 const dadosIniciais = {
   nome: "",
@@ -19,9 +20,20 @@ export default function CadastroPet({ onSaved }) {
   const [dados, setDados] = useState(dadosIniciais);
   const [mensagem, setMensagem] = useState("");
   const [salvando, setSalvando] = useState(false);
+  const [erroFoto, setErroFoto] = useState("");
 
   function atualizar(campo, valor) {
     setDados((atual) => ({ ...atual, [campo]: valor }));
+  }
+
+  async function selecionarFoto(event) {
+    setErroFoto("");
+    try {
+      atualizar("foto", await lerImagem(event.target.files?.[0]));
+    } catch (error) {
+      event.target.value = "";
+      setErroFoto(error.message);
+    }
   }
 
   async function salvar(event) {
@@ -119,14 +131,12 @@ export default function CadastroPet({ onSaved }) {
             <option value="nao_informado">Não informado</option>
           </select>
         </label>
-        <label>
-          Foto (URL, opcional)
-          <input
-            type="url"
-            value={dados.foto}
-            onChange={(event) => atualizar("foto", event.target.value)}
-          />
+        <label className="pet-foto-campo">
+          Foto do pet (opcional)
+          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
+          {erroFoto && <span className="erro-foto" role="alert">{erroFoto}</span>}
         </label>
+        {dados.foto && <img className="pet-foto-previa" src={dados.foto} alt="Prévia da foto do pet" />}
         <label className="pet-vacinado">
           <input
             type="checkbox"

@@ -14,6 +14,7 @@ const ROTULOS_TIPO = {
 export default function Aside({ tipo }) {
   const [nomeUsuario, setNomeUsuario] = useState("");
   const [autenticado, setAutenticado] = useState(false);
+  const [fotoUsuario, setFotoUsuario] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState(tipo || "cliente");
   const navigate = useNavigate();
 
@@ -40,9 +41,13 @@ export default function Aside({ tipo }) {
           try {
             const perfil = await clientesApi.meusDados();
             nome = perfil.cliente?.nome || nome;
+            if (ativo) setFotoUsuario(perfil.cliente?.foto || "");
           } catch {
             nome = usuario?.nome || usuario?.email || "";
+            if (ativo) setFotoUsuario("");
           }
+        } else if (ativo) {
+          setFotoUsuario("");
         }
 
         if (ativo) setNomeUsuario(nome);
@@ -51,6 +56,7 @@ export default function Aside({ tipo }) {
           setNomeUsuario("");
           setAutenticado(false);
           setTipoUsuario("cliente");
+          setFotoUsuario("");
         }
       }
     }
@@ -88,16 +94,16 @@ export default function Aside({ tipo }) {
           className="img-usuario"
           aria-label={nomeUsuario ? `Iniciais de ${nomeUsuario}` : "Perfil do usuário"}
         >
-          {iniciais || "?"}
+          {fotoUsuario ? <img src={fotoUsuario} alt="" /> : iniciais || "?"}
         </div>
 
         <div className="dados-usuario">
           {!autenticado ? (
             <>
-              <button type="button" onClick={() => navigate("/meusPets?modo=login")}>
+              <button type="button" onClick={() => navigate("/meuspets?modo=login")}>
                 Fazer login
               </button>
-              <button type="button" onClick={() => navigate("/meusPets?modo=cadastro")}>
+              <button type="button" onClick={() => navigate("/meuspets?modo=cadastro")}>
                 Cadastrar
               </button>
             </>

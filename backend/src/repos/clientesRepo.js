@@ -156,6 +156,16 @@ export default class Usuario {
         return resultado[0]
     }
 
+    async atualizarFotoPorUsuario(foto, idUsuario) {
+        const [resultado] = await db.query(`
+            UPDATE clientes
+            SET foto = ?
+            WHERE id_usuario = ?
+        `, [foto || null, idUsuario])
+
+        return resultado.affectedRows
+    }
+
     async atualizarClientePorUsuario(cliente, idUsuario){
             const {
             nome,
@@ -163,6 +173,7 @@ export default class Usuario {
             telefone,
             cpf,
             endereco,
+            foto,
             email
         } = cliente
 
@@ -176,6 +187,7 @@ export default class Usuario {
                 c.telefone = ?,
                 c.cpf = ?,
                 c.endereco = ?,
+                c.foto = ?,
                 u.email = ?
             WHERE u.id_usuario = ?
         `, [
@@ -184,6 +196,7 @@ export default class Usuario {
             telefone,
             cpf,
             endereco,
+            foto || null,
             email,
             idUsuario
         ])

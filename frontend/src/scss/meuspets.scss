@@ -162,6 +162,8 @@
       font-family: var(--titulo);
       font-size: 1.5rem;
       font-weight: 700;
+      overflow: hidden;
+      img { width: 100%; height: 100%; object-fit: cover; }
     }
     .infos-pessoais h2 {
       margin-bottom: 0.4rem;
@@ -171,30 +173,119 @@
       margin-bottom: 0.25rem;
       overflow-wrap: anywhere;
     }
+    .foto-perfil-editar {
+      display: grid;
+      gap: .5rem;
+      min-width: 10rem;
+      label { display: grid; gap: .4rem; font-size: .9rem; }
+      input { max-width: 15rem; font: inherit; }
+      p { margin: 0; font-size: .85rem; }
+      .botao-secundario { justify-self: start; }
+    }
     .botao-secundario {
       background: var(--verde-escuro, #243b32);
       color: white;
     }
     .pets-cabecalho {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #243b321c;
+    }
+    .pets-cabecalho > div {
+      position: relative;
+      padding-left: 3.4rem;
+      &::before {
+        content: "\f1b0";
+        position: absolute;
+        top: .15rem;
+        left: 0;
+        display: grid;
+        width: 2.6rem;
+        height: 2.6rem;
+        place-items: center;
+        border-radius: .85rem;
+        background: #dce8d8;
+        color: var(--verde-escuro, #243b32);
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+      }
+      p { margin: .35rem 0 0; color: #607168; }
     }
     .lista-pets {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+      gap: 1.1rem;
     }
     .card-pet,
     .estado-pets {
-      padding: 1rem 1.25rem;
-      border-radius: 0.75rem;
-      background: var(--verde-claro, #506c5b);
-      color: white;
+      padding: 1.15rem;
+      border: 1px solid #243b3214;
+      border-radius: 1rem;
+      background: #fffefa;
+      color: var(--verde-escuro, #243b32);
+      box-shadow: 0 8px 24px #243b3210;
     }
     .card-pet h3 {
       margin-bottom: 0.35rem;
-      color: var(--laranja, #ed795d);
+      color: var(--verde-escuro, #243b32);
+    }
+    .card-pet {
+      display: grid;
+      gap: 1rem;
+      transition: transform .2s ease, box-shadow .2s ease;
+      &:hover { transform: translateY(-3px); box-shadow: 0 14px 30px #243b321c; }
+    }
+    .pet-identidade { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+    .foto-pet {
+      width: 6.25rem;
+      height: 6.25rem;
+      flex: 0 0 6.25rem;
+      object-fit: cover;
+      border-radius: 1rem;
+      background: #e9eee5;
+    }
+    .pet-sem-foto { display: grid; place-items: center; color: var(--verde-escuro, #243b32); font-size: 1.6rem; }
+    .pet-identidade > div:last-child { min-width: 0; }
+    .pet-identidade h3 { margin: 0 0 .3rem; font-size: 1.3rem; }
+    .pet-identidade p { margin: 0; color: #65746b; overflow-wrap: anywhere; }
+    .pet-detalhes { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .pet-detalhes span {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .4rem .65rem;
+      border-radius: 99px;
+      background: #edf1e9;
+      color: #3d5649;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+    .pet-detalhes .vacinado { background: #e3f2e4; color: #356443; }
+    .pet-detalhes .pendente-vacina { background: #fff0df; color: #8c5723; }
+    .pet-detalhes i { font-size: .75rem; }
+    .estado-pets {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-height: 5rem;
+      border-style: dashed;
+      color: #607168;
+      &::before {
+        content: "\f1b0";
+        display: grid;
+        width: 3rem;
+        height: 3rem;
+        flex: 0 0 3rem;
+        place-items: center;
+        border-radius: 50%;
+        background: #e9eee5;
+        color: var(--verde-escuro, #243b32);
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+      }
     }
   }
 }
@@ -209,5 +300,6 @@
     .sta {
       gap: 0.75rem;
     }
+    .foto-perfil-editar { width: 100%; }
   }
 }

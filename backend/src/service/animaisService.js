@@ -24,6 +24,14 @@ function validarAnimal(animal) {
     if (!animal.porte || animal.porte.trim() === '') throw new Error('O porte do animal é obrigatório.')
 
     if (animal.e_vacinado !== true && animal.e_vacinado !== false) throw new Error('O campo e_vacinado deve ser verdadeiro ou falso.igual')
+    if (animal.foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(animal.foto)) throw new Error('A foto do pet deve ser PNG, JPG ou WEBP.')
+    if (animal.foto && animal.foto.length > 2800000) throw new Error('A foto do pet deve ter no mÃ¡ximo 2 MB.')
+}
+
+// Fotos enviadas pelo cliente s\u00e3o guardadas como data URLs no banco.
+function validarFoto(foto) {
+    if (foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(foto)) throw new Error('A foto do pet deve ser PNG, JPG ou WEBP.')
+    if (foto && foto.length > 2800000) throw new Error('A foto do pet deve ter no m\u00e1ximo 2 MB.')
 }
 
 export async function buscarTodosAnimais(idCliente) {
@@ -49,6 +57,7 @@ export async function buscarAnimalPorId(idAnimal, idCliente) {
 export async function adicionarAnimal(animal, idCliente) {
     validarId(idCliente)
     validarAnimal(animal)
+    validarFoto(animal.foto)
 
     let { nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado } = animal
 
@@ -85,6 +94,7 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
     validarId(idAnimal)
     validarId(idCliente)
     validarAnimal(animal)
+    validarFoto(animal.foto)
 
     const animalAtual = await db.buscarAnimalPorId(idAnimal, idCliente)
 

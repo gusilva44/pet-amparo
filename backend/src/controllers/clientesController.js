@@ -49,6 +49,17 @@ endpoints.put('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     }
 })
 
+endpoints.patch('/clientes/me/foto', autenticar, exigirCliente, async (req, res) => {
+    try {
+        const idUsuario = Number(req.usuario.id_usuario)
+        await service.atualizarFotoPorUsuario(req.body.foto, idUsuario)
+        res.status(200).json({ sucesso: true, mensagem: 'Foto de perfil atualizada.' })
+    } catch (error) {
+        logError(error)
+        res.status(400).json(formatarError(error))
+    }
+})
+
 endpoints.delete('/clientes/me', autenticar, exigirCliente, async (req, res) => {
     try {
         const idUsuario = req.usuario.id_usuario

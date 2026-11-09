@@ -21,10 +21,10 @@ export default function Navigation() {
                 <Route path='/unidades/:id' element={<Unidades />} />
                 <Route path='/meuspets' element={<Pets />}/>
                 <Route path='/teste' element={<Teste />}/>
-                <Route path = '/agendamentos' element={<Agendamentos/>}/>
+                <Route path ='/agendamentos' element={<Agendamentos/>}/>
 
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
-                    <Route path="/usuarios" element={<Clientes />} />
+                    <Route path='/usuarios' element={<Clientes />} />
                     <Route path='/visao' element={<VisaoGeral/>} />
                     <Route path='/unidades' element={<UnidadesAdmin />} />
                     <Route path='/servicos' element={<Servicos />} />

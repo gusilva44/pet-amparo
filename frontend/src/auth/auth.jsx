@@ -82,6 +82,7 @@ export default function Auth({
   onAuthenticated,
   initialMode = "login",
   onCancel,
+  redirectTo = "/",
 }) {
   const [modo, setModo] = useState(initialMode);
   const [email, setEmail] = useState("");
@@ -91,6 +92,9 @@ export default function Auth({
   const [mostrar, setMostrar] = useState(false);
 
   const navigate = useNavigate();
+  const destino = redirectTo.startsWith("/") && !redirectTo.startsWith("//")
+    ? redirectTo
+    : "/";
 
   function mudarModo(novoModo) {
     setModo(novoModo);
@@ -120,7 +124,7 @@ export default function Auth({
         description: "Seja bem-vindo de volta!",
       });
 
-      navigate("/");
+      navigate(destino);
     } catch (error) {
       toast.error("Não foi possível entrar", {
         description:
@@ -170,7 +174,7 @@ export default function Auth({
         description: "Bem-vindo à nossa clínica veterinária!",
       });
 
-      navigate("/");
+      navigate(destino);
     } catch (error) {
       toast.error("Erro no cadastro", {
         description:

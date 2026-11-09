@@ -41,6 +41,7 @@ CREATE TABLE clientes (
     telefone VARCHAR(30) NOT NULL UNIQUE,
     cpf VARCHAR(20) NOT NULL UNIQUE,
     endereco VARCHAR(255) NOT NULL,
+    foto LONGTEXT NULL,
     
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -270,7 +271,7 @@ CREATE TABLE animais (
         'grande',
         'nao_informado'
     ) NOT NULL DEFAULT 'nao_informado',
-    foto VARCHAR(255),
+    foto LONGTEXT,
     e_vacinado BOOLEAN NOT NULL DEFAULT FALSE,
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL
