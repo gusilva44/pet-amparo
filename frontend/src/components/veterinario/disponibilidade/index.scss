@@ -1,0 +1,30 @@
+.disponibilidade-veterinario {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1rem, 3vw, 1.75rem);
+  border: 1px solid #e2e9e2;
+  border-radius: 1rem;
+  background: #fffefa;
+  color: var(--verde-escuro);
+
+  header h2, .lista-disponibilidade h3 { margin: 0 0 .4rem; font-family: var(--titulo); }
+  header p { margin: 0; color: #5c6d62; }
+  .form-disponibilidade { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); align-items: end; gap: .85rem; }
+  label { display: grid; gap: .4rem; font-family: var(--textos); font-weight: 600; }
+  input, select { min-height: 2.7rem; padding: .55rem .7rem; border: 1px solid #b8c2b9; border-radius: .5rem; background: white; font: inherit; }
+  button { min-height: 2.7rem; padding: .6rem .9rem; border: 0; border-radius: .5rem; background: var(--verde-escuro); color: white; cursor: pointer; }
+  button:disabled { cursor: wait; opacity: .65; }
+  .lista-disponibilidade { display: grid; gap: .65rem; }
+  .lista-disponibilidade article { display: flex; align-items: center; gap: 1rem; padding: .8rem; border: 1px solid #e6ebe5; border-radius: .7rem; background: #f8faf6; }
+  .lista-disponibilidade article div { display: grid; flex: 1; gap: .2rem; }
+  .lista-disponibilidade article span { color: #68766d; font-size: .9rem; }
+  .lista-disponibilidade article time { color: #335c45; font-weight: 700; white-space: nowrap; }
+  .lista-disponibilidade article button { min-height: 2.25rem; background: #fff0ed; color: #9e4334; }
+  .mensagem-disponibilidade { margin: 0; color: #335c45; }
+  .disponibilidade-vazia { padding: 1rem; border-radius: .6rem; background: #fff4e8; }
+}
+
+@media (max-width: 520px) {
+  .disponibilidade-veterinario .lista-disponibilidade article { align-items: flex-start; flex-wrap: wrap; }
+  .disponibilidade-veterinario .lista-disponibilidade article time { flex: 1 0 100%; }
+}

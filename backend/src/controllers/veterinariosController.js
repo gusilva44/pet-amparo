@@ -115,6 +115,46 @@ endpoints.patch(
   },
 );
 
+endpoints.get("/veterinarios/me/unidades", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const resultado = await service.listarUnidadesDoVeterinario(Number(req.veterinario.id_veterinario));
+    res.status(200).json({ sucesso: true, resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.get("/veterinarios/me/horarios", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const resultado = await service.listarHorarios(Number(req.veterinario.id_veterinario));
+    res.status(200).json({ sucesso: true, resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.post("/veterinarios/me/horarios", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const id_horario = await service.criarHorario(Number(req.veterinario.id_veterinario), req.body);
+    res.status(201).json({ sucesso: true, id_horario });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.delete("/veterinarios/me/horarios/:idHorario", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const resultado = await service.apagarHorario(Number(req.veterinario.id_veterinario), Number(req.params.idHorario));
+    res.status(200).json({ sucesso: true, resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
 endpoints.post("/veterinarios", autenticar, verificarAdmin, async (req, res) => {
   try {
     const resultado = await service.criarVeterinario(req.body);
@@ -123,6 +163,19 @@ endpoints.post("/veterinarios", autenticar, verificarAdmin, async (req, res) => 
       sucesso: true,
       id_veterinario: resultado,
     });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.post("/admin/veterinarios/:id/unidades/:idUnidade", autenticar, verificarAdmin, async (req, res) => {
+  try {
+    const resultado = await service.vincularVeterinarioUnidade(
+      Number(req.params.id),
+      Number(req.params.idUnidade),
+    );
+    res.status(200).json({ sucesso: true, mensagem: "Veterinário vinculado à unidade.", resultado });
   } catch (error) {
     logError(error);
     res.status(statusDoErro(error)).json(formatarError(error));

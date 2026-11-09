@@ -243,7 +243,7 @@ export async function existeConflito(
         SELECT id_agendamento
         FROM agendamentos
         WHERE id_veterinario = ?
-          AND status NOT IN ('cancelado', 'concluido')
+          AND status <> 'cancelado'
           AND inicio < ?
           AND fim > ?
     `;
@@ -258,6 +258,17 @@ export async function existeConflito(
   const [resultado] = await db.query(sql, valores);
 
   return Boolean(resultado[0]);
+}
+
+export async function listarConflitos(idVeterinario, data) {
+  const [resultado] = await db.query(
+    `SELECT inicio, fim FROM agendamentos
+     WHERE id_veterinario = ? AND DATE(inicio) = ?
+       AND status <> 'cancelado'
+     ORDER BY inicio`,
+    [idVeterinario, data],
+  );
+  return resultado;
 }
 
 export async function criarAgendamento(agendamento) {

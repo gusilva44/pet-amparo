@@ -59,6 +59,7 @@ export const servicosApi = {
 
 export const agendamentosApi = {
   listarMeus: () => requisicao({ method: "GET", url: "/agendamentos" }),
+  disponibilidade: (params) => requisicao({ method: "GET", url: "/agendamentos/disponibilidade", params }),
   criar: (dados) =>
     requisicao({ method: "POST", url: "/agendamentos", data: dados }),
   cancelar: (id) =>
@@ -74,6 +75,12 @@ export const veterinariosApi = {
     }),
   criar: (dados) =>
     requisicao({ method: "POST", url: "/veterinarios", data: dados }),
+  vincularUnidade: (idVeterinario, idUnidade) =>
+    requisicao({ method: "POST", url: `/admin/veterinarios/${idVeterinario}/unidades/${idUnidade}` }),
+  minhasUnidades: () => requisicao({ method: "GET", url: "/veterinarios/me/unidades" }),
+  meusHorarios: () => requisicao({ method: "GET", url: "/veterinarios/me/horarios" }),
+  criarMeuHorario: (dados) => requisicao({ method: "POST", url: "/veterinarios/me/horarios", data: dados }),
+  excluirMeuHorario: (id) => requisicao({ method: "DELETE", url: `/veterinarios/me/horarios/${id}` }),
   meusAgendamentos: (filtros) =>
     requisicao({
       method: "GET",
@@ -131,6 +138,12 @@ export const unidadesApi = {
     requisicao({
       method: "GET",
       url: "/admin/unidades",
+      params: { incluir_servicos: true },
+    }),
+  listarPublicasComServicos: () =>
+    requisicao({
+      method: "GET",
+      url: "/unidades",
       params: { incluir_servicos: true },
     }),
 

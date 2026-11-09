@@ -5,6 +5,19 @@ export async function buscarPorCrmv(crmv) {
     return resultado[0]
 }
 
+export async function buscarVeterinarioPorId(idVeterinario) {
+    const [resultado] = await db.query('SELECT id_veterinario FROM veterinarios WHERE id_veterinario = ?', [idVeterinario])
+    return resultado[0]
+}
+
+export async function vincularUnidade(idVeterinario, idUnidade) {
+    await db.query(`
+        INSERT INTO veterinarios_unidades (id_veterinario, id_unidade, ativo)
+        VALUES (?, ?, TRUE)
+        ON DUPLICATE KEY UPDATE ativo = TRUE
+    `, [idVeterinario, idUnidade])
+}
+
 export async function buscarVeterinarioPorUsuario(idUsuario) {
     const [resultado] = await db.query(`
         SELECT id_veterinario, id_usuario, nome, ativo
@@ -46,9 +59,22 @@ export async function veterinarioAtendeNaUnidade(idVeterinario, idUnidade) {
 
 export async function listarHorarios(idVeterinario) {
     const [resultado] = await db.query(`
-        SELECT * FROM horarios_veterinarios
-        WHERE id_veterinario = ?
-        ORDER BY dia_semana, hora_inicio
+        SELECT h.*, u.nome AS unidade_nome
+        FROM horarios_veterinarios h
+        INNER JOIN unidades u ON u.id_unidade = h.id_unidade
+        WHERE h.id_veterinario = ? AND h.ativo = TRUE AND u.ativo = TRUE
+        ORDER BY h.id_unidade, h.dia_semana, h.hora_inicio
+    `, [idVeterinario])
+    return resultado
+}
+
+export async function listarUnidadesDoVeterinario(idVeterinario) {
+    const [resultado] = await db.query(`
+        SELECT u.id_unidade, u.nome
+        FROM veterinarios_unidades vu
+        INNER JOIN unidades u ON u.id_unidade = vu.id_unidade
+        WHERE vu.id_veterinario = ? AND vu.ativo = TRUE AND u.ativo = TRUE
+        ORDER BY u.nome
     `, [idVeterinario])
     return resultado
 }

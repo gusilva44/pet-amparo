@@ -3,13 +3,30 @@ import { db } from "./connection.js";
 export async function buscarTodosUsuarios() {
     const [resultado] = await db.query(`
         SELECT 
-            id_usuario,
-            email,
-            tipo,
-            ativo,
-            criado_em
-        FROM usuarios
-        ORDER BY id_usuario DESC
+            u.id_usuario,
+            u.email,
+            u.tipo,
+            u.ativo,
+            u.criado_em,
+            c.id_cliente,
+            c.cpf,
+            COALESCE(c.nome, v.nome, u.email) AS nome,
+            v.id_veterinario,
+            vinculacoes.unidades_ids,
+            vinculacoes.unidades_nomes
+        FROM usuarios u
+        LEFT JOIN clientes c ON c.id_usuario = u.id_usuario
+        LEFT JOIN veterinarios v ON v.id_usuario = u.id_usuario
+        LEFT JOIN (
+            SELECT vu.id_veterinario,
+                GROUP_CONCAT(vu.id_unidade ORDER BY vu.id_unidade SEPARATOR ',') AS unidades_ids,
+                GROUP_CONCAT(un.nome ORDER BY un.nome SEPARATOR ', ') AS unidades_nomes
+            FROM veterinarios_unidades vu
+            INNER JOIN unidades un ON un.id_unidade = vu.id_unidade
+            WHERE vu.ativo = TRUE
+            GROUP BY vu.id_veterinario
+        ) vinculacoes ON vinculacoes.id_veterinario = v.id_veterinario
+        ORDER BY u.id_usuario DESC
     `);
 
     return resultado;

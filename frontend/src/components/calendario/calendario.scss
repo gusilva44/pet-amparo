@@ -136,6 +136,18 @@
   background-color: #a65f50;
 }
 
+.status-evento {
+  font-weight: 700;
+}
+
+.evento-status-concluido .status-evento {
+  color: #d8f4dc;
+}
+
+.evento-status-pendente .status-evento {
+  color: #ffe1a8;
+}
+
 .evento-selecionado {
   outline: 2px solid var(--laranja);
 }

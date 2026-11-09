@@ -52,6 +52,24 @@ export async function listarHorarios(idVeterinario) {
     return veterinariosRepo.listarHorarios(idVeterinario)
 }
 
+export async function listarUnidadesDoVeterinario(idVeterinario) {
+    validarId(idVeterinario)
+    return veterinariosRepo.listarUnidadesDoVeterinario(idVeterinario)
+}
+
+export async function vincularVeterinarioUnidade(idVeterinario, idUnidade) {
+    validarId(idVeterinario)
+    validarId(idUnidade)
+    const [veterinario, unidade] = await Promise.all([
+        veterinariosRepo.buscarVeterinarioPorId(idVeterinario),
+        unidadesRepo.buscarUnidadePorId(idUnidade),
+    ])
+    if (!veterinario) throw new Error('Veterinário não encontrado.')
+    if (!unidade || !unidade.ativo) throw new Error('Unidade não encontrada ou inativa.')
+    await veterinariosRepo.vincularUnidade(idVeterinario, idUnidade)
+    return { id_veterinario: idVeterinario, id_unidade: idUnidade }
+}
+
 export async function criarHorario(idVeterinario, dados) {
     validarId(idVeterinario)
 

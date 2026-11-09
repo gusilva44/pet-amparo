@@ -29,7 +29,7 @@ export default function CadastroPet({ onSaved }) {
   async function selecionarFoto(event) {
     setErroFoto("");
     try {
-      atualizar("foto", await lerImagem(event.target.files?.[0]));
+      atualizar("foto", await lerImagem(event.target.files?.[0], 10));
     } catch (error) {
       event.target.value = "";
       setErroFoto(error.message);

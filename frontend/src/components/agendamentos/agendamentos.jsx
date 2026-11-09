@@ -77,7 +77,7 @@ export default function AgendamentosMes({
                             </div>
 
                             <span
-                                className={`status-agendamento status-${item.status.toLowerCase()}`}
+                                className={`status-agendamento status-${item.situacao || "pendente"}`}
                             >
                                 {item.status}
                             </span>

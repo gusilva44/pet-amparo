@@ -3,6 +3,7 @@ import Aside from "../components/aside/aside";
 import CabecalhoVeterinario from "../components/veterinario/cabecalhoVeterinario";
 import AgendamentosVeterinario from "../components/veterinario/agendamentos";
 import AgendaVeterinario from "../components/veterinario/agenda";
+import DisponibilidadeVeterinario from "../components/veterinario/disponibilidade";
 import useAgendamentosVeterinario from "../components/veterinario/useAgendamentosVeterinario";
 import usePerfilVeterinario from "../components/veterinario/usePerfilVeterinario";
 import "../scss/pagVeterinario.scss";
@@ -17,6 +18,11 @@ const ABAS = [
         id: "agenda",
         rotulo: "Agenda do mês",
         icone: "fa-regular fa-calendar-days"
+    },
+    {
+        id: "disponibilidade",
+        rotulo: "Minha disponibilidade",
+        icone: "fa-regular fa-clock"
     }
 ];
 
@@ -75,13 +81,15 @@ export default function Veterinario() {
                         recarregar={recarregar}
                         limparMensagem={limparMensagem}
                     />
-                ) : (
+                ) : abaAtiva === "agenda" ? (
                     <AgendaVeterinario
                         agendamentos={agendamentos}
                         carregando={carregando}
                         atualizandoId={atualizandoId}
                         alterarSituacao={alterarSituacao}
                     />
+                ) : (
+                    <DisponibilidadeVeterinario />
                 )}
             </main>
         </div>

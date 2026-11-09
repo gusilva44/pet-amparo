@@ -41,7 +41,7 @@
                 p {
                     margin: 5px 0 0;
                     color: #777;
-                    font-family: var(--texto);
+                    font-family: var(--textos);
                     font-size: 14px;
                 }
             }
@@ -90,7 +90,7 @@
             p {
                 margin: 0 0 5px;
                 color: #777;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 13px;
             }
 
@@ -131,7 +131,7 @@
                 border: none;
                 outline: none;
                 color: #333;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 13px;
                 background: transparent;
             }
@@ -145,7 +145,7 @@
                 outline: none;
                 color: #555;
                 background: #fff;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 13px;
                 cursor: pointer;
             }
@@ -161,7 +161,7 @@
             border-radius: 9px;
             background: #084D39;
             color: #fff;
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 13px;
             cursor: pointer;
             transition: .2s;
@@ -184,7 +184,7 @@
         border-radius: 10px;
         background: #fee2e2;
         color: #991b1b;
-        font-family: var(--texto);
+        font-family: var(--textos);
         font-size: 13px;
 
         span {
@@ -227,7 +227,7 @@
         .cabeca {
             background: #f1f6f2;
             color: #52635a;
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 12px;
             font-weight: 600;
         }
@@ -244,7 +244,7 @@
             strong {
                 display: block;
                 color: #303b34;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 12px;
                 font-weight: 600;
             }
@@ -253,7 +253,7 @@
                 display: block;
                 margin-top: 5px;
                 color: #929a94;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 11px;
             }
         }
@@ -297,7 +297,7 @@
                 align-items: center;
                 gap: 7px;
                 color: #4f5e54;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 11px;
 
                 i {
@@ -324,7 +324,7 @@
             display: inline-block;
             padding: 6px 10px;
             border-radius: 20px;
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 11px;
             font-weight: 600;
 
@@ -380,7 +380,7 @@
             gap: 10px;
             min-height: 180px;
             color: #929a94;
-            font-family: var(--texto);
+            font-family: var(--textos);
             font-size: 13px;
 
             i {
@@ -398,7 +398,7 @@
         width: 88%;
         margin: 12px auto;
         color: #858d87;
-        font-family: var(--texto);
+        font-family: var(--textos);
         font-size: 12px;
         text-align: right;
     }
@@ -445,7 +445,7 @@
             p {
                 margin: 6px 0 0;
                 color: #858d87;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 12px;
             }
 
@@ -475,7 +475,7 @@
                 padding-bottom: 10px;
                 border-bottom: 1px solid #edf0ed;
                 color: #084D39;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 14px;
 
                 i {
@@ -492,7 +492,7 @@
 
             label {
                 color: #46534a;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 12px;
                 font-weight: 600;
             }
@@ -506,7 +506,7 @@
                 outline: none;
                 background: #fff;
                 color: #333;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 13px;
                 transition: .2s;
 
@@ -546,7 +546,7 @@
                 padding: 11px 17px;
                 border: none;
                 border-radius: 8px;
-                font-family: var(--texto);
+                font-family: var(--textos);
                 font-size: 12px;
                 font-weight: 600;
                 cursor: pointer;

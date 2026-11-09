@@ -55,6 +55,39 @@ export function listarMeusAgendamentos(idCliente) {
     return repo.listarAgendamentosCliente(idCliente)
 }
 
+export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idServico, data }) {
+    validarId(idVeterinario);
+    validarId(idUnidade);
+    validarId(idServico);
+    if (typeof data !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new Error('Informe uma data válida.');
+    const inicioDia = new Date(`${data}T00:00:00`);
+    if (Number.isNaN(inicioDia.getTime()) || dataLocalISO(inicioDia) !== data) throw new Error('Informe uma data válida.');
+    const servico = await servicosRepo.buscarServicoPorId(idServico);
+    if (!servico?.ativo || !await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) return [];
+    const veterinario = await repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade);
+    if (!veterinario?.ativo || !veterinario?.usuario_ativo) return [];
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicioDia));
+    const ocupados = await repo.listarConflitos(idVeterinario, data);
+    const duracao = Number(servico.duracao_minutos);
+    const passo = Math.max(15, Math.min(duracao, 60));
+    const agora = new Date();
+    const opcoes = new Set();
+    for (const horario of horarios) {
+        const [h0, m0] = horario.hora_inicio.slice(0, 5).split(':').map(Number);
+        const [h1, m1] = horario.hora_fim.slice(0, 5).split(':').map(Number);
+        const fimExpediente = h1 * 60 + m1;
+        for (let minuto = h0 * 60 + m0; minuto + duracao <= fimExpediente; minuto += passo) {
+            const hora = `${String(Math.floor(minuto / 60)).padStart(2, '0')}:${String(minuto % 60).padStart(2, '0')}`;
+            const inicio = new Date(`${data}T${hora}:00`);
+            const fim = new Date(inicio.getTime() + duracao * 60000);
+            if (inicio <= agora) continue;
+            if (ocupados.some(item => inicio < new Date(item.fim) && fim > new Date(item.inicio))) continue;
+            opcoes.add(hora);
+        }
+    }
+    return [...opcoes].sort();
+}
+
 function normalizarFiltros(filtros = {}) {
     const mes = typeof filtros.mes === 'string' && /^\d{4}-\d{2}$/.test(filtros.mes) ? filtros.mes : null
 

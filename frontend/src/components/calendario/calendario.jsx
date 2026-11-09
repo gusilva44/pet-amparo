@@ -13,6 +13,7 @@ agendamentoSelecionado,
 onSelecionar,
 onSelecionarData,
 dataMinima,
+  diasDisponiveis,
 onMudarMes,
 }) {
 const ano = mesAtual.getFullYear();
@@ -76,22 +77,25 @@ return (
 
         const consultas = agendamentos.filter((item) => item.data === data);
         const passada = Boolean(dataMinima && data < dataMinima);
+        const diaSemana = new Date(`${data}T12:00:00`).getDay() || 7;
+        const indisponivel = Boolean(diasDisponiveis && !diasDisponiveis.includes(diaSemana));
+        const desabilitado = passada || indisponivel;
 
         return (
           <div
+            key={data}
             className={`dia-calendario ${
               agendamentoSelecionado?.data === data ? "dia-destacado" : ""
-            }`}
-            key={data}
-            role={onSelecionarData && !passada ? "button" : undefined}
-            tabIndex={onSelecionarData && !passada ? 0 : undefined}
-            aria-disabled={Boolean(passada)}
+            } ${indisponivel ? "dia-indisponivel" : ""}`}
+            role={onSelecionarData && !desabilitado ? "button" : undefined}
+            tabIndex={onSelecionarData && !desabilitado ? 0 : undefined}
+            aria-disabled={Boolean(desabilitado)}
             onClick={() => {
-              if (!passada) onSelecionarData?.(data);
+              if (!desabilitado) onSelecionarData?.(data);
             }}
             onKeyDown={(event) => {
               if (
-                !passada &&
+                !desabilitado &&
                 onSelecionarData &&
                 (event.key === "Enter" || event.key === " ")
               ) {
@@ -111,16 +115,17 @@ return (
                     agendamentoSelecionado?.id === item.id
                       ? "evento-selecionado"
                       : ""
-                  }`}
+                  } evento-status-${item.situacao || "pendente"}`}
                   onClick={(event) => {
                     event.stopPropagation();
                     onSelecionar(item);
                     onSelecionarData?.(data);
                   }}
-                  title={`${item.pet} - ${item.horario}`}
+                  title={`${item.pet} - ${item.horario} - ${item.status || "Pendente"}`}
                 >
                   <span>{item.horario}</span>
                   <span>{item.pet}</span>
+                  <span className="status-evento">{item.status || "Pendente"}</span>
                 </button>
               ))}
 

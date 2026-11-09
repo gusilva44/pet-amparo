@@ -17,21 +17,19 @@ function validarAnimal(animal) {
 
     if (!Number.isInteger(animal.idade) || animal.idade < 0) throw new Error('A idade do animal deve ser um número inteiro maior ou  a zero.')
 
-    if (animal.idade > 38) throw new Error('O animal não pode ter mais de 38 anos.')
+    if (animal.idade > 30) throw new Error('O animal não pode ter mais de 30 anos.')
 
     if (animal.sexo !== 'M' && animal.sexo !== 'F') throw new Error('O sexo deve ser M ou F.')
 
     if (!animal.porte || animal.porte.trim() === '') throw new Error('O porte do animal é obrigatório.')
 
     if (animal.e_vacinado !== true && animal.e_vacinado !== false) throw new Error('O campo e_vacinado deve ser verdadeiro ou falso.igual')
-    if (animal.foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(animal.foto)) throw new Error('A foto do pet deve ser PNG, JPG ou WEBP.')
-    if (animal.foto && animal.foto.length > 2800000) throw new Error('A foto do pet deve ter no mÃ¡ximo 2 MB.')
 }
 
 // Fotos enviadas pelo cliente s\u00e3o guardadas como data URLs no banco.
 function validarFoto(foto) {
     if (foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(foto)) throw new Error('A foto do pet deve ser PNG, JPG ou WEBP.')
-    if (foto && foto.length > 2800000) throw new Error('A foto do pet deve ter no m\u00e1ximo 2 MB.')
+    if (foto && foto.length > 14000000) throw new Error('A foto do pet deve ter no m\u00e1ximo 10 MB.')
 }
 
 export async function buscarTodosAnimais(idCliente) {
@@ -65,8 +63,6 @@ export async function adicionarAnimal(animal, idCliente) {
     const animalExistente = await db.buscarAnimalPorRga(rga)
 
     if (animalExistente) throw new Error('Já existe um animal cadastrado com esse RGA.')
-
-    if(Number(idade) >= 30 ) throw new Error("Um animal não consegue viver mais que 30 anos")
 
     if (!["pequeno", "medio", "grande", "nao_informado"].includes(porte)) porte = "nao_informado"
 

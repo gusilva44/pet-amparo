@@ -7,6 +7,21 @@ import * as service from '../service/agendamentosService.js'
 
 const endpoints = Router()
 
+endpoints.get('/agendamentos/disponibilidade', autenticar, exigirCliente, async (req, res) => {
+    try {
+        const horarios = await service.listarHorariosDisponiveis({
+            idVeterinario: Number(req.query.id_veterinario),
+            idUnidade: Number(req.query.id_unidade),
+            idServico: Number(req.query.id_servico),
+            data: req.query.data,
+        });
+        res.status(200).json({ sucesso: true, horarios });
+    } catch (error) {
+        logError(error);
+        res.status(400).json(formatarError(error));
+    }
+});
+
 endpoints.get('/agendamentos', autenticar, exigirCliente, async (req, res) => {
     try {
         const id_cliente = Number(req.cliente.id_cliente)

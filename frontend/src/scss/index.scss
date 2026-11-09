@@ -7,6 +7,7 @@ body{
     padding: 0px;
     box-sizing: border-box;
     background-color: var(--creme);
+    font-family: var(--textos);
 }
 
 :root {
@@ -17,13 +18,20 @@ body{
     --branco: #ffffff;
 
     --titulo: "Outfit", sans-serif;
-    --textos: "Nutito Sans", sans-serif;
+    --textos: "Nunito Sans", sans-serif;
 }
 
-h1, h2 , h3, h4 {
+h1, h2 , h3, h4, h5, h6 {
         font-family: var(--titulo);
     }
 
-p, span, input {
-    font-family: var(--texto);
+p, span, input, textarea, select, button {
+    font-family: var(--textos);
+}
+
+:is(input, textarea, select):focus {
+    border-color: var(--laranja) !important;
+    outline: 2px solid var(--laranja) !important;
+    outline-offset: 1px;
+    box-shadow: 0 0 0 3px rgb(217 119 91 / 18%);
 }

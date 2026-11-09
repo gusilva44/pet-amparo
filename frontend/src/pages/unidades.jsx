@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
 import Calendario from "../components/calendario/calendario";
@@ -53,38 +53,6 @@ function formatarAgendamento(item) {
   };
 }
 
-function criarOpcoesHorario(horarios, idUnidade, data, duracao) {
-  const diaSemana = new Date(`${data}T12:00:00`).getDay() || 7;
-  const expediente = horarios.filter(
-    (h) =>
-      Number(h.id_unidade) === Number(idUnidade) &&
-      Number(h.dia_semana) === diaSemana,
-  );
-  const opcoes = [];
-  const passo = Math.max(15, Math.min(Number(duracao) || 30, 60));
-  const agora = new Date();
-
-  expediente.forEach((horario) => {
-    const [horaInicio, minutoInicio] = String(horario.hora_inicio)
-      .slice(0, 5)
-      .split(":")
-      .map(Number);
-    const [horaFim, minutoFim] = String(horario.hora_fim)
-      .slice(0, 5)
-      .split(":")
-      .map(Number);
-    let atual = horaInicio * 60 + minutoInicio;
-    const fim = horaFim * 60 + minutoFim;
-    while (atual + (Number(duracao) || 30) <= fim) {
-      const valor = `${String(Math.floor(atual / 60)).padStart(2, "0")}:${String(atual % 60).padStart(2, "0")}`;
-      const instante = new Date(`${data}T${valor}:00`);
-      if (instante > agora) opcoes.push(valor);
-      atual += passo;
-    }
-  });
-  return [...new Set(opcoes)].sort();
-}
-
 export default function Unidades() {
   const { id } = useParams();
   const [unidade, setUnidade] = useState(null);
@@ -97,7 +65,9 @@ export default function Unidades() {
   const [pets, setPets] = useState([]);
   const [veterinarios, setVeterinarios] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
-  const [horarios, setHorarios] = useState([]);
+  const [horariosVeterinario, setHorariosVeterinario] = useState([]);
+  const [carregandoHorarios, setCarregandoHorarios] = useState(false);
+  const [opcoesHorario, setOpcoesHorario] = useState([]);
   const [idPet, setIdPet] = useState("");
   const [idVeterinario, setIdVeterinario] = useState("");
   const [idServico, setIdServico] = useState("");
@@ -113,7 +83,7 @@ export default function Unidades() {
       try {
         const [resUnidade, resUnidades] = await Promise.all([
           unidadesApi.buscarPorId(id),
-          unidadesApi.listarComServicos(),
+          unidadesApi.listarPublicasComServicos(),
         ]);
         if (!ativo) return;
         setUnidade(resUnidade.resultado);
@@ -183,39 +153,52 @@ export default function Unidades() {
 
   useEffect(() => {
     if (!idVeterinario) {
-      setHorarios([]);
+      setHorariosVeterinario([]);
       return undefined;
     }
     let ativo = true;
-    veterinariosApi
-      .listarHorarios(idVeterinario)
+    setCarregandoHorarios(true);
+    veterinariosApi.listarHorarios(idVeterinario)
       .then((res) => {
-        if (ativo) setHorarios(res.resultado || []);
+        if (ativo) setHorariosVeterinario((res.resultado || []).filter((horario) => Number(horario.id_unidade) === Number(id)));
       })
       .catch((error) => {
-        if (ativo) setMensagem(mensagemErroApi(error));
-      });
-    return () => {
-      ativo = false;
-    };
-  }, [idVeterinario]);
+        if (ativo) {
+          setHorariosVeterinario([]);
+          setMensagem(mensagemErroApi(error));
+        }
+      })
+      .finally(() => { if (ativo) setCarregandoHorarios(false); });
+    return () => { ativo = false; };
+  }, [id, idVeterinario]);
 
-  const servicoSelecionado = servicos.find(
-    (item) => String(item.id_servico) === String(idServico),
-  );
-  const opcoesHorario = useMemo(
-    () =>
-      criarOpcoesHorario(
-        horarios,
-        id,
-        dataSelecionada,
-        servicoSelecionado?.duracao_minutos,
-      ),
-    [horarios, id, dataSelecionada, servicoSelecionado],
-  );
+  useEffect(() => {
+    if (!idVeterinario || !idServico || !dataSelecionada || dataPassada(dataSelecionada)) {
+      setOpcoesHorario([]);
+      return undefined;
+    }
+    let ativo = true;
+    agendamentosApi.disponibilidade({
+      id_veterinario: idVeterinario,
+      id_unidade: id,
+      id_servico: idServico,
+      data: dataSelecionada,
+    }).then((res) => {
+      if (ativo) setOpcoesHorario(res.horarios || []);
+    }).catch((error) => {
+      if (ativo) {
+        setOpcoesHorario([]);
+        setMensagem(mensagemErroApi(error));
+      }
+    });
+    return () => { ativo = false; };
+  }, [id, idVeterinario, idServico, dataSelecionada]);
   const agendamentoSelecionado = agendamentos.find(
     (item) => item.data === dataSelecionada,
   ) || { data: dataSelecionada };
+  const diasDisponiveisVet = idVeterinario
+    ? [...new Set(horariosVeterinario.map((horario) => Number(horario.dia_semana)))]
+    : undefined;
 
   async function confirmarAgendamento(event) {
     event.preventDefault();
@@ -425,6 +408,7 @@ export default function Unidades() {
                 <Calendario
                   mesAtual={mesAtual}
                   dataMinima={dataLocal(new Date())}
+                  diasDisponiveis={diasDisponiveisVet}
                   agendamentos={agendamentos}
                   agendamentoSelecionado={agendamentoSelecionado}
                   onSelecionar={(item) => {
@@ -527,6 +511,18 @@ export default function Unidades() {
                       ))}
                     </select>
                   </label>
+                  <div className="agenda-disponibilidade-vet" aria-live="polite">
+                    <strong>Disponibilidade de {veterinarios.find((vet) => String(vet.id_veterinario) === String(idVeterinario))?.nome || ""}</strong>
+                    {carregandoHorarios ? <span>Carregando disponibilidade...</span> : horariosVeterinario.length ? (
+                      <ul>
+                        {[...new Set(horariosVeterinario.map((horario) => Number(horario.dia_semana)))].sort((a, b) => a - b).map((dia) => {
+                          const nomeDia = ["", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"][dia];
+                          const faixas = horariosVeterinario.filter((horario) => Number(horario.dia_semana) === dia).map((horario) => `${String(horario.hora_inicio).slice(0, 5)}–${String(horario.hora_fim).slice(0, 5)}`).join(", ");
+                          return <li key={dia}><span>{nomeDia}</span><span>{faixas}</span></li>;
+                        })}
+                      </ul>
+                    ) : <span>Este veterinário ainda não cadastrou dias e horários nesta unidade.</span>}
+                  </div>
                   <label>
                     Hor&#225;rio dispon&#237;vel
                     <select

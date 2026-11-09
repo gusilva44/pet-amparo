@@ -36,6 +36,9 @@ export default function Clientes() {
     const [filtroStatus, setFiltroStatus] = useState("");
 
     const [modal, setModal] = useState(false);
+    const [vinculoVet, setVinculoVet] = useState(null);
+    const [unidadeVinculo, setUnidadeVinculo] = useState("");
+    const [salvandoVinculo, setSalvandoVinculo] = useState(false);
     const [editando, setEditando] = useState(null);
     const [formulario, setFormulario] = useState(formularioInicial);
     const [salvando, setSalvando] = useState(false);
@@ -137,6 +140,31 @@ export default function Clientes() {
         setModal(false);
         setEditando(null);
         setFormulario(formularioInicial);
+    }
+
+    function abrirVinculoUnidade(usuario) {
+        const vinculadas = String(usuario.unidades_ids || "").split(",").filter(Boolean);
+        const primeiraLivre = unidades.find((unidade) => !vinculadas.includes(String(unidade.id_unidade)));
+        setVinculoVet(usuario);
+        setUnidadeVinculo(String(primeiraLivre?.id_unidade || ""));
+        setMensagem("");
+    }
+
+    async function salvarVinculoUnidade(event) {
+        event.preventDefault();
+        if (!vinculoVet?.id_veterinario || !unidadeVinculo) return;
+        setSalvandoVinculo(true);
+        setMensagem("");
+        try {
+            await veterinariosApi.vincularUnidade(vinculoVet.id_veterinario, unidadeVinculo);
+            setVinculoVet(null);
+            await carregarUsuarios();
+            setMensagem("Unidade vinculada ao veterinário com sucesso.");
+        } catch (error) {
+            setMensagem(mensagemErroApi(error));
+        } finally {
+            setSalvandoVinculo(false);
+        }
     }
 
     function alterarCampo(event) {
@@ -426,6 +454,15 @@ export default function Clientes() {
                                 </span>
 
                                 <div className="acoes">
+                                    {usuario.tipo === "veterinario" && usuario.id_veterinario && (
+                                        <button
+                                            title="Vincular veterinário a uma unidade"
+                                            aria-label={`Vincular ${usuario.nome} a uma unidade`}
+                                            onClick={() => abrirVinculoUnidade(usuario)}
+                                        >
+                                            <i className="fa-solid fa-hospital-user"></i>
+                                        </button>
+                                    )}
                                     <button
                                         title="Editar usuário"
                                         onClick={() => abrirEdicao(usuario)}
@@ -668,6 +705,42 @@ export default function Clientes() {
                         </form>
 
                     </div>
+                </div>
+            )}
+
+            {vinculoVet && (
+                <div className="modal-overlay" onClick={() => setVinculoVet(null)}>
+                    <section className="modal-vinculo" role="dialog" aria-modal="true" aria-labelledby="titulo-vinculo" onClick={(event) => event.stopPropagation()}>
+                        <div className="modal-header">
+                            <div>
+                                <h2 id="titulo-vinculo">Vincular unidade</h2>
+                                <p>Selecione uma unidade para {vinculoVet.nome}.</p>
+                            </div>
+                            <button type="button" onClick={() => setVinculoVet(null)} aria-label="Fechar">×</button>
+                        </div>
+                        {unidadeVinculo ? (
+                            <form onSubmit={salvarVinculoUnidade}>
+                                <label htmlFor="unidade-vinculo">Unidade</label>
+                                <select id="unidade-vinculo" value={unidadeVinculo} onChange={(event) => setUnidadeVinculo(event.target.value)} required>
+                                    {unidades.filter((unidade) => !String(vinculoVet.unidades_ids || "").split(",").includes(String(unidade.id_unidade))).map((unidade) => (
+                                        <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>
+                                    ))}
+                                </select>
+                                <div className="unidades-vinculadas">
+                                    {vinculoVet.unidades_nomes ? <span>Unidades atuais: {vinculoVet.unidades_nomes}</span> : <span>Este veterinário ainda não está vinculado a uma unidade.</span>}
+                                </div>
+                                <div className="botoes-modal">
+                                    <button type="button" className="cancelar" onClick={() => setVinculoVet(null)}>Cancelar</button>
+                                    <button type="submit" className="salvar" disabled={salvandoVinculo}>{salvandoVinculo ? "Salvando..." : "Vincular unidade"}</button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="sem-unidades-disponiveis">
+                                <p>Este veterinário já está vinculado a todas as unidades disponíveis.</p>
+                                <button type="button" onClick={() => setVinculoVet(null)}>Fechar</button>
+                            </div>
+                        )}
+                    </section>
                 </div>
             )}
 

@@ -331,8 +331,13 @@ html {
 
             // Cards das unidades
             .unidades {
+                display: block;
+                position: relative;
+                flex: 0 0 auto;
                 width: 100%;
                 margin-top: 50px;
+                margin-bottom: 48px;
+                padding-bottom: 24px;
 
                 > h2 {
                     font-family: var(--titulo);
@@ -345,8 +350,10 @@ html {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    position: relative;
                     gap: 30px;
                     width: 100%;
+                    height: auto;
                 }
 
                 .card {
@@ -362,7 +369,7 @@ html {
                     box-sizing: border-box;
 
                     &:last-child {
-                        margin-bottom: 80px;
+                        margin-bottom: 0;
                     }
 
                     .imagem {
@@ -441,6 +448,9 @@ html {
 
     // Rodapé
     .footer {
+        position: relative;
+        clear: both;
+        flex: 0 0 auto;
         display: flex;
         align-items: flex-start;
         justify-content: space-around;
@@ -535,6 +545,13 @@ html {
             font-size: 13px;
         }
     }
+}
+
+.home-page .main .content,
+.home-page .main .content .unidades,
+.home-page .main .content .cards-unidades {
+    height: auto;
+    overflow: visible;
 }
 
 // Responsividade para tablets

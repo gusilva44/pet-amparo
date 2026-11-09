@@ -37,7 +37,7 @@
 
                     p {
                         font-size: 1em;
-                        font-family: var(--texto);
+                        font-family: var(--textos);
                         color: #777;
                     }
 
@@ -222,7 +222,7 @@
             .linha-usuario {
                 min-width: 850px;
                 display: grid;
-                grid-template-columns: 1.5fr 1.5fr 1fr 1fr .8fr 1fr;
+                grid-template-columns: 1.5fr 1.5fr 1fr 1fr .8fr 1.4fr;
                 align-items: center;
                 gap: 12px;
                 padding: 16px 20px;
@@ -489,6 +489,30 @@
             }
         }
     }
+}
+
+.modal-vinculo {
+    width: min(100%, 480px);
+    padding: 24px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 15px 50px #0002;
+    color: #263a31;
+
+    .modal-header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    h2 { margin: 0 0 6px; color: #084d39; font: 700 22px var(--titulo); }
+    p { margin: 0; color: #718078; font: 14px var(--textos); }
+    .modal-header button { width: 34px; height: 34px; border: 0; border-radius: 8px; background: #f1f5f2; cursor: pointer; }
+    form { display: grid; gap: 10px; }
+    label { color: #28543f; font: 600 13px var(--textos); }
+    select { min-height: 44px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background: white; }
+    .unidades-vinculadas { padding: 10px; border-radius: 8px; background: #f1f6f2; color: #557064; font: 12px/1.5 var(--textos); }
+    .botoes-modal { display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+    .botoes-modal button, .sem-unidades-disponiveis button { padding: 10px 14px; border: 0; border-radius: 8px; cursor: pointer; font: 600 13px var(--textos); }
+    .botoes-modal .cancelar { background: #eef2ef; color: #45584e; }
+    .botoes-modal .salvar, .sem-unidades-disponiveis button { background: #084d39; color: #fff; }
+    .botoes-modal .salvar:disabled { opacity: .6; cursor: wait; }
+    .sem-unidades-disponiveis { display: grid; justify-items: start; gap: 16px; }
 }
 
 @media (max-width: 1100px) {

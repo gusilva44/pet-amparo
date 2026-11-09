@@ -10,7 +10,7 @@ import AgendamentosMes from '../components/agendamentos/agendamentos.jsx';
 import Logo from '../assets/imagens/Logo.webp';
 import Cachorro from '../assets/imagens/cachorro-agendamentos.png';
 
-import { authApi } from '../services/api';
+import { authApi, agendamentosApi } from '../services/api';
 
 export default function Agendamentos() {
     const [usuario, setUsuario] = useState(null);
@@ -24,7 +24,32 @@ export default function Agendamentos() {
 
     const carregarDados = useCallback(async (dadosUsuario) => {
         setUsuario(dadosUsuario);
-        setAgendamentos([]);
+        if (dadosUsuario?.tipo !== 'cliente') {
+            setAgendamentos([]);
+            return;
+        }
+
+        const resposta = await agendamentosApi.listarMeus();
+        const lista = resposta.agendamentos || resposta.resultado || [];
+        setAgendamentos(lista.map((item) => {
+            const inicio = new Date(item.inicio);
+            const data = `${inicio.getFullYear()}-${String(inicio.getMonth() + 1).padStart(2, '0')}-${String(inicio.getDate()).padStart(2, '0')}`;
+            const status = item.situacao === 'concluido'
+                ? 'Concluído'
+                : item.situacao === 'cancelado' ? 'Cancelado' : 'Pendente';
+
+            return {
+                ...item,
+                id: item.id_agendamento,
+                data,
+                horario: inicio.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                pet: item.animal,
+                tipo: item.servico,
+                tipoCor: /vacina/i.test(item.servico || '') ? 'vacinacao' : 'consulta',
+                status,
+                situacao: item.situacao || 'pendente',
+            };
+        }));
     }, []);
 
     useEffect(() => {
