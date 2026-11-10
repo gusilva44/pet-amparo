@@ -8,12 +8,15 @@ export async function buscarVeterinarioNaUnidade(idVeterinario, idUnidade) {
             v.nome,
             vu.id_unidade,
             v.ativo,
-            u.ativo AS usuario_ativo
+            u.ativo AS usuario_ativo,
+            unidade.ativo AS unidade_ativa
         FROM veterinarios as v
         INNER JOIN usuarios as u
             ON u.id_usuario = v.id_usuario
         INNER JOIN veterinarios_unidades as vu
             ON vu.id_veterinario = v.id_veterinario
+        INNER JOIN unidades as unidade
+            ON unidade.id_unidade = vu.id_unidade
         WHERE v.id_veterinario = ? AND vu.id_unidade = ? AND vu.ativo = TRUE
     `,
     [idVeterinario, idUnidade],
@@ -33,15 +36,20 @@ export async function listarVeterinarios(idUnidade) {
             v.crmv,
             v.especialidade,
             v.telefone,
+            u.email,
+            unidade.nome AS unidade_nome,
             vu.id_unidade
         FROM veterinarios as v
         INNER JOIN usuarios as u
             ON u.id_usuario = v.id_usuario
         INNER JOIN veterinarios_unidades as vu
             ON vu.id_veterinario = v.id_veterinario
+        INNER JOIN unidades as unidade
+            ON unidade.id_unidade = vu.id_unidade
         WHERE v.ativo = TRUE
           AND u.ativo = TRUE
           AND vu.ativo = TRUE
+          AND unidade.ativo = TRUE
           ${filtroUnidade}
         ORDER BY v.nome
     `,
@@ -233,33 +241,6 @@ export async function atualizarStatusDoAgendamento(
   return resultado.affectedRows;
 }
 
-export async function existeConflito(
-  idVeterinario,
-  inicio,
-  fim,
-  ignorarId = null,
-) {
-  let sql = `
-        SELECT id_agendamento
-        FROM agendamentos
-        WHERE id_veterinario = ?
-          AND status <> 'cancelado'
-          AND inicio < ?
-          AND fim > ?
-    `;
-
-  const valores = [idVeterinario, fim, inicio];
-
-  if (ignorarId) {
-    sql += " AND id_agendamento <> ?";
-    valores.push(ignorarId);
-  }
-
-  const [resultado] = await db.query(sql, valores);
-
-  return Boolean(resultado[0]);
-}
-
 export async function listarConflitos(idVeterinario, data) {
   const [resultado] = await db.query(
     `SELECT inicio, fim FROM agendamentos
@@ -271,9 +252,26 @@ export async function listarConflitos(idVeterinario, data) {
   return resultado;
 }
 
-export async function criarAgendamento(agendamento) {
-  const [resultado] = await db.query(
-    `
+export async function criarAgendamentoAtomico(agendamento) {
+  const conexao = await db.getConnection();
+
+  try {
+    await conexao.beginTransaction();
+    await conexao.query(
+      `SELECT id_veterinario FROM veterinarios WHERE id_veterinario = ? FOR UPDATE`,
+      [agendamento.id_veterinario],
+    );
+
+    const [conflitos] = await conexao.query(
+      `SELECT id_agendamento FROM agendamentos
+       WHERE id_veterinario = ? AND status <> 'cancelado'
+         AND inicio < ? AND fim > ? FOR UPDATE`,
+      [agendamento.id_veterinario, agendamento.fim, agendamento.inicio],
+    );
+    if (conflitos.length) throw new Error("Este horário não está mais disponível.");
+
+    const [resultado] = await conexao.query(
+      `
         INSERT INTO agendamentos (
             id_cliente,
             id_animal,
@@ -285,20 +283,19 @@ export async function criarAgendamento(agendamento) {
             observacao
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      agendamento.id_cliente,
-      agendamento.id_animal,
-      agendamento.id_veterinario,
-      agendamento.id_unidade,
-      agendamento.id_servico,
-      agendamento.inicio,
-      agendamento.fim,
-      agendamento.observacao,
-    ],
-  );
-
-  return resultado.insertId;
+      `,
+      [agendamento.id_cliente, agendamento.id_animal, agendamento.id_veterinario,
+        agendamento.id_unidade, agendamento.id_servico, agendamento.inicio,
+        agendamento.fim, agendamento.observacao],
+    );
+    await conexao.commit();
+    return resultado.insertId;
+  } catch (error) {
+    await conexao.rollback();
+    throw error;
+  } finally {
+    conexao.release();
+  }
 }
 
 export async function cancelarAgendamento(idAgendamento, idCliente) {

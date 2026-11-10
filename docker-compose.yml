@@ -10,7 +10,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./backend/.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./backend/src/schema/tables.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_dev_password"]
       interval: 5s
@@ -28,11 +28,15 @@ services:
       DB_DATABASE: pet_amparo
       JWT_SECRET: altere_esta_chave_no_ambiente_real
       JWT_EXPIRES_IN: 1h
+      PUBLIC_API_URL: http://localhost:3001
     ports:
       - "3001:3001"
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - pet_uploads:/app/uploads
 
 volumes:
   mysql_data:
+  pet_uploads:

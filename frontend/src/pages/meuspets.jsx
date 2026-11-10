@@ -96,8 +96,9 @@ export default function MeusPets() {
     setMensagemFoto("");
     try {
       await clientesApi.atualizarFoto(fotoSelecionada);
+      const resposta = await clientesApi.meusDados();
       avisarMudancaAutenticacao();
-      setCliente((atual) => ({ ...atual, foto: fotoSelecionada }));
+      setCliente(resposta.cliente);
       setFotoSelecionada("");
       setMensagemFoto("Foto de perfil atualizada.");
     } catch (error) {
@@ -158,8 +159,8 @@ export default function MeusPets() {
                   </div>
                 </div>
                 <div className="foto-perfil-editar">
-                  <label>
-                    Alterar foto de perfil
+                  <label className="botao-escolher-foto-perfil">
+                    <span><i className="fa-regular fa-image" aria-hidden="true" /> Alterar foto de perfil</span>
                     <input type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFotoPerfil} />
                   </label>
                   {fotoSelecionada && <button className="botao-secundario" onClick={salvarFotoPerfil} disabled={salvandoFoto}>{salvandoFoto ? "Salvando..." : "Salvar foto"}</button>}

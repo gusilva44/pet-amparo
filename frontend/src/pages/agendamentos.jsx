@@ -186,7 +186,7 @@ export default function Agendamentos() {
                                 <button
                                 className='n'
                                     onClick={() => {
-                                        window.location.href = '/unidades';
+                                        window.location.href = '/#unidades';
                                     }}
                                 >
                                     Clique aqui para agendar seu atendimento

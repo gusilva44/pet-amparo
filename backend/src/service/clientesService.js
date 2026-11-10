@@ -2,6 +2,7 @@ import Usuario from '../repos/clientesRepo.js'
 import { validarDataNascimento } from '../utils/date.js'
 import { regex } from '../utils/regex.js';
 import { autenticacaoUsuario } from '../validation/idCliente.js'
+import { salvarImagemDataUrl } from '../utils/imagem.js'
 
 const dbUser = new Usuario()
 
@@ -11,7 +12,7 @@ export function buscarClientePorUsuario(idUsuario){
     return dbUser.buscarDadosCliente(idUsuario)
 }
 
-export function atualizarClientePorUsuario(cliente, idUsuario){
+export async function atualizarClientePorUsuario(cliente, idUsuario){
     autenticacaoUsuario(idUsuario)
     if (!cliente) throw new Error('Nenhum dado foi enviado.')
 
@@ -21,18 +22,26 @@ export function atualizarClientePorUsuario(cliente, idUsuario){
 
     if (regex.verificarNome.test(cliente.nome)) throw new Error('O nome não pode conter números.')
     validarDataNascimento(cliente.data_nascimento)
-    if (foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(foto)) throw new Error('A foto do perfil deve ser PNG, JPG ou WEBP.')
-    if (foto && foto.length > 2800000) throw new Error('A foto do perfil deve ter no mÃ¡ximo 2 MB.')
+    const fotoSalva = foto === undefined ? undefined : await salvarImagemDataUrl(foto, {
+        limiteBytes: 2 * 1024 * 1024,
+        campo: 'foto do perfil',
+        pasta: 'perfis',
+    })
 
-    return dbUser.atualizarClientePorUsuario(cliente, idUsuario)
+    return dbUser.atualizarClientePorUsuario({ ...cliente, foto: fotoSalva }, idUsuario)
 }
 
-export function atualizarFotoPorUsuario(foto, idUsuario) {
+export async function atualizarFotoPorUsuario(foto, idUsuario) {
     autenticacaoUsuario(idUsuario)
-    if (foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(foto)) throw new Error('A foto do perfil deve ser PNG, JPG ou WEBP.')
-    if (foto && foto.length > 2800000) throw new Error('A foto do perfil deve ter no m\u00e1ximo 2 MB.')
+    const fotoSalva = await salvarImagemDataUrl(foto, {
+        limiteBytes: 2 * 1024 * 1024,
+        campo: 'foto do perfil',
+        pasta: 'perfis',
+    })
 
-    return dbUser.atualizarFotoPorUsuario(foto || null, idUsuario)
+    const alteradas = await dbUser.atualizarFotoPorUsuario(fotoSalva, idUsuario)
+    if (!alteradas) throw new Error('Perfil do cliente não encontrado.')
+    return alteradas
 }
 
 export function deletarClientePorUsuario(idUsuario){

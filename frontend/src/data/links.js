@@ -41,12 +41,18 @@ const links = {
         },
         {
             id: 4,
+            caminho: '/veterinarios',
+            texto: 'Veterinários',
+            icone: 'fa-solid fa-user-doctor'
+        },
+        {
+            id: 5,
             caminho: '/usuarios',
             texto: 'Usuários',
             icone: 'fa-regular fa-user'
         },
         {
-            id: 5,
+            id: 6,
             caminho: '/relatorios',
             texto: 'Relatórios',
             icone: 'fa-solid fa-file-lines'

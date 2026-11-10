@@ -62,7 +62,7 @@ export default function Home(){
     ]
 
     function irParaUnidades(id) {
-        navigate(`/unidades/${id}`)
+        navigate(`/unidades/${id}?aba=Agendamentos`)
     }
 
     return(

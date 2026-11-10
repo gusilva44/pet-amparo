@@ -11,6 +11,37 @@ export function listarVeterinarios(idUnidade) {
     return repo.listarVeterinarios(idUnidade === undefined ? undefined : Number(idUnidade))
 }
 
+export function listarVeterinariosAdmin() {
+    return veterinariosRepo.listarVeterinariosAdmin()
+}
+
+export function listarContasVeterinariasSemFicha() {
+    return veterinariosRepo.listarContasVeterinariasSemFicha()
+}
+
+export async function criarFichaParaContaVeterinaria(idUsuario, dados) {
+    validarId(idUsuario)
+    const idUnidade = Number(dados?.id_unidade)
+    if (!dados?.nome?.trim() || !dados?.crmv?.trim()) throw new Error('Nome e CRMV são obrigatórios.')
+    validarId(idUnidade)
+
+    const usuario = await authRepo.buscarUsuarioPorId(idUsuario)
+    if (!usuario || usuario.tipo !== 'veterinario' || !usuario.ativo) throw new Error('Conta de veterinário não encontrada ou inativa.')
+    if (await veterinariosRepo.buscarVeterinarioPorUsuario(idUsuario)) throw new Error('Esta conta já possui uma ficha profissional.')
+    if (await veterinariosRepo.buscarPorCrmv(dados.crmv.trim())) throw new Error('Já existe um veterinário cadastrado com esse CRMV.')
+
+    const unidade = await unidadesRepo.buscarUnidadePorId(idUnidade)
+    if (!unidade || !unidade.ativo) throw new Error('Unidade não encontrada ou inativa.')
+
+    return veterinariosRepo.criarFichaParaContaVeterinaria(idUsuario, {
+        nome: dados.nome.trim(),
+        crmv: dados.crmv.trim(),
+        especialidade: dados.especialidade?.trim() || null,
+        telefone: dados.telefone?.trim() || null,
+        id_unidade: idUnidade,
+    })
+}
+
 function validarId(id) { 
     if (!Number.isInteger(id) || id <= 0) throw new Error('O ID deve ser um número inteiro e positivo.') 
 }

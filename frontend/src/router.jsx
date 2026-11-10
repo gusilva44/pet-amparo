@@ -2,7 +2,6 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Home from './pages/home';
 import Unidades from './pages/unidades';
 import Pets from './pages/meuspets';
-import Teste from './pages/teste'
 import Agendamentos from './pages/agendamentos';
 import NaoEncontrada from './pages/naoEncontrada'
 import RotaProtegida from './components/rotaProtegida/rotaProtegida';
@@ -12,6 +11,7 @@ import Veterinario from './pages/pagVeterinario';
 import UnidadesAdmin from './components/admin/unidades';
 import Servicos from './components/admin/servicos/servicos';
 import Relatorios from './components/admin/relatorios/relatorios';
+import VeterinariosAdmin from './components/admin/veterinarios/veterinarios';
 
 export default function Navigation() {
     return (
@@ -20,7 +20,6 @@ export default function Navigation() {
                 <Route path='/' element={<Home />} />
                 <Route path='/unidades/:id' element={<Unidades />} />
                 <Route path='/meuspets' element={<Pets />}/>
-                <Route path='/teste' element={<Teste />}/>
                 <Route path ='/agendamentos' element={<Agendamentos/>}/>
 
                 <Route element={<RotaProtegida tiposPermitidos={['admin']} />}>
@@ -28,6 +27,7 @@ export default function Navigation() {
                     <Route path='/visao' element={<VisaoGeral/>} />
                     <Route path='/unidades' element={<UnidadesAdmin />} />
                     <Route path='/servicos' element={<Servicos />} />
+                    <Route path='/veterinarios' element={<VeterinariosAdmin />} />
                     <Route path='/relatorios' element={<Relatorios />} />
                 </Route>
 

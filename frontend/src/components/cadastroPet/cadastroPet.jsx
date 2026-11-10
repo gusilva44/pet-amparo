@@ -29,7 +29,7 @@ export default function CadastroPet({ onSaved }) {
   async function selecionarFoto(event) {
     setErroFoto("");
     try {
-      atualizar("foto", await lerImagem(event.target.files?.[0], 10));
+      atualizar("foto", await lerImagem(event.target.files?.[0], 5));
     } catch (error) {
       event.target.value = "";
       setErroFoto(error.message);
@@ -132,8 +132,12 @@ export default function CadastroPet({ onSaved }) {
           </select>
         </label>
         <label className="pet-foto-campo">
-          Foto do pet (opcional)
-          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
+          <span>Foto do pet (opcional)</span>
+          <span className="botao-escolher-foto">
+            <i className="fa-regular fa-image" aria-hidden="true" />
+            Escolher imagem
+          </span>
+          <input className="entrada-foto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
           {erroFoto && <span className="erro-foto" role="alert">{erroFoto}</span>}
         </label>
         {dados.foto && <img className="pet-foto-previa" src={dados.foto} alt="Prévia da foto do pet" />}

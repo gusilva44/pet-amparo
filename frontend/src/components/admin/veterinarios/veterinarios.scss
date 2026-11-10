@@ -1,0 +1,52 @@
+.pagina-admin-veterinarios {
+  display: flex;
+  min-height: 100vh;
+  background: #f4efe5;
+}
+
+.conteudo-admin-veterinarios {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  color: #263a31;
+
+  header { max-width: 52rem; margin: 0 auto 1.5rem; }
+  h1, h2 { margin: 0 0 .5rem; font-family: var(--titulo, sans-serif); }
+  h1 { color: #263a31; font-size: clamp(2rem, 4vw, 2.75rem); }
+  h2 { color: #d9775b; font-size: 1.35rem; }
+  p { line-height: 1.55; }
+  button, input, select { font: inherit; }
+  button { border: 0; border-radius: .55rem; padding: .7rem 1rem; background: #d9775b; color: white; font-weight: 700; cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: .55; }
+  input, select { box-sizing: border-box; width: 100%; min-height: 2.65rem; padding: .55rem .7rem; border: 1px solid #cad2c9; border-radius: .5rem; background: white; color: #263a31; }
+}
+
+.eyebrow-admin-veterinarios { color: #567160; font-size: .75rem; font-weight: 800; letter-spacing: .12em; }
+.mensagem-admin-veterinarios { max-width: 52rem; margin: 0 auto 1rem; padding: .8rem 1rem; border-radius: .6rem; background: #e7eee7; }
+.cadastro-admin-veterinario, .lista-admin-veterinarios { max-width: 52rem; margin: 0 auto 1.5rem; padding: clamp(1rem, 3vw, 1.5rem); border-radius: .9rem; background: #fffefa; box-shadow: 0 8px 24px #263a3110; }
+.cadastro-admin-veterinario form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.cadastro-admin-veterinario label { display: grid; gap: .4rem; font-size: .9rem; font-weight: 650; }
+.cadastro-admin-veterinario form button { grid-column: 1 / -1; justify-self: start; }
+.lista-admin-veterinarios-titulo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .8rem; }
+.lista-admin-veterinarios-titulo button { padding: .55rem .8rem; background: #263a31; }
+.linha-admin-veterinario { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 1rem; padding: 1rem 0; border-top: 1px solid #e2e7df; }
+.linha-admin-veterinario > div:first-child, .unidades-admin-veterinario { display: grid; gap: .25rem; min-width: 0; }
+.linha-admin-veterinario span, .linha-admin-veterinario small { overflow-wrap: anywhere; color: #617168; font-size: .85rem; }
+.vincular-admin-veterinario { display: flex; gap: .45rem; }
+.vincular-admin-veterinario select { min-width: 11rem; }
+.vincular-admin-veterinario button { padding-inline: .7rem; }
+
+@media (max-width: 850px) {
+  .linha-admin-veterinario { grid-template-columns: 1fr 1fr; }
+  .vincular-admin-veterinario { grid-column: 1 / -1; }
+}
+
+@media (max-width: 600px) {
+  .pagina-admin-veterinarios { flex-direction: column; }
+  .cadastro-admin-veterinario form, .linha-admin-veterinario { grid-template-columns: 1fr; }
+  .cadastro-admin-veterinario form button, .vincular-admin-veterinario { grid-column: auto; }
+  .lista-admin-veterinarios-titulo { align-items: flex-start; flex-direction: column; }
+  .vincular-admin-veterinario { width: 100%; flex-direction: column; }
+  .vincular-admin-veterinario select { min-width: 0; }
+}

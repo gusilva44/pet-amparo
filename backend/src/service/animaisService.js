@@ -1,4 +1,5 @@
 import * as db from '../repos/animaisRepo.js'
+import { salvarImagemDataUrl } from '../utils/imagem.js'
 
 function validarId(id) {
     if (!Number.isInteger(id) || id <= 0) throw new Error('O ID deve ser um número inteiro e positivo.')
@@ -26,12 +27,6 @@ function validarAnimal(animal) {
     if (animal.e_vacinado !== true && animal.e_vacinado !== false) throw new Error('O campo e_vacinado deve ser verdadeiro ou falso.igual')
 }
 
-// Fotos enviadas pelo cliente s\u00e3o guardadas como data URLs no banco.
-function validarFoto(foto) {
-    if (foto && !/^data:image\/(png|jpe?g|webp);base64,/i.test(foto)) throw new Error('A foto do pet deve ser PNG, JPG ou WEBP.')
-    if (foto && foto.length > 14000000) throw new Error('A foto do pet deve ter no m\u00e1ximo 10 MB.')
-}
-
 export async function buscarTodosAnimais(idCliente) {
     validarId(idCliente)
 
@@ -55,9 +50,8 @@ export async function buscarAnimalPorId(idAnimal, idCliente) {
 export async function adicionarAnimal(animal, idCliente) {
     validarId(idCliente)
     validarAnimal(animal)
-    validarFoto(animal.foto)
 
-    let { nome, especie, raca, rga, idade, sexo, porte, foto, e_vacinado } = animal
+    let { nome, especie, raca, rga, idade, sexo, porte, e_vacinado } = animal
 
     const rgaValidado = rga.trim()
     const animalExistente = await db.buscarAnimalPorRga(rga)
@@ -68,6 +62,11 @@ export async function adicionarAnimal(animal, idCliente) {
 
     if (!["M", "F"].includes(sexo)) sexo = "desconhecido"
     
+    const foto = await salvarImagemDataUrl(animal.foto, {
+        limiteBytes: 5 * 1024 * 1024,
+        campo: 'foto do pet',
+        pasta: 'pets',
+    })
     const dados = {
         nome: nome.trim(),
         especie: especie.trim(),
@@ -90,7 +89,6 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
     validarId(idAnimal)
     validarId(idCliente)
     validarAnimal(animal)
-    validarFoto(animal.foto)
 
     const animalAtual = await db.buscarAnimalPorId(idAnimal, idCliente)
 
@@ -101,6 +99,13 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
 
     if (animalComRga && animalComRga.id_animal !== idAnimal) throw new Error('Já existe outro animal cadastrado com esse RGA.')
 
+    const foto = animal.foto === undefined
+        ? animalAtual.foto
+        : await salvarImagemDataUrl(animal.foto, {
+            limiteBytes: 5 * 1024 * 1024,
+            campo: 'foto do pet',
+            pasta: 'pets',
+        })
     const dados = {
         nome: animal.nome.trim(),
         especie: animal.especie.trim(),
@@ -109,7 +114,7 @@ export async function atualizarAnimal(animal, idAnimal, idCliente) {
         idade: animal.idade,
         sexo: animal.sexo,
         porte: animal.porte.trim(),
-        foto: animal.foto || null,
+        foto: foto || null,
         e_vacinado: animal.e_vacinado
     }
 

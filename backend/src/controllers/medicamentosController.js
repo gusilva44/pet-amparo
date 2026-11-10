@@ -41,7 +41,7 @@ endpoints.put('/medicamentos/:id', autenticar, verificarAdmin, async (req, res) 
         const id_medicamento = Number(req.params.id)
         const dados = req.body
 
-        const resultado = await service.atualizarMedicamento(dados, id_medicamento)
+        const resultado = await service.atualizarMedicamento(id_medicamento, dados)
         
         res.json({ 
             mensagem: 'Medicamento atualizado com sucesso.',
