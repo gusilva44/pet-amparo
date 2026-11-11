@@ -2,6 +2,7 @@
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 USE pet_amparo;
 
+DROP DATABASE pet_amparo;
 -- =====================================================
 -- 1. USUARIOS
 -- Autenticação e controle de acesso
@@ -282,7 +283,7 @@ CREATE TABLE animais (
         'grande',
         'nao_informado'
     ) NOT NULL DEFAULT 'nao_informado',
-    foto LONGTEXT,
+    foto LONGTEXT NULL,
     e_vacinado BOOLEAN NOT NULL DEFAULT FALSE,
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     atualizado_em DATETIME NOT NULL
@@ -587,15 +588,6 @@ INSERT INTO unidades (
 
 UPDATE usuarios
 set tipo = "admin"
-where id_usuario = 2;
+where id_usuario = 1;
 
-INSERT INTO unidades_servicos (id_unidade, id_servico, ativo)
-SELECT u.id_unidade, s.id_servico, TRUE
-FROM unidades AS u
-CROSS JOIN servicos AS s
-ON DUPLICATE KEY UPDATE ativo = TRUE;
-
-SHOW CREATE TABLE unidades;
-SHOW CREATE TABLE unidades_servicos;
-SHOW CREATE TABLE veterinarios_unidades;
-SHOW CREATE TABLE agendamentos;
+SELECT * FROM usuarios;

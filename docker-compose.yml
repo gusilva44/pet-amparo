@@ -7,7 +7,7 @@ services:
       MYSQL_PASSWORD: pet_amparo_dev
       MYSQL_ROOT_PASSWORD: root_dev_password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./backend/src/schema/tables.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
@@ -26,6 +26,7 @@ services:
       DB_USER: pet_amparo
       DB_PASSWORD: pet_amparo_dev
       DB_DATABASE: pet_amparo
+      NODE_ENV: development
       JWT_SECRET: altere_esta_chave_no_ambiente_real
       JWT_EXPIRES_IN: 1h
       PUBLIC_API_URL: http://localhost:3001
@@ -36,6 +37,17 @@ services:
         condition: service_healthy
     volumes:
       - pet_uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://localhost:3001
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_started
 
 volumes:
   mysql_data:

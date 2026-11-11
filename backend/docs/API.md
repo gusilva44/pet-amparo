@@ -1,12 +1,28 @@
 # API Pet Amparo
 
-Referência das rotas atualmente implementadas no backend. Os exemplos usam `http://localhost:3001`, endereço exposto pelo Docker Compose. Se o backend for iniciado diretamente, use `http://localhost:<PORT>` (a porta padrão do código é `3000`).
+Referência da API REST implementada no backend do Pet Amparo.
 
-## Como enviar requisições
+> Esta documentação descreve as rotas registradas em `backend/src/controllers`. A API não possui prefixo como `/api` ou versionamento no endereço.
 
-Os corpos devem ser JSON e usar o cabeçalho `Content-Type: application/json`. IDs de rota são inteiros positivos. Datas usam `YYYY-MM-DD`; início de agendamento usa ISO 8601 com fuso, por exemplo `2027-06-21T14:00:00-03:00`.
+## Endereço base
 
-O login grava um JWT no cookie HTTP-only `token`. Não é necessário nem possível lê-lo no JavaScript: preserve e reenvie o cookie nas rotas protegidas.
+| Ambiente | URL |
+| --- | --- |
+| Docker Compose | `http://localhost:3001` |
+| Backend iniciado diretamente | `http://localhost:3001` por padrão, ou a porta definida em `PORT` |
+
+No Compose, a interface é servida em `http://localhost:3000` e o banco fica disponível para o host em `localhost:3307`.
+
+## Convenções
+
+- Envie corpos em JSON, com `Content-Type: application/json`.
+- IDs em URL devem ser inteiros positivos.
+- Datas usam `AAAA-MM-DD`; horários usam `HH:MM`; um início de agendamento usa uma data ISO 8601 com fuso, como `2027-06-21T14:00:00-03:00`.
+- A maioria das respostas de sucesso contém `sucesso: true`; erros normalmente retornam `{ "sucesso": false, "mensagem": "..." }`. Algumas rotas mais antigas retornam apenas os dados indicados em sua seção.
+
+## Sessão e níveis de acesso
+
+O login grava o JWT no cookie HTTP-only `token`. Para chamar uma rota protegida, o cliente precisa preservar e reenviar esse cookie. Não há autenticação por `Authorization: Bearer` implementada.
 
 ```js
 await fetch('http://localhost:3001/animais', {
@@ -14,7 +30,7 @@ await fetch('http://localhost:3001/animais', {
 })
 ```
 
-No Axios, configure `withCredentials: true`. Em `curl`, grave e reutilize o arquivo de cookies:
+Com Axios, use `withCredentials: true`. Em `curl`, grave e reutilize os cookies:
 
 ```bash
 curl -i -c cookies.txt \
@@ -25,35 +41,21 @@ curl -i -c cookies.txt \
 curl -b cookies.txt http://localhost:3001/animais
 ```
 
-Perfis usados pela API:
-
 | Acesso | Requisito |
 | --- | --- |
-| Público | Não precisa de sessão. |
-| Autenticado | Cookie `token` válido. |
-| Cliente | Sessão de um usuário com cadastro de cliente. |
-| Veterinário | Sessão de um usuário veterinário com cadastro correspondente. |
-| Admin | Sessão cujo `tipo` é `admin`. |
+| Público | Não exige sessão. |
+| Autenticado | Cookie `token` válido e usuário ativo. |
+| Cliente | Usuário autenticado com cadastro de cliente. |
+| Veterinário | Usuário do tipo `veterinario` com ficha profissional. |
+| Admin | Usuário autenticado do tipo `admin`. |
 
-Erros normalmente retornam um objeto com `mensagem`; erros de autenticação retornam `401` e falta de permissão, `403`.
+Uma sessão ausente, expirada ou inválida retorna `401`. Falta de permissão para uma rota de administrador ou veterinário retorna `403`.
 
-## Fluxo sugerido para agendar
+## Formatos reutilizáveis
 
-1. Cadastre e faça login como cliente.
-2. Crie um animal em `POST /animais`.
-3. Consulte `GET /unidades?incluir_servicos=true` e `GET /veterinarios?id_unidade=:id`.
-4. Consulte os horários livres com `GET /agendamentos/disponibilidade?id_unidade=:id&id_servico=:id&id_veterinario=:id&data=AAAA-MM-DD`.
-5. Envie o horário retornado para `POST /agendamentos`.
+### Cadastro de cliente
 
-O servidor confere propriedade do animal, disponibilidade do serviço na unidade, vínculo e expediente do veterinário, horário futuro e conflitos.
-
-O endpoint de disponibilidade é público e retorna horários locais no formato `HH:MM`. A criação exige uma sessão de cliente. Os horários usam o fuso `America/Sao_Paulo`.
-
-## Autenticação e conta
-
-### `POST /auth/cadastro` e `POST /auth/cadastrar`
-
-**Acesso:** público. As duas URLs criam uma conta de cliente equivalente.
+Usado em `POST /auth/cadastrar` e em `POST /clientes` para administradores.
 
 ```json
 {
@@ -67,66 +69,33 @@ O endpoint de disponibilidade é público e retorna horários locais no formato 
 }
 ```
 
-Todos os campos são obrigatórios. A pessoa deve ser maior de 18 anos; senha tem no mínimo 6 caracteres; CPF tem 11 dígitos; telefone tem 10 ou 11 dígitos. CPF e telefone aceitam máscara. Retorna `201` e o identificador em `resultado`.
+Todos os campos são obrigatórios. A pessoa deve ser maior de 18 anos; a senha tem pelo menos 6 caracteres; CPF precisa ter 11 dígitos e telefone, 10 ou 11. CPF e telefone podem conter máscara.
 
-### `POST /auth/login`
+### Cliente
 
-**Acesso:** público.
-
-```json
-{ "email": "ana@example.com", "senha": "senha-segura" }
-```
-
-Retorna `200`, os dados básicos em `usuario` e o cookie de sessão.
-
-### `POST /auth/logout`
-
-**Acesso:** público. Não recebe corpo; remove o cookie `token` e retorna `200`.
-
-### `GET /auth/me`
-
-**Acesso:** autenticado. Sem corpo. Retorna o usuário da sessão em `usuario`.
-
-### `PUT /auth/me`
-
-**Acesso:** autenticado.
-
-```json
-{ "senhaAntiga": "senha-atual", "senhaNova": "nova-senha-segura" }
-```
-
-As duas senhas são obrigatórias; a nova deve ter ao menos 6 caracteres e ser diferente da atual.
-
-## Perfil de cliente
-
-### `GET /clientes/me`
-
-**Acesso:** cliente. Retorna o perfil do cliente associado à sessão.
-
-### `PUT /clientes/me`
-
-**Acesso pretendido:** cliente. Corpo completo:
+Usado em `PUT /clientes/me` e `PUT /clientes/:id`. Todos os campos abaixo são exigidos nesses endpoints; `foto` é opcional.
 
 ```json
 {
   "nome": "Ana Silva",
+  "email": "ana@example.com",
   "data_nascimento": "1998-07-15",
   "telefone": "11999999999",
   "cpf": "12345678901",
   "endereco": "Rua Exemplo, 100",
-  "email": "ana.nova@example.com"
+  "foto": "data:image/jpeg;base64,..."
 }
 ```
 
-### `DELETE /clientes/me`
+Para a atualização administrativa de um cliente (`PUT /clientes/:id`), inclua também `senha`.
 
-**Acesso pretendido:** cliente. Sem corpo; exclui a conta.
+### Foto
 
-As rotas de atualização e exclusão do perfil usam `/clientes/me` e só afetam o cliente autenticado.
+Fotos de perfil e pets devem ser uma data URL de PNG, JPG ou WEBP. O limite é de 2 MB para perfil e 5 MB para pet. A API salva o arquivo e retorna uma URL pública em `/uploads/...`; para remover uma foto, envie `null` ou uma string vazia no campo correspondente.
 
-## Animais
+### Animal
 
-Para criar ou atualizar, envie o objeto completo:
+Usado em `POST /animais` e `PUT /animais/:id`.
 
 ```json
 {
@@ -137,34 +106,154 @@ Para criar ou atualizar, envie o objeto completo:
   "idade": 4,
   "sexo": "F",
   "porte": "medio",
-  "foto": "data:image/jpeg;base64,...",
+  "foto": "data:image/webp;base64,...",
   "e_vacinado": true
 }
 ```
 
-`foto` é opcional ou pode ser `null`; envie uma data URL de PNG, JPG ou WEBP. O arquivo é salvo no armazenamento persistente da API e a resposta das consultas contém seu endereço. O limite para fotos de pets é 5 MB. `idade` precisa ser um número inteiro entre 0 e 30, `sexo` aceita `M` ou `F`, e `e_vacinado` é booleano. O RGA é único.
+Todos os campos, exceto `foto`, são obrigatórios. `idade` é um inteiro de 0 a 30; `sexo` aceita `M` ou `F`; `porte` aceita `pequeno`, `medio`, `grande` ou `nao_informado`; e o RGA é único.
 
-| Método e rota | Acesso | Como usar |
+### Serviço
+
+Usado em `POST /servicos` e `PUT /servicos/:id`.
+
+```json
+{
+  "nome": "Consulta clínica",
+  "descricao": "Avaliação veterinária geral",
+  "duracao_minutos": 30,
+  "ativo": true,
+  "unidades": [1, 3]
+}
+```
+
+`nome` e `duracao_minutos` são obrigatórios na criação. A duração deve ser um inteiro de 5 a 480 minutos. `ativo` é booleano e `unidades`, quando informado, substitui os vínculos de unidades do serviço.
+
+### Unidade
+
+Usado em `POST /unidades` e `PUT /unidades/:id`.
+
+```json
+{
+  "nome": "Unidade Leste",
+  "descricao": "Atendimento veterinário público",
+  "cep": "03000-000",
+  "endereco": "Rua Exemplo",
+  "numero": "100",
+  "complemento": "Próximo à praça",
+  "bairro": "Tatuapé",
+  "cidade": "São Paulo",
+  "estado": "SP",
+  "telefone": "11999999999",
+  "email": "unidade@example.com",
+  "latitude": -23.5401,
+  "longitude": -46.5765,
+  "ativo": true
+}
+```
+
+`nome`, `endereco`, `bairro` e `cidade` são obrigatórios. `estado` deve ter duas letras; latitude e longitude, quando enviadas, devem estar nas faixas geográficas válidas.
+
+### Veterinário
+
+Usado em `POST /veterinarios`.
+
+```json
+{
+  "nome": "Dra. Beatriz Lima",
+  "email": "beatriz@example.com",
+  "senha": "senha-segura",
+  "crmv": "SP-12345",
+  "especialidade": "Clínica geral",
+  "telefone": "11999999999",
+  "id_unidade": 1
+}
+```
+
+`nome`, `email`, `senha`, `crmv` e `id_unidade` são obrigatórios. A unidade precisa estar ativa e o CRMV e e-mail não podem estar em uso.
+
+### Horário de expediente
+
+Usado em `POST /veterinarios/me/horarios` e `POST /veterinarios/:id/horarios`.
+
+```json
+{
+  "id_unidade": 1,
+  "dia_semana": 1,
+  "hora_inicio": "08:00",
+  "hora_fim": "12:00",
+  "ids_servicos": [1, 2]
+}
+```
+
+`dia_semana` vai de `1` (segunda-feira) a `7` (domingo). Para uma disponibilidade em data específica, envie `data` no lugar de `dia_semana`; a API calcula o dia da semana e exige ao menos um serviço:
+
+```json
+{
+  "id_unidade": 1,
+  "data": "2027-06-21",
+  "hora_inicio": "13:00",
+  "hora_fim": "17:00",
+  "ids_servicos": [1]
+}
+```
+
+A data deve ser atual ou futura. O profissional precisa atender a unidade, os serviços devem estar disponíveis nela e o intervalo não pode se sobrepor a outro expediente.
+
+## Autenticação e conta
+
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| `GET /animais` | Cliente | Lista os animais da própria conta. |
-| `GET /animais/:id` | Cliente | Obtém um animal da própria conta. Sem corpo. |
-| `POST /animais` | Cliente | Cria um animal com o JSON acima; retorna `201` e `id_animal`. |
-| `PUT /animais/:id` | Cliente | Atualiza integralmente um animal próprio com o JSON acima. |
-| `DELETE /animais/:id` | Cliente | Exclui um animal próprio. Sem corpo. |
+| `POST /auth/cadastrar` | Público | Cria uma conta de cliente com o formato de [cadastro de cliente](#cadastro-de-cliente). Retorna `201` com `resultado`. |
+| `POST /auth/login` | Público | Recebe `{ "email", "senha" }`, cria o cookie `token` e retorna o usuário básico em `usuario`. |
+| `POST /auth/logout` | Público | Remove o cookie `token`. Não recebe corpo. |
+| `GET /auth/me` | Autenticado | Retorna o usuário da sessão em `usuario`. |
+| `PUT /auth/me` | Autenticado | Altera a senha; recebe `{ "senhaAntiga", "senhaNova" }`. A nova senha deve ter ao menos 6 caracteres e ser diferente da atual. |
+
+> A rota pública de cadastro é `/auth/cadastrar`. Não existe `POST /auth/cadastro`.
+
+## Perfil do cliente e pets
+
+### Perfil do usuário autenticado
+
+| Método e rota | Acesso | Corpo ou resultado |
+| --- | --- | --- |
+| `GET /clientes/me` | Cliente | Retorna o perfil em `cliente`. |
+| `PUT /clientes/me` | Cliente | Atualiza o perfil usando o formato [cliente](#cliente). |
+| `PATCH /clientes/me/foto` | Cliente | Recebe `{ "foto": "data:image/..." }`, `null` ou string vazia. |
+| `DELETE /clientes/me` | Cliente | Exclui a própria conta. |
+
+### Animais
+
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /animais` | Cliente | Lista os animais da própria conta em `animais`, com `quantidade`. |
+| `GET /animais/:id` | Cliente | Obtém um animal que pertença ao cliente autenticado. |
+| `POST /animais` | Cliente | Cria um pet com o formato [animal](#animal); retorna `201` e `id_animal`. |
+| `PUT /animais/:id` | Cliente | Atualiza integralmente um pet próprio com o mesmo formato. Se `foto` for omitida, preserva a atual. |
+| `DELETE /animais/:id` | Cliente | Exclui um pet próprio. |
 
 ## Agendamentos
 
-### `GET /agendamentos`
+### Fluxo recomendado
 
-**Acesso:** cliente. Sem corpo. Retorna `quantidade` e `agendamentos`, incluindo pet, serviço, veterinário, início, fim, status e situação.
+1. Cadastre e autentique um cliente.
+2. Cadastre pelo menos um animal.
+3. Consulte as unidades em `GET /unidades?incluir_servicos=true`.
+4. Consulte os veterinários da unidade com `GET /veterinarios?id_unidade=:id`.
+5. Busque opções com `GET /agendamentos/disponibilidade`.
+6. Crie o agendamento usando um dos horários retornados.
 
-### `GET /agendamentos/disponibilidade`
+### Rotas
 
-**Acesso:** público. Informe `id_unidade`, `id_servico`, `id_veterinario` e `data` (`AAAA-MM-DD`). Retorna `horarios` livres em intervalos de 15 minutos, respeitando a duração do serviço, o expediente semanal do veterinário e os agendamentos já existentes.
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /agendamentos/disponibilidade` | Público | Recebe `id_unidade`, `id_servico`, `id_veterinario` e `data` (`AAAA-MM-DD`) por query string. Retorna `horarios` livres em `HH:MM`. |
+| `GET /agendamentos` | Cliente | Lista os agendamentos do cliente autenticado em `agendamentos`, com `quantidade`. |
+| `POST /agendamentos` | Cliente | Cria um agendamento e retorna `201` com `id_agendamento`. |
+| `DELETE /agendamentos/:id` | Cliente | Cancela um agendamento próprio que ainda não tenha iniciado. |
 
-### `POST /agendamentos`
-
-**Acesso:** cliente.
+Corpo de criação:
 
 ```json
 {
@@ -177,207 +266,153 @@ Para criar ou atualizar, envie o objeto completo:
 }
 ```
 
-Os quatro IDs e `inicio` são obrigatórios; `observacao` é opcional. O horário precisa estar no futuro e dentro do expediente. O servidor calcula o fim pela duração do serviço e retorna `201` com `id_agendamento`.
+Os quatro IDs e `inicio` são obrigatórios. `observacao` é opcional e aceita até 500 caracteres. Antes de salvar, a API valida a propriedade do animal, a unidade e serviço ativos, o vínculo do serviço à unidade, o profissional ativo na unidade, o expediente compatível e conflitos de horário.
 
-### `DELETE /agendamentos/:id`
+## Serviços e unidades
 
-**Acesso:** cliente. Sem corpo. Cancela somente agendamento próprio, futuro, com status `agendado` ou `confirmado`.
+### Serviços
 
-### Rotas do veterinário
-
-| Método e rota | Acesso | Como usar |
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| `GET /veterinarios/me/agendamentos` | Veterinário | Lista a agenda do profissional autenticado, com cliente, animal, serviço e unidade. |
-| `PATCH /veterinarios/me/agendamentos/:id/status` | Veterinário | Altera a situação de um agendamento próprio. Envie `{ "status": "pendente" }` ou `{ "status": "concluido" }`. |
+| `GET /servicos` | Autenticado | Lista serviços ativos em `resultado`. Administradores podem usar `?incluir_inativos=true`. |
+| `GET /servicos/:id` | Público | Retorna um serviço e as unidades vinculadas. |
+| `POST /servicos` | Admin | Cria com o formato [serviço](#serviço). |
+| `PUT /servicos/:id` | Admin | Atualiza serviço; se `unidades` for enviado, sincroniza os vínculos. |
+| `PATCH /servicos/:id/status` | Admin | Recebe `{ "ativo": true }` ou `{ "ativo": false }`. Não permite desativar serviço com agendamentos futuros. |
 
-Não é possível alterar um agendamento cancelado. `pendente` é armazenado como `agendado` e retornado como situação `pendente`.
+> Diferentemente de `GET /servicos/:id`, a listagem `GET /servicos` exige sessão válida.
 
-## Serviços
+### Unidades
 
-Formato administrativo de serviço:
-
-```json
-{
-  "nome": "Consulta clínica",
-  "descricao": "Avaliação veterinária geral",
-  "duracao_minutos": 30,
-  "ativo": true
-}
-```
-
-`nome` e `duracao_minutos` são obrigatórios; duração é inteiro positivo. `descricao` é opcional; `ativo` é booleano e assume `true` se omitido.
-
-| Método e rota | Acesso | Como usar |
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| `GET /servicos` | Público | Lista serviços ativos. |
-| `GET /servicos/:id` | Público | Busca um serviço por ID. |
-| `POST /servicos` | Admin | Cria com o JSON acima. |
-| `PUT /servicos/:id` | Admin | Atualiza integralmente com o JSON acima. |
+| `GET /unidades` | Público | Lista unidades ativas. Use `?incluir_servicos=true` para incluir os serviços vinculados. |
+| `GET /unidades/:id` | Público | Retorna uma unidade pelo ID. |
+| `GET /admin/unidades` | Admin | Lista unidades ativas e inativas. Aceita `?incluir_servicos=true`. |
+| `POST /unidades` | Admin | Cria uma unidade com o formato [unidade](#unidade). |
+| `PUT /unidades/:id` | Admin | Atualiza uma unidade com o mesmo formato. |
+| `PUT /unidades/:id/status` | Admin | Recebe `{ "ativo": true }` ou `{ "ativo": false }`. |
+| `DELETE /unidades/:id` | Admin | Exclui a unidade. |
+| `POST /unidades/:id/servicos/:idServico` | Admin | Vincula um serviço ativo a uma unidade. Não recebe corpo. |
+| `DELETE /unidades/:id/servicos/:idServico` | Admin | Remove o vínculo de um serviço da unidade. |
 
-> O parâmetro `?incluir_inativos=true` existe, mas atualmente não efetiva a listagem de inativos porque esta rota não autentica a requisição.
+## Veterinários, agenda e expediente
 
-## Unidades
+### Consulta e administração
 
-Formato administrativo de unidade:
-
-```json
-{
-  "nome": "Unidade Norte",
-  "descricao": "Atendimento veterinário público",
-  "cep": "02000-000",
-  "endereco": "Av. Exemplo",
-  "numero": "100",
-  "complemento": "Bloco A",
-  "bairro": "Centro",
-  "cidade": "São Paulo",
-  "estado": "SP",
-  "telefone": "1133334444",
-  "email": "norte@petamparo.org",
-  "latitude": -23.5,
-  "longitude": -46.6,
-  "ativo": true
-}
-```
-
-Obrigatórios: `nome`, `endereco`, `bairro` e `cidade`. Os demais são opcionais. `estado` precisa ter duas letras; latitude vai de -90 a 90 e longitude de -180 a 180. Quando omitidos, `estado` é `SP` e `ativo` é `true`.
-
-| Método e rota | Acesso | Como usar |
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| `GET /unidades` | Público | Lista unidades ativas. Use `?incluir_servicos=true` para trazer o campo `servicos`. |
-| `GET /unidades/:id` | Público | Busca uma unidade. |
-| `POST /unidades` | Admin | Cria usando o JSON acima. |
-| `PUT /unidades/:id` | Admin | Atualiza integralmente usando o JSON acima. |
-| `POST /unidades/:id/servicos/:idServico` | Admin | Vincula ou reativa um serviço ativo à unidade. Sem corpo. |
-| `DELETE /unidades/:id/servicos/:idServico` | Admin | Desvincula o serviço. Sem corpo. |
+| `GET /veterinarios` | Público | Lista veterinários ativos. Aceita `?id_unidade=:id` para filtrar por unidade. |
+| `POST /veterinarios` | Admin | Cria o usuário, a ficha profissional e o primeiro vínculo de unidade usando o formato [veterinário](#veterinário). |
+| `GET /admin/veterinarios` | Admin | Lista veterinários para administração. |
+| `GET /admin/veterinarios/contas-sem-ficha` | Admin | Lista contas do tipo veterinário que ainda não possuem ficha profissional. |
+| `POST /admin/veterinarios/contas/:id/ficha` | Admin | Cria a ficha para uma conta existente; recebe `nome`, `crmv`, `id_unidade` e, opcionalmente, `especialidade` e `telefone`. |
+| `POST /admin/veterinarios/:id/unidades/:idUnidade` | Admin | Vincula um veterinário a uma unidade ativa. Não recebe corpo. |
 
-> Assim como em serviços, `?incluir_inativas=true` não funciona na implementação atual, pois a listagem é pública e não preenche o usuário da requisição.
+### Área do veterinário autenticado
 
-## Veterinários e expediente
-
-### `GET /veterinarios`
-
-**Acesso:** público. Use `?id_unidade=1` para filtrar por unidade. Retorna `quantidade` e a lista de profissionais ativos.
-
-### `POST /veterinarios`
-
-**Acesso:** admin.
-
-```json
-{
-  "nome": "Dra. Beatriz Lima",
-  "email": "beatriz@example.com",
-  "senha": "senha-segura",
-  "crmv": "CRMV-SP 12345",
-  "especialidade": "Clínica médica",
-  "id_unidade": 1,
-  "telefone": "11988887777"
-}
-```
-
-Obrigatórios: `nome`, `email`, `senha`, `crmv` e `id_unidade`. A unidade deve estar ativa. `especialidade` e `telefone` são opcionais. Retorna `201` com `id_veterinario`.
-
-### Expediente
-
-Formato para criar horário:
-
-```json
-{
-  "dia_semana": 1,
-  "hora_inicio": "08:00",
-  "hora_fim": "12:00",
-  "id_unidade": 1
-}
-```
-
-`dia_semana` é de `1` (segunda-feira) a `7` (domingo). As horas usam `HH:MM`, o fim deve ser posterior ao início, a unidade precisa estar vinculada ao veterinário e não pode haver sobreposição.
-
-| Método e rota | Acesso | Como usar |
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| `GET /veterinarios/:id/horarios` | Público | Lista os horários cadastrados. |
-| `POST /veterinarios/me/horarios` | Veterinário | Cria um horário próprio com o JSON acima. |
-| `DELETE /veterinarios/me/horarios/:idHorario` | Veterinário | Exclui um horário próprio. Sem corpo. |
+| `GET /veterinarios/me/unidades` | Veterinário | Lista as unidades vinculadas ao profissional da sessão. |
+| `GET /veterinarios/me/horarios` | Veterinário | Lista os expedientes do profissional da sessão. |
+| `POST /veterinarios/me/horarios` | Veterinário | Cria expediente próprio com o formato [horário de expediente](#horário-de-expediente). |
+| `DELETE /veterinarios/me/horarios/:idHorario` | Veterinário | Exclui um expediente próprio. |
+| `GET /veterinarios/me/agendamentos` | Veterinário | Lista a própria agenda. Aceita `mes=AAAA-MM` e `situacao=pendente`, `concluido` ou `cancelado`. |
+| `GET /veterinarios/me/agenda` | Veterinário | Retorna a agenda agrupada por dia. Aceita os mesmos filtros. |
+| `PATCH /veterinarios/me/agendamentos/:id/status` | Veterinário | Recebe `{ "status": "pendente" }` ou `{ "status": "concluido" }` para um agendamento próprio. Não altera agendamentos cancelados. |
+
+### Gestão de expediente por administrador
+
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /veterinarios/:id/horarios` | Público | Lista os expedientes de um veterinário. |
+| `POST /veterinarios/:id/horarios` | Admin | Cria expediente para o profissional usando o formato [horário de expediente](#horário-de-expediente). |
+| `DELETE /veterinarios/:id/horarios/:idHorario` | Admin | Exclui o expediente do profissional. |
 
 ## Medicamentos e carteira de medicação
 
-### `GET /medicamentos`
+### Medicamentos
 
-**Acesso:** público. Lista medicamentos ativos.
-
-### `POST /medicamentos`
-
-**Acesso:** admin.
+Formato de medicamento:
 
 ```json
 {
-  "nome": "Antipulgas",
-  "descricao": "Uso conforme prescrição",
+  "nome": "Amoxicilina",
+  "descricao": "Antibiótico",
   "ativo": true
 }
 ```
 
-`nome` é obrigatório; `descricao` é opcional; `ativo` é booleano e assume `true`. Retorna `201` com `id_medicamento`.
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /medicamentos` | Público | Retorna diretamente a lista de medicamentos ativos. |
+| `POST /medicamentos` | Admin | Cria um medicamento; retorna `201` com `id_medicamento`. |
+| `PUT /medicamentos/:id` | Admin | Atualiza um medicamento com o formato acima. |
 
-### `PUT /medicamentos/:id`
+### Carteira de um pet
 
-**Acesso:** admin. O corpo é o mesmo de criação.
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /animais/:id/medicacoes` | Cliente | Retorna a carteira de medicação de um animal próprio. |
+| `POST /animais/:id/medicacoes` | Admin | Registra uma medicação para o animal indicado e retorna `201` com `id_carteira`. |
 
-### `GET /animais/:id/medicacoes`
-
-**Acesso:** cliente. Sem corpo. Mostra a carteira do animal indicado somente se ele pertence ao cliente autenticado.
-
-### `POST /animais/:id/medicacoes`
-
-**Acesso:** admin. `:id` é o ID do animal.
+Corpo para registrar uma medicação:
 
 ```json
 {
   "id_medicamento": 1,
   "id_veterinario": 2,
-  "dosagem": "1 comprimido",
-  "frequencia": "A cada 24 horas",
+  "dosagem": "10 mg",
+  "frequencia": "A cada 12 horas",
   "data_inicio": "2027-06-21",
   "data_fim": "2027-06-28",
-  "observacao": "Administrar após a refeição"
+  "observacao": "Administrar após alimentação"
 }
 ```
 
-Obrigatórios: `id_medicamento`, `dosagem`, `frequencia` e `data_inicio`. `id_veterinario`, `data_fim` e `observacao` são opcionais. A data final não pode ser anterior à inicial e o medicamento precisa estar ativo. Retorna `201` com `id_carteira`.
+`id_medicamento`, `dosagem`, `frequencia` e `data_inicio` são obrigatórios. `id_veterinario`, `data_fim` e `observacao` são opcionais. Se informada, a data final não pode preceder a inicial.
 
-## Administração de clientes
+## Administração de clientes e usuários
 
-Todas as rotas abaixo exigem admin. O corpo de criação é o mesmo de `POST /auth/cadastro`; para atualização, envie todos os campos.
+### Clientes
 
-| Método e rota | Como usar |
-| --- | --- |
-| `GET /clientes` | Lista todos os clientes. |
-| `GET /clientes/filtros` | Filtra por `?nome=Ana&id=1&cpf=12345678901`. Os filtros são opcionais e combináveis. |
-| `POST /clientes` | Cria um cliente com o JSON de cadastro. |
-| `PUT /clientes/:id` | Atualiza integralmente o cliente com o JSON de cadastro. |
-| `DELETE /clientes/:id` | Exclui o cliente. Sem corpo. |
-
-## Mapa de todas as rotas
-
-| Método | Rota | Acesso |
+| Método e rota | Acesso | Descrição |
 | --- | --- | --- |
-| POST | `/auth/cadastro`, `/auth/cadastrar` | Público |
-| POST | `/auth/login`, `/auth/logout` | Público |
-| GET, PUT | `/auth/me` | Autenticado |
-| GET | `/clientes/me` | Cliente |
-| PUT, DELETE | `/clientes/me` | Cliente |
-| GET, POST | `/animais` | Cliente |
-| GET, PUT, DELETE | `/animais/:id` | Cliente |
-| GET, POST | `/agendamentos` | Cliente |
-| GET | `/agendamentos/disponibilidade` | Público |
-| DELETE | `/agendamentos/:id` | Cliente |
-| GET, PATCH | `/veterinarios/me/agendamentos` e `/veterinarios/me/agendamentos/:id/status` | Veterinário |
-| GET, POST, PUT | `/servicos`, `/servicos/:id` | Público / Admin conforme método |
-| GET, POST, PUT | `/unidades`, `/unidades/:id` | Público / Admin conforme método |
-| POST, DELETE | `/unidades/:id/servicos/:idServico` | Admin |
-| GET, POST | `/veterinarios` | Público / Admin conforme método |
-| GET | `/veterinarios/:id/horarios` | Público |
-| POST, DELETE | `/veterinarios/me/horarios` e `/veterinarios/me/horarios/:idHorario` | Veterinário |
-| GET, POST, PUT | `/medicamentos`, `/medicamentos/:id` | Público / Admin conforme método |
-| GET, POST | `/animais/:id/medicacoes` | Cliente / Admin conforme método |
-| GET, POST | `/clientes`, `/clientes/filtros` | Admin |
-| PUT, DELETE | `/clientes/:id` | Admin |
+| `GET /clientes` | Admin | Lista todos os clientes. |
+| `GET /clientes/filtros` | Admin | Busca clientes pelos parâmetros opcionais `nome`, `id` e `cpf`. Retorna `404` quando não há resultado. |
+| `POST /clientes` | Admin | Cria um cliente com o formato [cadastro de cliente](#cadastro-de-cliente). |
+| `PUT /clientes/:id` | Admin | Atualiza um cliente. Exige os campos do formato [cliente](#cliente), além de `senha`. |
+| `DELETE /clientes/:id` | Admin | Exclui um cliente pelo ID. |
 
+### Usuários administrativos
+
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /usuarios` | Admin | Lista todos os usuários. |
+| `POST /usuarios` | Admin | Cria somente administrador. Recebe `{ "email", "senha", "tipo": "admin" }`. |
+| `PUT /usuarios/:id` | Admin | Atualiza o e-mail de um usuário. Recebe `{ "email": "novo@example.com" }`. |
+| `PATCH /usuarios/:id/status` | Admin | Altera status. Recebe `{ "ativo": true }`, `{ "ativo": false }`, `0` ou `1`. |
+| `PATCH /admin/usuarios/:id/ativar` | Admin | Ativa um usuário. Não recebe corpo. |
+| `PATCH /admin/usuarios/:id/desativar` | Admin | Desativa um usuário. Não recebe corpo. |
+| `PUT /admin/usuarios/:id` | Admin | Atualiza e-mail e tipo. Recebe `{ "email": "novo@example.com", "tipo": "cliente\|veterinario\|admin" }`. |
+
+## Relatórios
+
+| Método e rota | Acesso | Descrição |
+| --- | --- | --- |
+| `GET /admin/relatorios` | Admin | Gera indicadores consolidados de unidades, usuários, animais, serviços, agendamentos e medicamentos. Aceita `periodo` em meses: `1`, `3`, `6` ou `12`; se omitido ou inválido, usa `6`. |
+
+A resposta contém `resultado` com `resumo`, `animais`, `agendamentos`, séries por unidade, serviço, veterinário e mês, próximos agendamentos e medicamentos mais prescritos.
+
+## Mapa rápido de rotas
+
+| Grupo | Rotas |
+| --- | --- |
+| Autenticação | `POST /auth/cadastrar`, `POST /auth/login`, `POST /auth/logout`, `GET/PUT /auth/me` |
+| Cliente e pets | `GET/PUT/DELETE /clientes/me`, `PATCH /clientes/me/foto`, `GET/POST /animais`, `GET/PUT/DELETE /animais/:id` |
+| Agendamentos | `GET /agendamentos/disponibilidade`, `GET/POST /agendamentos`, `DELETE /agendamentos/:id` |
+| Catálogo | `GET /servicos`, `GET /servicos/:id`, `POST /servicos`, `PUT /servicos/:id`, `PATCH /servicos/:id/status`, `GET/POST /unidades` |
+| Unidades administrativas | `GET /admin/unidades`, `GET/PUT/DELETE /unidades/:id`, `PUT /unidades/:id/status`, `POST/DELETE /unidades/:id/servicos/:idServico` |
+| Veterinários | `GET/POST /veterinarios`, `GET/POST /veterinarios/:id/horarios`, `DELETE /veterinarios/:id/horarios/:idHorario`, rotas `/veterinarios/me/*` e `/admin/veterinarios/*` |
+| Saúde | `GET/POST /medicamentos`, `PUT /medicamentos/:id`, `GET/POST /animais/:id/medicacoes` |
+| Administração | `GET/POST /clientes`, `GET /clientes/filtros`, `PUT/DELETE /clientes/:id`, `GET/POST /usuarios`, `PUT /usuarios/:id`, `PATCH /usuarios/:id/status`, rotas `/admin/usuarios/*`, `GET /admin/relatorios` |
