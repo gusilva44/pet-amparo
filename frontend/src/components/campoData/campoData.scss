@@ -1,0 +1,19 @@
+.campo-data {
+  position: relative;
+  display: block;
+
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    padding-right: 2.75rem;
+  }
+
+  i {
+    position: absolute;
+    top: 50%;
+    right: 0.9rem;
+    transform: translateY(-50%);
+    color: #4c8070;
+    pointer-events: none;
+  }
+}

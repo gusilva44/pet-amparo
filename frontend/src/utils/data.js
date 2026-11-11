@@ -15,7 +15,15 @@ const DIAS_SEMANA = [
 export function paraData(valor) {
     if (!valor) return null;
 
-    const data = valor instanceof Date ? valor : new Date(valor);
+    if (valor instanceof Date) {
+        return Number.isNaN(valor.getTime()) ? null : valor;
+    }
+
+    const texto = String(valor);
+    const somenteData = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const data = somenteData
+        ? new Date(Number(somenteData[1]), Number(somenteData[2]) - 1, Number(somenteData[3]), 12)
+        : new Date(texto);
 
     return Number.isNaN(data.getTime()) ? null : data;
 }
