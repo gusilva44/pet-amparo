@@ -177,7 +177,20 @@
       display: grid;
       gap: .5rem;
       min-width: 10rem;
+<<<<<<< HEAD
       label { display: grid; gap: .4rem; font-size: .9rem; }
+=======
+      .botao-escolher-foto-perfil {
+        display: grid;
+        gap: .4rem;
+        width: fit-content;
+        font-size: .9rem;
+        cursor: pointer;
+        span { display: inline-flex; align-items: center; gap: .5rem; padding: .65rem .85rem; border-radius: .6rem; background: #fffefa; color: var(--verde-escuro, #243b32); font-weight: 700; }
+        input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; }
+        &:focus-within span { outline: 3px solid var(--laranja); outline-offset: 2px; }
+      }
+>>>>>>> 298adaa81a9aa03269b56cc5c1b933ed4924c631
       p { margin: 0; font-size: .85rem; }
       .botao-secundario { justify-self: start; }
     }

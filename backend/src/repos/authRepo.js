@@ -68,12 +68,12 @@ export async function buscarClientePorTelefone(telefone) {
 }
 
 export async function cadastrarCliente(dados) {
-
-    await db.beginTransaction()
+    const conexao = await db.getConnection()
+    await conexao.beginTransaction()
 
     try {
 
-        const [usuario] = await db.query(`
+        const [usuario] = await conexao.query(`
             INSERT INTO usuarios (
                 email,
                 senha_hash,
@@ -87,7 +87,7 @@ export async function cadastrarCliente(dados) {
 
         const idUsuario = usuario.insertId
 
-        const [cliente] = await db.query(`
+        const [cliente] = await conexao.query(`
             INSERT INTO clientes (
                 id_usuario,
                 nome,
@@ -106,7 +106,7 @@ export async function cadastrarCliente(dados) {
             dados.endereco
         ])
 
-        await db.commit()
+        await conexao.commit()
 
         return {
             id_usuario: idUsuario,
@@ -115,9 +115,11 @@ export async function cadastrarCliente(dados) {
 
     } catch (error) {
 
-        await db.rollback()
+        await conexao.rollback()
 
         throw error
+    } finally {
+        conexao.release()
     }
 }
 

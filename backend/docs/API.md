@@ -41,10 +41,13 @@ Erros normalmente retornam um objeto com `mensagem`; erros de autenticação ret
 
 1. Cadastre e faça login como cliente.
 2. Crie um animal em `POST /animais`.
-3. Consulte `GET /unidades?incluir_servicos=true`, `GET /veterinarios?id_unidade=:id` e `GET /veterinarios/:id/horarios`.
-4. Envie o agendamento para `POST /agendamentos`.
+3. Consulte `GET /unidades?incluir_servicos=true` e `GET /veterinarios?id_unidade=:id`.
+4. Consulte os horários livres com `GET /agendamentos/disponibilidade?id_unidade=:id&id_servico=:id&id_veterinario=:id&data=AAAA-MM-DD`.
+5. Envie o horário retornado para `POST /agendamentos`.
 
 O servidor confere propriedade do animal, disponibilidade do serviço na unidade, vínculo e expediente do veterinário, horário futuro e conflitos.
+
+O endpoint de disponibilidade é público e retorna horários locais no formato `HH:MM`. A criação exige uma sessão de cliente. Os horários usam o fuso `America/Sao_Paulo`.
 
 ## Autenticação e conta
 
@@ -119,7 +122,7 @@ As duas senhas são obrigatórias; a nova deve ter ao menos 6 caracteres e ser d
 
 **Acesso pretendido:** cliente. Sem corpo; exclui a conta.
 
-> **Limitação atual:** as rotas `PUT` e `DELETE /clientes/me` são interceptadas antes pelas rotas administrativas `/clientes/:id`, pois elas são registradas primeiro. Na versão atual, não devem ser usadas até o ajuste da ordem/definição das rotas. `GET /clientes/me` funciona normalmente.
+As rotas de atualização e exclusão do perfil usam `/clientes/me` e só afetam o cliente autenticado.
 
 ## Animais
 
@@ -134,12 +137,12 @@ Para criar ou atualizar, envie o objeto completo:
   "idade": 4,
   "sexo": "F",
   "porte": "medio",
-  "foto": "https://exemplo.com/amparo.jpg",
+  "foto": "data:image/jpeg;base64,...",
   "e_vacinado": true
 }
 ```
 
-`foto` é opcional ou pode ser `null`. `idade` precisa ser um número inteiro entre 0 e 38, `sexo` aceita `M` ou `F`, e `e_vacinado` é booleano. O RGA é único.
+`foto` é opcional ou pode ser `null`; envie uma data URL de PNG, JPG ou WEBP. O arquivo é salvo no armazenamento persistente da API e a resposta das consultas contém seu endereço. O limite para fotos de pets é 5 MB. `idade` precisa ser um número inteiro entre 0 e 30, `sexo` aceita `M` ou `F`, e `e_vacinado` é booleano. O RGA é único.
 
 | Método e rota | Acesso | Como usar |
 | --- | --- | --- |
@@ -154,6 +157,10 @@ Para criar ou atualizar, envie o objeto completo:
 ### `GET /agendamentos`
 
 **Acesso:** cliente. Sem corpo. Retorna `quantidade` e `agendamentos`, incluindo pet, serviço, veterinário, início, fim, status e situação.
+
+### `GET /agendamentos/disponibilidade`
+
+**Acesso:** público. Informe `id_unidade`, `id_servico`, `id_veterinario` e `data` (`AAAA-MM-DD`). Retorna `horarios` livres em intervalos de 15 minutos, respeitando a duração do serviço, o expediente semanal do veterinário e os agendamentos já existentes.
 
 ### `POST /agendamentos`
 
@@ -287,8 +294,8 @@ Formato para criar horário:
 | Método e rota | Acesso | Como usar |
 | --- | --- | --- |
 | `GET /veterinarios/:id/horarios` | Público | Lista os horários cadastrados. |
-| `POST /veterinarios/:id/horarios` | Admin | Cria um horário com o JSON acima. |
-| `DELETE /veterinarios/:id/horarios/:idHorario` | Admin | Exclui o horário. Sem corpo. |
+| `POST /veterinarios/me/horarios` | Veterinário | Cria um horário próprio com o JSON acima. |
+| `DELETE /veterinarios/me/horarios/:idHorario` | Veterinário | Exclui um horário próprio. Sem corpo. |
 
 ## Medicamentos e carteira de medicação
 
@@ -312,9 +319,7 @@ Formato para criar horário:
 
 ### `PUT /medicamentos/:id`
 
-**Acesso pretendido:** admin. O corpo é o mesmo de criação.
-
-> **Limitação atual:** o controlador usa `id.params.id` em vez de `req.params.id`; esta rota falha antes da atualização. Corrija o controlador antes de integrá-la.
+**Acesso:** admin. O corpo é o mesmo de criação.
 
 ### `GET /animais/:id/medicacoes`
 
@@ -358,17 +363,19 @@ Todas as rotas abaixo exigem admin. O corpo de criação é o mesmo de `POST /au
 | POST | `/auth/login`, `/auth/logout` | Público |
 | GET, PUT | `/auth/me` | Autenticado |
 | GET | `/clientes/me` | Cliente |
-| PUT, DELETE | `/clientes/me` | Cliente (indisponível na ordem atual das rotas) |
+| PUT, DELETE | `/clientes/me` | Cliente |
 | GET, POST | `/animais` | Cliente |
 | GET, PUT, DELETE | `/animais/:id` | Cliente |
 | GET, POST | `/agendamentos` | Cliente |
+| GET | `/agendamentos/disponibilidade` | Público |
 | DELETE | `/agendamentos/:id` | Cliente |
 | GET, PATCH | `/veterinarios/me/agendamentos` e `/veterinarios/me/agendamentos/:id/status` | Veterinário |
 | GET, POST, PUT | `/servicos`, `/servicos/:id` | Público / Admin conforme método |
 | GET, POST, PUT | `/unidades`, `/unidades/:id` | Público / Admin conforme método |
 | POST, DELETE | `/unidades/:id/servicos/:idServico` | Admin |
-| GET, POST | `/veterinarios`, `/veterinarios/:id/horarios` | Público / Admin conforme método |
-| DELETE | `/veterinarios/:id/horarios/:idHorario` | Admin |
+| GET, POST | `/veterinarios` | Público / Admin conforme método |
+| GET | `/veterinarios/:id/horarios` | Público |
+| POST, DELETE | `/veterinarios/me/horarios` e `/veterinarios/me/horarios/:idHorario` | Veterinário |
 | GET, POST, PUT | `/medicamentos`, `/medicamentos/:id` | Público / Admin conforme método |
 | GET, POST | `/animais/:id/medicacoes` | Cliente / Admin conforme método |
 | GET, POST | `/clientes`, `/clientes/filtros` | Admin |

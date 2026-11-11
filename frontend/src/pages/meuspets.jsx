@@ -98,8 +98,9 @@ export default function MeusPets() {
     setMensagemFoto("");
     try {
       await clientesApi.atualizarFoto(fotoSelecionada);
+      const resposta = await clientesApi.meusDados();
       avisarMudancaAutenticacao();
-      setCliente((atual) => ({ ...atual, foto: fotoSelecionada }));
+      setCliente(resposta.cliente);
       setFotoSelecionada("");
       setMensagemFoto("Foto de perfil atualizada.");
     } catch (error) {

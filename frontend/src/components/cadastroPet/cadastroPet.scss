@@ -45,6 +45,33 @@
     margin: 0;
   }
   .pet-foto-campo { align-content: start; }
+  .entrada-foto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+  .botao-escolher-foto {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    width: fit-content;
+    min-height: 2.5rem;
+    padding: 0 .9rem;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: .65rem;
+    background: #fffefa;
+    color: #263a31;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+    &:hover { transform: translateY(-1px); box-shadow: 0 5px 14px #17281e24; }
+  }
+  .pet-foto-campo:focus-within .botao-escolher-foto { outline: 3px solid #f28b68; outline-offset: 2px; }
   .erro-foto { color: #ffe0d8; font-size: 0.85rem; }
   .pet-foto-previa {
     width: 5rem;

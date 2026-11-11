@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
 import Calendario from "../components/calendario/calendario";
 import AgendamentosMes from "../components/agendamentos/agendamentos";
 import Logo from "../assets/imagens/Logo.webp";
 import {
   agendamentosApi,
+  authApi,
   animaisApi,
   unidadesApi,
   veterinariosApi,
@@ -60,14 +61,16 @@ function formatarAgendamento(item) {
 
 export default function Unidades() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [unidade, setUnidade] = useState(null);
   const [servicos, setServicos] = useState([]);
-  const [aba, setAba] = useState("Servi\u00e7os");
+  const [aba, setAba] = useState(() => abas.includes(searchParams.get("aba")) ? searchParams.get("aba") : "Servi\u00e7os");
   const [aberto, setAberto] = useState(null);
   const [erro, setErro] = useState("");
   const [mesAtual, setMesAtual] = useState(() => new Date());
   const [dataSelecionada, setDataSelecionada] = useState(dataLocal(new Date()));
   const [pets, setPets] = useState([]);
+  const [usuario, setUsuario] = useState(null);
   const [veterinarios, setVeterinarios] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
   const [horariosVeterinario, setHorariosVeterinario] = useState([]);
@@ -109,52 +112,76 @@ export default function Unidades() {
   useEffect(() => {
     if (aba !== "Agendamentos") return undefined;
     let ativo = true;
-    Promise.allSettled([
-      animaisApi.listarMeus(),
-      veterinariosApi.listar(id),
-      agendamentosApi.listarMeus(),
-    ]).then(([resPets, resVeterinarios, resAgendamentos]) => {
+    async function carregarAgenda() {
+      const [resVeterinarios, resUsuario] = await Promise.allSettled([
+        veterinariosApi.listar(id),
+        authApi.usuarioAtual(),
+      ]);
       if (!ativo) return;
-      const listaPets =
-        resPets.status === "fulfilled"
-          ? resPets.value.resultado || resPets.value.animais || []
-          : [];
       const listaVets =
         resVeterinarios.status === "fulfilled"
           ? resVeterinarios.value.veterinarios ||
             resVeterinarios.value.resultado ||
             []
           : [];
-      const listaAgendamentos =
-        resAgendamentos.status === "fulfilled"
-          ? resAgendamentos.value.agendamentos ||
-            resAgendamentos.value.resultado ||
-            []
-          : [];
-      setPets(listaPets);
       setVeterinarios(listaVets);
-      setAgendamentos(
-        listaAgendamentos
-          .filter((item) => Number(item.id_unidade) === Number(id))
-          .map(formatarAgendamento),
-      );
-      if (!idPet && listaPets.length) setIdPet(String(listaPets[0].id_animal));
-      if (!idVeterinario && listaVets.length)
-        setIdVeterinario(String(listaVets[0].id_veterinario));
-      if (!idServico && servicos.length)
-        setIdServico(String(servicos[0].id_servico));
-      const erroPrivado =
-        resPets.status === "rejected"
-          ? resPets.reason
-          : resAgendamentos.status === "rejected"
-            ? resAgendamentos.reason
-            : null;
-      if (erroPrivado) setMensagem(mensagemErroApi(erroPrivado));
-    });
+      if (resUsuario.status !== "fulfilled") {
+        setUsuario(null);
+        setPets([]);
+        setAgendamentos([]);
+        return;
+      }
+      const conta = resUsuario.value.usuario;
+      setUsuario(conta);
+      if (conta?.tipo !== "cliente") {
+        setPets([]);
+        setAgendamentos([]);
+        return;
+      }
+
+      const [resPets, resAgendamentos] = await Promise.allSettled([
+        animaisApi.listarMeus(),
+        agendamentosApi.listarMeus(),
+      ]);
+      if (!ativo) return;
+      const listaPets = resPets.status === "fulfilled"
+        ? resPets.value.animais || resPets.value.resultado || []
+        : [];
+      const listaAgendamentos = resAgendamentos.status === "fulfilled"
+        ? resAgendamentos.value.agendamentos || resAgendamentos.value.resultado || []
+        : [];
+      setPets(listaPets);
+      setAgendamentos(listaAgendamentos
+        .filter((item) => Number(item.id_unidade) === Number(id))
+        .map(formatarAgendamento));
+      if (resPets.status === "rejected") setMensagem(mensagemErroApi(resPets.reason));
+      else if (resAgendamentos.status === "rejected") setMensagem(mensagemErroApi(resAgendamentos.reason));
+    }
+    carregarAgenda();
     return () => {
       ativo = false;
     };
-  }, [aba, id, servicos, idPet, idServico, idVeterinario]);
+  }, [aba, id]);
+
+  useEffect(() => {
+    if (!idServico || !servicos.some((servico) => String(servico.id_servico) === String(idServico))) {
+      setIdServico(servicos.length ? String(servicos[0].id_servico) : "");
+      setHorarioSelecionado("");
+    }
+  }, [servicos, idServico]);
+
+  useEffect(() => {
+    if (!idVeterinario || !veterinarios.some((vet) => String(vet.id_veterinario) === String(idVeterinario))) {
+      setIdVeterinario(veterinarios.length ? String(veterinarios[0].id_veterinario) : "");
+      setHorarioSelecionado("");
+    }
+  }, [veterinarios, idVeterinario]);
+
+  useEffect(() => {
+    if (!idPet || !pets.some((pet) => String(pet.id_animal) === String(idPet))) {
+      setIdPet(pets.length ? String(pets[0].id_animal) : "");
+    }
+  }, [pets, idPet]);
 
   useEffect(() => {
     if (!idVeterinario) {
@@ -229,9 +256,11 @@ export default function Unidades() {
     }
     setSalvando(true);
     try {
-      const inicio = new Date(
-        `${dataSelecionada}T${horarioSelecionado}:00`,
-      ).toISOString();
+      if (usuario?.tipo !== "cliente") {
+        setMensagem("Entre na sua conta de cliente para solicitar o agendamento.");
+        return;
+      }
+      const inicio = `${dataSelecionada}T${horarioSelecionado}:00`;
       await agendamentosApi.criar({
         id_animal: Number(idPet),
         id_veterinario: Number(idVeterinario),
@@ -299,9 +328,9 @@ export default function Unidades() {
         <img className="unidade-logo" src={Logo} alt="Pet Amparo" />
         <article className="unidade-card">
           <section className="unidade-cabecalho">
-            <div className="unidade-foto" 
-            style={{ 
-              backgroundImage: `url(${unidades.find((card) => String(card.id) === String(id))?.img})`,
+          <div className="unidade-foto"
+            style={{
+              backgroundImage: `url(${unidades.find((card) => String(card.id) === String(id))?.img || unidades[0].img})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
@@ -463,8 +492,12 @@ export default function Unidades() {
                       "pt-BR",
                     )}
                   </h3>
-                  {!pets.length ? (
-                    <p>Entre na sua conta e cadastre um pet para continuar.</p>
+                  {!usuario ? (
+                    <p>Para agendar, <Link className="agenda-link-login" to={`/meuspets?modo=login&redirect=${encodeURIComponent(`/unidades/${id}?aba=Agendamentos`)}`}>entre na sua conta de cliente</Link> e cadastre um pet.</p>
+                  ) : usuario.tipo !== "cliente" ? (
+                    <p>O agendamento está disponível para contas de cliente.</p>
+                  ) : !pets.length ? (
+                    <p>Cadastre um pet em <Link className="agenda-link-login" to="/meuspets?modo=cadastro">Meus Pets</Link> para continuar.</p>
                   ) : (
                     <label>
                       Pet
@@ -581,6 +614,7 @@ export default function Unidades() {
                       salvando ||
                       dataPassada(dataSelecionada) ||
                       !opcoesHorario.length ||
+                      usuario?.tipo !== "cliente" ||
                       !pets.length ||
                       !servicos.length ||
                       !veterinarios.length

@@ -75,6 +75,9 @@ export const veterinariosApi = {
     }),
   criar: (dados) =>
     requisicao({ method: "POST", url: "/veterinarios", data: dados }),
+  listarAdmin: () => requisicao({ method: "GET", url: "/admin/veterinarios" }),
+  contasSemFicha: () => requisicao({ method: "GET", url: "/admin/veterinarios/contas-sem-ficha" }),
+  criarFichaConta: (idUsuario, dados) => requisicao({ method: "POST", url: `/admin/veterinarios/contas/${idUsuario}/ficha`, data: dados }),
   vincularUnidade: (idVeterinario, idUnidade) =>
     requisicao({ method: "POST", url: `/admin/veterinarios/${idVeterinario}/unidades/${idUnidade}` }),
   minhasUnidades: () => requisicao({ method: "GET", url: "/veterinarios/me/unidades" }),

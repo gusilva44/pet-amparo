@@ -33,6 +33,37 @@ endpoints.get("/veterinarios", async (req, res) => {
   }
 });
 
+endpoints.get("/admin/veterinarios", autenticar, verificarAdmin, async (req, res) => {
+  try {
+    const resultado = await service.listarVeterinariosAdmin();
+    res.status(200).json({ sucesso: true, resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.get("/admin/veterinarios/contas-sem-ficha", autenticar, verificarAdmin, async (req, res) => {
+  try {
+    const resultado = await service.listarContasVeterinariasSemFicha();
+    res.status(200).json({ sucesso: true, resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.post("/admin/veterinarios/contas/:id/ficha", autenticar, verificarAdmin, async (req, res) => {
+  try {
+    const idUsuario = Number(req.params.id);
+    const idVeterinario = await service.criarFichaParaContaVeterinaria(idUsuario, req.body);
+    res.status(201).json({ sucesso: true, id_veterinario: idVeterinario });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
 endpoints.get(
   "/veterinarios/me/agendamentos",
   autenticar,

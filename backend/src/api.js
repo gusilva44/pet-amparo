@@ -2,6 +2,8 @@ import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import adicionarRotas from './router.js';
 
 const app = express()
@@ -12,7 +14,7 @@ const origensPermitidas = (process.env.CORS_ORIGINS
     .map(origem => origem.trim())
     .filter(Boolean)
 
-app.use(express.json({ limit: '16mb' }))
+app.use(express.json({ limit: '8mb' }))
 
 app.use(cors({
     origin: origensPermitidas,
@@ -20,6 +22,15 @@ app.use(cors({
 }))
 
 app.use(cookieParser())
+
+const diretorioUploads = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../uploads')
+app.use('/uploads', express.static(diretorioUploads, {
+    dotfiles: 'deny',
+    index: false,
+    immutable: true,
+    maxAge: '1y',
+    fallthrough: false,
+}))
 
 adicionarRotas(app)
 

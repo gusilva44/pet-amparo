@@ -187,7 +187,7 @@ export default class Usuario {
                 c.telefone = ?,
                 c.cpf = ?,
                 c.endereco = ?,
-                c.foto = ?,
+                c.foto = COALESCE(?, c.foto),
                 u.email = ?
             WHERE u.id_usuario = ?
         `, [

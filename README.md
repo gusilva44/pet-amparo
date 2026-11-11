@@ -14,8 +14,7 @@ Aplicação desenvolvida para o TCC que facilita o acesso a serviços veterinár
 ```text
 .
 ├── backend/              # API REST e schema MySQL
-│   ├── .sql              # criação das tabelas e serviços iniciais
-│   └── src/
+│   └── src/schema/       # criação das tabelas e serviços iniciais
 ├── frontend/             # interface React
 └── docker-compose.yml    # API + MySQL para desenvolvimento
 ```
@@ -28,7 +27,7 @@ Pré-requisito: Docker com o plugin Docker Compose.
 docker compose up --build
 ```
 
-A API ficará disponível em `http://localhost:3001` e o MySQL em `localhost:3306`. Na primeira execução, o schema em `backend/.sql` é aplicado automaticamente.
+A API ficará disponível em `http://localhost:3001` e o MySQL em `localhost:3306`. Em um volume de banco novo, o Compose aplica `backend/src/schema/tables.sql` automaticamente. As fotos ficam no volume `pet_uploads` e continuam disponíveis após reiniciar os containers.
 
 Para parar os serviços:
 
@@ -46,7 +45,7 @@ docker compose down -v
 
 ## Executar sem Docker
 
-1. Crie um banco MySQL e execute `backend/.sql`.
+1. Crie um banco MySQL e execute `backend/src/schema/tables.sql`.
 2. Copie `backend/.env.example` para `backend/.env` e preencha as credenciais.
 3. Inicie a API:
 
@@ -82,8 +81,8 @@ Um cliente pertence a um usuário e pode ter vários animais. Cada agendamento a
 O login grava o JWT no cookie `token`, que é HTTP-only. Rotas protegidas dependem desse cookie.
 
 - `cliente`: administra o próprio perfil, animais, agendamentos e visualiza a carteira de medicação.
-- `admin`: administra clientes, serviços, medicamentos, veterinários e horários.
-- `veterinario`: perfil preparado no banco; suas telas/rotas específicas ainda podem ser adicionadas.
+- `admin`: administra clientes, unidades, serviços, veterinários e horários.
+- `veterinario`: consulta e atualiza a própria agenda e expediente.
 
 O cadastro público cria usuários do tipo `cliente`. Para criar o primeiro administrador em desenvolvimento, cadastre um usuário e altere seu `tipo` para `admin` diretamente no MySQL.
 
@@ -110,7 +109,9 @@ O cadastro público cria usuários do tipo `cliente`. Para criar o primeiro admi
 | GET | `/animais/:id/medicacoes` | Cliente | Consulta a carteira do próprio pet |
 | POST | `/animais/:id/medicacoes` | Admin | Adiciona medicação à carteira |
 
-Ao criar um agendamento, a API confirma se o animal pertence ao cliente autenticado, se o serviço e o veterinário estão ativos, se a unidade está correta, se está dentro do expediente e se não há conflito de horários.
+Para agendar, o cliente escolhe uma unidade, um serviço vinculado a ela, um veterinário ativo que atende nessa unidade e um horário livre no expediente daquele dia. A API repete essas validações ao salvar e impede duas solicitações simultâneas de ocuparem o mesmo intervalo. Horários são tratados no fuso local de São Paulo.
+
+Fotos de perfil e de pets são gravadas em arquivos no diretório `backend/uploads` (ou no volume `pet_uploads` no Compose); o banco guarda o endereço público de cada arquivo. O limite é 2 MB para perfil e 5 MB para pet.
 
 ## Exemplo: cadastro e login
 
@@ -129,9 +130,6 @@ POST /auth/cadastro
 
 Depois, envie `POST /auth/login` com `email` e `senha`. Clientes HTTP precisam preservar cookies nas próximas requisições.
 
-## Pendências sugeridas
+## Preparar dados para agendamento
 
-- telas React para login, pets e agendamentos;
-- testes automatizados da API com banco isolado;
-- fluxo próprio para veterinários confirmarem/concluírem atendimentos;
-- upload real das fotos dos animais.
+O banco inicial cria as unidades e o catálogo de serviços. Para disponibilizar agendamentos, vincule os serviços desejados às unidades na tela **Serviços**, cadastre e associe profissionais na tela **Veterinários**, e peça que cada veterinário configure seus horários semanais na área **Atendimentos**. Só então as opções correspondentes aparecem para o cliente.
