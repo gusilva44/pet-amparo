@@ -38,12 +38,12 @@ function dentroDoHorario(inicio, fim, horario) {
     return inicio >= inicioHorario && fim <= fimHorario
 }
 
-async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim) {
+async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim, idServico) {
     const veterinario = await repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade)
 
     if (!veterinario || !veterinario.ativo || !veterinario.usuario_ativo) throw new Error('Veterinário não encontrado ou inativo.')
 
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio))
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio), dataLocalISO(inicio), idServico)
 
     if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) throw new Error('O horário escolhido está fora do expediente do veterinário.')
     
@@ -66,7 +66,7 @@ export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idSe
     if (!servico?.ativo || !await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) return [];
     const veterinario = await repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade);
     if (!veterinario?.ativo || !veterinario?.usuario_ativo) return [];
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicioDia));
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicioDia), data, idServico);
     const ocupados = await repo.listarConflitos(idVeterinario, data);
     const duracao = Number(servico.duracao_minutos);
     const passo = Math.max(15, Math.min(duracao, 60));
@@ -185,7 +185,7 @@ export async function criarAgendamento(dados, idCliente) {
     const inicio = lerDataHora(dados.inicio)
     const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
 
-    await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)
+    await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim, idServico)
 
     if (await repo.existeConflito(idVeterinario, inicio, fim)) {
         throw new Error('Este horário não está mais disponível.')

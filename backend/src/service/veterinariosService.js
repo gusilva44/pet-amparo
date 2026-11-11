@@ -2,6 +2,7 @@ import * as repo from '../repos/agendamentosRepo.js'
 import * as veterinariosRepo from '../repos/veterinariosRepo.js'
 import * as authRepo from '../repos/authRepo.js'
 import * as unidadesRepo from '../repos/unidadesRepo.js'
+import * as servicosRepo from '../repos/servicosRepo.js'
 import bcrypt from 'bcryptjs'
 import { regex } from '../utils/regex.js';
 
@@ -73,11 +74,26 @@ export async function vincularVeterinarioUnidade(idVeterinario, idUnidade) {
 export async function criarHorario(idVeterinario, dados) {
     validarId(idVeterinario)
 
-    const dia = Number(dados?.dia_semana)
+    const data = dados?.data || null
+    let dataObj = null
+    if (data) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new Error('Informe uma data válida.')
+        dataObj = new Date(`${data}T12:00:00`)
+        if (Number.isNaN(dataObj.getTime()) || `${dataObj.getFullYear()}-${String(dataObj.getMonth() + 1).padStart(2, '0')}-${String(dataObj.getDate()).padStart(2, '0')}` !== data) throw new Error('Informe uma data válida.')
+        const hoje = new Date()
+        const hojeISO = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`
+        if (data < hojeISO) throw new Error('A data deve ser hoje ou futura.')
+    }
+    const dia = dataObj ? (dataObj.getDay() === 0 ? 7 : dataObj.getDay()) : Number(dados?.dia_semana)
     const idUnidade = Number(dados?.id_unidade)
+    const idsServicos = [...new Set((Array.isArray(dados?.ids_servicos) ? dados.ids_servicos : []).map(Number))]
 
-    if (!Number.isInteger(dia) || dia < 1 || dia > 7) throw new Error('O dia da semana deve estar entre 1 e 7.')
     validarId(idUnidade)
+    if (!Number.isInteger(dia) || dia < 1 || dia > 7) throw new Error('O dia da semana informado é inválido.')
+    if (data && (!idsServicos.length || idsServicos.some((id) => !Number.isInteger(id) || id <= 0))) throw new Error('Selecione ao menos um serviço válido.')
+    for (const idServico of idsServicos) {
+        if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) throw new Error('Um dos serviços não está disponível nesta unidade.')
+    }
     if (!regex.verificarFormatosHorario.test(dados.hora_inicio || '') || !regex.verificarFormatosHorario.test(dados.hora_fim || '') || dados.hora_inicio >= dados.hora_fim) throw new Error('O intervalo de horários é inválido.')
 
     if (!await veterinariosRepo.veterinarioAtendeNaUnidade(idVeterinario, idUnidade))throw new Error('O veterinário não atende nesta unidade.')
@@ -87,6 +103,8 @@ export async function criarHorario(idVeterinario, dados) {
         id_veterinario: idVeterinario, 
         id_unidade: idUnidade,
         dia_semana: dia, 
+        data_disponivel: data,
+        ids_servicos: idsServicos,
         hora_inicio: dados.hora_inicio, 
         hora_fim: dados.hora_fim
     }

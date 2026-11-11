@@ -1,17 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { veterinariosApi } from "../../../services/api";
+import { unidadesApi, veterinariosApi } from "../../../services/api";
 import { mensagemErroApi } from "../../../utils/api";
 import "./index.scss";
 
-const DIAS = [
-  [1, "Segunda-feira"], [2, "Terça-feira"], [3, "Quarta-feira"],
-  [4, "Quinta-feira"], [5, "Sexta-feira"], [6, "Sábado"], [7, "Domingo"],
-];
-
 export default function DisponibilidadeVeterinario() {
   const [unidades, setUnidades] = useState([]);
+  const [servicos, setServicos] = useState([]);
+  const [catalogoUnidades, setCatalogoUnidades] = useState([]);
   const [horarios, setHorarios] = useState([]);
-  const [form, setForm] = useState({ id_unidade: "", dia_semana: "1", hora_inicio: "09:00", hora_fim: "17:00" });
+  const [form, setForm] = useState({ id_unidade: "", data: "", hora_inicio: "09:00", hora_fim: "17:00", ids_servicos: [] });
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [removendo, setRemovendo] = useState(null);
@@ -20,13 +17,16 @@ export default function DisponibilidadeVeterinario() {
   const carregar = useCallback(async () => {
     setCarregando(true);
     try {
-      const [resUnidades, resHorarios] = await Promise.all([
+      const [resUnidades, resHorarios, resCatalogo] = await Promise.all([
         veterinariosApi.minhasUnidades(),
         veterinariosApi.meusHorarios(),
+        unidadesApi.listarPublicasComServicos(),
       ]);
       const listaUnidades = resUnidades.resultado || [];
       setUnidades(listaUnidades);
       setHorarios(resHorarios.resultado || []);
+      const catalogo = resCatalogo.resultado || [];
+      setCatalogoUnidades(catalogo);
       setForm((atual) => ({ ...atual, id_unidade: atual.id_unidade || String(listaUnidades[0]?.id_unidade || "") }));
       setMensagem("");
     } catch (error) {
@@ -35,6 +35,12 @@ export default function DisponibilidadeVeterinario() {
       setCarregando(false);
     }
   }, []);
+
+  useEffect(() => {
+    const unidade = catalogoUnidades.find((item) => Number(item.id_unidade) === Number(form.id_unidade));
+    setServicos(unidade?.servicos || []);
+    setForm((atual) => ({ ...atual, ids_servicos: atual.ids_servicos.filter((id) => (unidade?.servicos || []).some((servico) => String(servico.id_servico) === id)) }));
+  }, [catalogoUnidades, form.id_unidade]);
 
   useEffect(() => { carregar(); }, [carregar]);
 
@@ -46,7 +52,8 @@ export default function DisponibilidadeVeterinario() {
       await veterinariosApi.criarMeuHorario({
         ...form,
         id_unidade: Number(form.id_unidade),
-        dia_semana: Number(form.dia_semana),
+        dia_semana: ((new Date(`${form.data}T12:00:00`).getDay() + 6) % 7) + 1,
+        ids_servicos: form.ids_servicos.map(Number),
       });
       await carregar();
       setMensagem("Disponibilidade adicionada.");
@@ -87,14 +94,16 @@ export default function DisponibilidadeVeterinario() {
               {unidades.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}
             </select>
           </label>
-          <label>Dia da semana
-            <select required value={form.dia_semana} onChange={(event) => setForm({ ...form, dia_semana: event.target.value })}>
-              {DIAS.map(([dia, nome]) => <option key={dia} value={dia}>{nome}</option>)}
-            </select>
+          <label>Data disponível
+            <input type="date" required value={form.data} min={new Date().toLocaleDateString("en-CA")} onChange={(event) => setForm({ ...form, data: event.target.value })} />
           </label>
           <label>Início <input type="time" required value={form.hora_inicio} onChange={(event) => setForm({ ...form, hora_inicio: event.target.value })} /></label>
           <label>Fim <input type="time" required value={form.hora_fim} onChange={(event) => setForm({ ...form, hora_fim: event.target.value })} /></label>
-          <button type="submit" disabled={salvando || carregando || !unidades.length}>{salvando ? "Salvando..." : "Adicionar horário"}</button>
+          <fieldset className="servicos-disponibilidade">
+            <legend>Serviços que atenderá nesta data</legend>
+            {servicos.map((servico) => <label key={servico.id_servico} className="servico-opcao"><input type="checkbox" checked={form.ids_servicos.includes(String(servico.id_servico))} onChange={(event) => setForm((atual) => ({ ...atual, ids_servicos: event.target.checked ? [...atual.ids_servicos, String(servico.id_servico)] : atual.ids_servicos.filter((id) => id !== String(servico.id_servico)) }))} />{servico.nome}</label>)}
+          </fieldset>
+          <button type="submit" disabled={salvando || carregando || !unidades.length || !form.ids_servicos.length}>{salvando ? "Salvando..." : "Adicionar horário"}</button>
         </form>
       )}
 
@@ -104,7 +113,7 @@ export default function DisponibilidadeVeterinario() {
         <h3>Horários cadastrados</h3>
         {carregando ? <p>Carregando disponibilidade...</p> : horarios.length === 0 ? <p>Nenhum dia ou horário cadastrado.</p> : horarios.map((horario) => (
           <article key={horario.id_horario}>
-            <div><strong>{DIAS.find(([dia]) => dia === Number(horario.dia_semana))?.[1]}</strong><span>{horario.unidade_nome || unidades.find((unidade) => Number(unidade.id_unidade) === Number(horario.id_unidade))?.nome}</span></div>
+            <div><strong>{horario.data_disponivel ? new Date(`${horario.data_disponivel instanceof Date ? horario.data_disponivel.toISOString().slice(0, 10) : String(horario.data_disponivel).slice(0, 10)}T12:00:00`).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" }) : "Disponibilidade recorrente"}</strong><span>{horario.unidade_nome || unidades.find((unidade) => Number(unidade.id_unidade) === Number(horario.id_unidade))?.nome}</span><span>{horario.servicos_nomes || "Todos os serviços"}</span></div>
             <time>{String(horario.hora_inicio).slice(0, 5)}–{String(horario.hora_fim).slice(0, 5)}</time>
             <button type="button" onClick={() => excluir(horario.id_horario)} disabled={removendo === horario.id_horario} aria-label="Remover horário">{removendo === horario.id_horario ? "Removendo..." : "Remover"}</button>
           </article>

@@ -14,6 +14,7 @@ onSelecionar,
 onSelecionarData,
 dataMinima,
   diasDisponiveis,
+  datasDisponiveis,
 onMudarMes,
 }) {
 const ano = mesAtual.getFullYear();
@@ -78,7 +79,10 @@ return (
         const consultas = agendamentos.filter((item) => item.data === data);
         const passada = Boolean(dataMinima && data < dataMinima);
         const diaSemana = new Date(`${data}T12:00:00`).getDay() || 7;
-        const indisponivel = Boolean(diasDisponiveis && !diasDisponiveis.includes(diaSemana));
+        const indisponivel = Boolean(
+          (datasDisponiveis && !datasDisponiveis.includes(data) && !diasDisponiveis?.includes(diaSemana)) ||
+          (!datasDisponiveis && diasDisponiveis && !diasDisponiveis.includes(diaSemana))
+        );
         const desabilitado = passada || indisponivel;
 
         return (

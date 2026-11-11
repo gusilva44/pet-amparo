@@ -28,6 +28,11 @@ function dataLocal(data) {
   return `${ano}-${mes}-${dia}`;
 }
 
+function dataBancoParaISO(data) {
+  if (data instanceof Date) return data.toISOString().slice(0, 10);
+  return String(data || "").slice(0, 10);
+}
+
 function dataPassada(data) {
   return data < dataLocal(new Date());
 }
@@ -196,8 +201,15 @@ export default function Unidades() {
   const agendamentoSelecionado = agendamentos.find(
     (item) => item.data === dataSelecionada,
   ) || { data: dataSelecionada };
+  const horariosDoServico = horariosVeterinario.filter((horario) => {
+    const ids = String(horario.servicos_ids || "").split(",").filter(Boolean);
+    return !ids.length || ids.includes(String(idServico));
+  });
   const diasDisponiveisVet = idVeterinario
-    ? [...new Set(horariosVeterinario.map((horario) => Number(horario.dia_semana)))]
+    ? [...new Set(horariosDoServico.filter((horario) => !horario.data_disponivel).map((horario) => Number(horario.dia_semana)))]
+    : undefined;
+  const datasDisponiveisVet = idVeterinario
+    ? [...new Set(horariosDoServico.map((horario) => horario.data_disponivel).filter(Boolean).map(dataBancoParaISO))]
     : undefined;
 
   async function confirmarAgendamento(event) {
@@ -409,6 +421,7 @@ export default function Unidades() {
                   mesAtual={mesAtual}
                   dataMinima={dataLocal(new Date())}
                   diasDisponiveis={diasDisponiveisVet}
+                  datasDisponiveis={datasDisponiveisVet}
                   agendamentos={agendamentos}
                   agendamentoSelecionado={agendamentoSelecionado}
                   onSelecionar={(item) => {
@@ -515,10 +528,10 @@ export default function Unidades() {
                     <strong>Disponibilidade de {veterinarios.find((vet) => String(vet.id_veterinario) === String(idVeterinario))?.nome || ""}</strong>
                     {carregandoHorarios ? <span>Carregando disponibilidade...</span> : horariosVeterinario.length ? (
                       <ul>
-                        {[...new Set(horariosVeterinario.map((horario) => Number(horario.dia_semana)))].sort((a, b) => a - b).map((dia) => {
-                          const nomeDia = ["", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"][dia];
-                          const faixas = horariosVeterinario.filter((horario) => Number(horario.dia_semana) === dia).map((horario) => `${String(horario.hora_inicio).slice(0, 5)}–${String(horario.hora_fim).slice(0, 5)}`).join(", ");
-                          return <li key={dia}><span>{nomeDia}</span><span>{faixas}</span></li>;
+                        {horariosDoServico.map((horario) => {
+                          const dataLabel = horario.data_disponivel ? new Date(`${dataBancoParaISO(horario.data_disponivel)}T12:00:00`).toLocaleDateString("pt-BR") : ["", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"][Number(horario.dia_semana)];
+                          const faixa = `${String(horario.hora_inicio).slice(0, 5)}–${String(horario.hora_fim).slice(0, 5)}`;
+                          return <li key={horario.id_horario}><span>{dataLabel}</span><span>{faixa}</span></li>;
                         })}
                       </ul>
                     ) : <span>Este veterinário ainda não cadastrou dias e horários nesta unidade.</span>}

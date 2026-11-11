@@ -19,6 +19,8 @@ export default function MeusPets() {
   const [fotoSelecionada, setFotoSelecionada] = useState("");
   const [salvandoFoto, setSalvandoFoto] = useState(false);
   const [mensagemFoto, setMensagemFoto] = useState("");
+  const [petEditando, setPetEditando] = useState(null);
+  const [mensagemPets, setMensagemPets] = useState("");
 
   const carregarDados = useCallback(async (conta) => {
     setUsuario(conta);
@@ -107,6 +109,18 @@ export default function MeusPets() {
     }
   }
 
+  async function excluirPet(pet) {
+    if (!window.confirm(`Remover ${pet.nome} da sua lista de pets?`)) return;
+    setMensagemPets("");
+    try {
+      await animaisApi.excluir(pet.id_animal);
+      await carregarDados(usuario);
+      setMensagemPets("Pet removido com sucesso.");
+    } catch (error) {
+      setMensagemPets(error.response?.data?.mensagem || "Não foi possível remover o pet.");
+    }
+  }
+
   const nomeExibicao = cliente?.nome || usuario?.nome || "";
   const iniciaisUsuario = nomeExibicao
     .trim()
@@ -158,9 +172,10 @@ export default function MeusPets() {
                   </div>
                 </div>
                 <div className="foto-perfil-editar">
-                  <label>
+                  <label className="seletor-imagem">
                     Alterar foto de perfil
-                    <input type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFotoPerfil} />
+                    <input className="input-imagem-oculto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFotoPerfil} />
+                    <span className="botao-escolher-imagem">Escolher imagem</span>
                   </label>
                   {fotoSelecionada && <button className="botao-secundario" onClick={salvarFotoPerfil} disabled={salvandoFoto}>{salvandoFoto ? "Salvando..." : "Salvar foto"}</button>}
                   {mensagemFoto && <p role="status">{mensagemFoto}</p>}
@@ -192,6 +207,10 @@ export default function MeusPets() {
                         <span>{pet.sexo === "F" ? "Fêmea" : pet.sexo === "M" ? "Macho" : "Sexo não informado"}</span>
                         <span className={pet.e_vacinado ? "vacinado" : "pendente-vacina"}>{pet.e_vacinado ? "Vacinado" : "Vacinação pendente"}</span>
                       </div>
+                      <div className="acoes-pet">
+                        <button type="button" className="botao-secundario" onClick={() => setPetEditando(pet)} aria-label={`Editar ${pet.nome}`} title="Editar"><i className="fa-solid fa-pen" /></button>
+                        <button type="button" className="botao-secundario" onClick={() => excluirPet(pet)} aria-label={`Remover ${pet.nome}`} title="Remover"><i className="fa-solid fa-trash-can" /></button>
+                      </div>
                     </article>
                   ))}
                 </div>
@@ -201,7 +220,12 @@ export default function MeusPets() {
                 </p>
               )}
 
-              <CadastroPet onSaved={() => carregarDados(usuario)} />
+              {mensagemPets && <p role="status">{mensagemPets}</p>}
+              {petEditando ? (
+                <CadastroPet key={petEditando.id_animal} pet={petEditando} onCancel={() => setPetEditando(null)} onSaved={async () => { setPetEditando(null); await carregarDados(usuario); }} />
+              ) : (
+                <CadastroPet onSaved={() => carregarDados(usuario)} />
+              )}
             </section>
           </>
         )}

@@ -16,8 +16,13 @@ const dadosIniciais = {
   e_vacinado: false,
 };
 
-export default function CadastroPet({ onSaved }) {
-  const [dados, setDados] = useState(dadosIniciais);
+export default function CadastroPet({ onSaved, pet, onCancel }) {
+  const [dados, setDados] = useState(() => pet ? {
+    nome: pet.nome || "", especie: pet.especie || "", raca: pet.raca || "",
+    rga: pet.rga || "", idade: String(pet.idade ?? ""), sexo: pet.sexo || "",
+    porte: pet.porte || "", foto: pet.foto || "",
+    e_vacinado: pet.e_vacinado === true || Number(pet.e_vacinado) === 1,
+  } : dadosIniciais);
   const [mensagem, setMensagem] = useState("");
   const [salvando, setSalvando] = useState(false);
   const [erroFoto, setErroFoto] = useState("");
@@ -41,13 +46,15 @@ export default function CadastroPet({ onSaved }) {
     setSalvando(true);
     setMensagem("");
     try {
-      await animaisApi.cadastrar({
+      const dadosPet = {
         ...dados,
         idade: Number(dados.idade),
         foto: dados.foto || null,
-      });
-      setDados(dadosIniciais);
-      setMensagem("Pet cadastrado com sucesso!");
+      };
+      if (pet) await animaisApi.atualizar(pet.id_animal, dadosPet);
+      else await animaisApi.cadastrar(dadosPet);
+      if (!pet) setDados(dadosIniciais);
+      setMensagem(pet ? "Pet atualizado com sucesso!" : "Pet cadastrado com sucesso!");
       await onSaved?.();
     } catch (error) {
       setMensagem(mensagemErroApi(error));
@@ -57,8 +64,8 @@ export default function CadastroPet({ onSaved }) {
   }
 
   return (
-    <details className="cadastro-pet">
-      <summary>+ Adicionar um novo pet</summary>
+    <details className="cadastro-pet" open={Boolean(pet)}>
+      {!pet && <summary>+ Adicionar um novo pet</summary>}
       <form className="form-cadastro-pet" onSubmit={salvar}>
         <label>
           Nome do pet
@@ -131,9 +138,10 @@ export default function CadastroPet({ onSaved }) {
             <option value="nao_informado">Não informado</option>
           </select>
         </label>
-        <label className="pet-foto-campo">
+        <label className="pet-foto-campo seletor-imagem">
           Foto do pet (opcional)
-          <input type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
+          <input className="input-imagem-oculto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
+          <span className="botao-escolher-imagem">Escolher imagem</span>
           {erroFoto && <span className="erro-foto" role="alert">{erroFoto}</span>}
         </label>
         {dados.foto && <img className="pet-foto-previa" src={dados.foto} alt="Prévia da foto do pet" />}
@@ -151,8 +159,9 @@ export default function CadastroPet({ onSaved }) {
           </p>
         )}
         <button type="submit" className="botao-principal" disabled={salvando}>
-          {salvando ? "Salvando..." : "Salvar pet"}
+          {salvando ? "Salvando..." : pet ? "Salvar alterações" : "Salvar pet"}
         </button>
+        {pet && <button type="button" className="botao-secundario" onClick={onCancel}>Cancelar</button>}
       </form>
     </details>
   );

@@ -59,11 +59,16 @@ export async function veterinarioAtendeNaUnidade(idVeterinario, idUnidade) {
 
 export async function listarHorarios(idVeterinario) {
     const [resultado] = await db.query(`
-        SELECT h.*, u.nome AS unidade_nome
+        SELECT h.*, u.nome AS unidade_nome,
+            GROUP_CONCAT(DISTINCT s.nome ORDER BY s.nome SEPARATOR ', ') AS servicos_nomes,
+            GROUP_CONCAT(DISTINCT s.id_servico ORDER BY s.id_servico SEPARATOR ',') AS servicos_ids
         FROM horarios_veterinarios h
         INNER JOIN unidades u ON u.id_unidade = h.id_unidade
+        LEFT JOIN horarios_veterinarios_servicos hs ON hs.id_horario = h.id_horario
+        LEFT JOIN servicos s ON s.id_servico = hs.id_servico
         WHERE h.id_veterinario = ? AND h.ativo = TRUE AND u.ativo = TRUE
-        ORDER BY h.id_unidade, h.dia_semana, h.hora_inicio
+        GROUP BY h.id_horario
+        ORDER BY h.id_unidade, h.data_disponivel, h.dia_semana, h.hora_inicio
     `, [idVeterinario])
     return resultado
 }
@@ -80,19 +85,30 @@ export async function listarUnidadesDoVeterinario(idVeterinario) {
 }
 
 export async function criarHorario(dados) {
-    const [resultado] = await db.query(`
-        INSERT INTO horarios_veterinarios (id_veterinario, id_unidade, dia_semana, hora_inicio, hora_fim)
-        VALUES (?, ?, ?, ?, ?)
-    `, [dados.id_veterinario, dados.id_unidade, dados.dia_semana, dados.hora_inicio, dados.hora_fim])
-    return resultado.insertId
+    await db.beginTransaction();
+    try {
+        const [resultado] = await db.query(`
+            INSERT INTO horarios_veterinarios (id_veterinario, id_unidade, dia_semana, data_disponivel, hora_inicio, hora_fim)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `, [dados.id_veterinario, dados.id_unidade, dados.dia_semana, dados.data_disponivel, dados.hora_inicio, dados.hora_fim]);
+        for (const idServico of dados.ids_servicos) {
+            await db.query(`INSERT INTO horarios_veterinarios_servicos (id_horario, id_servico) VALUES (?, ?)`, [resultado.insertId, idServico]);
+        }
+        await db.commit();
+        return resultado.insertId;
+    } catch (error) {
+        await db.rollback();
+        throw error;
+    }
 }
 
 export async function existeHorarioSobreposto(dados) {
     const [resultado] = await db.query(`
         SELECT id_horario FROM horarios_veterinarios
         WHERE id_veterinario = ? AND id_unidade = ? AND dia_semana = ?
+          AND (? IS NULL OR data_disponivel IS NULL OR data_disponivel = ?)
           AND hora_inicio < ? AND hora_fim > ?
-    `, [dados.id_veterinario, dados.id_unidade, dados.dia_semana, dados.hora_fim, dados.hora_inicio])
+    `, [dados.id_veterinario, dados.id_unidade, dados.dia_semana, dados.data_disponivel, dados.data_disponivel, dados.hora_fim, dados.hora_inicio])
     return Boolean(resultado[0])
 }
 

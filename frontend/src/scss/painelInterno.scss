@@ -1,0 +1,93 @@
+.content,
+.page-visao,
+.pagina-veterinario {
+  background: var(--creme);
+  color: var(--verde-escuro);
+}
+
+.content header .info_user > i,
+.content header .info_user > i:first-child {
+  background: var(--laranja);
+  color: var(--branco);
+}
+
+.content :is(.sub .card, .sub .card-sub, .indicador-visao, .atalho-visao) {
+  background: var(--verde-claro);
+  border-color: var(--verde-claro);
+  color: var(--branco);
+}
+
+.content :is(.sub .card, .sub .card-sub, .indicador-visao, .atalho-visao) :is(h2, h3, p, span, strong) {
+  color: var(--branco);
+}
+
+.content :is(.sub .card, .sub .card-sub, .indicador-visao, .atalho-visao) :is(.ico i, .icone-sub, .icone-indicador, .icone-atalho) {
+  background: var(--verde-escuro);
+  color: var(--branco);
+}
+
+.content :is(button, .botao-principal, .salvar, .btn-principal):not(:disabled) {
+  border-color: var(--verde-escuro);
+}
+
+.content :is(button, .botao-principal, .salvar, .btn-principal):hover:not(:disabled) {
+  border-color: var(--laranja);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--laranja) 24%, transparent);
+}
+
+.page-visao .indicador-visao,
+.page-visao .atalho-visao {
+  background: var(--verde-claro);
+  border-color: var(--verde-claro);
+  color: var(--branco);
+}
+
+.page-visao .indicador-visao .dados-indicador span,
+.page-visao .indicador-visao .dados-indicador strong,
+.page-visao .indicador-visao .dados-indicador small,
+.page-visao .atalho-visao .texto-atalho strong,
+.page-visao .atalho-visao .texto-atalho small,
+.page-visao .atalho-visao > i {
+  color: var(--branco);
+}
+
+.page-visao .titulo-secao-visao h2,
+.page-visao .titulo-secao-visao p {
+  color: var(--verde-escuro);
+}
+
+.pagina-veterinario {
+  .conteudo-veterinario .cabecalho-veterinario .identificacao .avatar-veterinario {
+    background: var(--laranja);
+    color: var(--branco);
+  }
+
+  .conteudo-veterinario .cabecalho-veterinario .identificacao h1 {
+    color: var(--verde-escuro);
+  }
+
+  .conteudo-veterinario .cabecalho-veterinario .numero-atendimentos {
+    background: var(--verde-claro);
+    border-color: var(--verde-claro);
+    color: var(--branco);
+
+    strong, span { color: var(--branco); }
+    strong { border-bottom: 2px solid var(--laranja); }
+  }
+
+  .abas-veterinario { border-color: color-mix(in srgb, var(--verde-escuro) 22%, transparent); }
+  .abas-veterinario .aba.ativa { color: var(--verde-escuro); border-bottom-color: var(--laranja); }
+  .abas-veterinario .aba:hover { color: var(--verde-escuro); background: var(--verde-claro); }
+}
+
+.disponibilidade-veterinario {
+  border-color: var(--verde-claro);
+  background: var(--branco);
+  color: var(--verde-escuro);
+
+  header p, .lista-disponibilidade article span, .mensagem-disponibilidade { color: var(--verde-escuro); }
+  .lista-disponibilidade article { background: var(--creme); border-color: var(--creme); color: var(--verde-escuro); }
+  .lista-disponibilidade article span, .lista-disponibilidade article time { color: var(--verde-escuro); }
+  button:not(:disabled) { background: var(--verde-escuro); }
+  button:hover:not(:disabled) { background: var(--laranja); }
+}

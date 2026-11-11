@@ -216,6 +216,7 @@ CREATE TABLE horarios_veterinarios (
     id_unidade INT NOT NULL,
 
     dia_semana TINYINT NOT NULL,
+    data_disponivel DATE NULL,
     hora_inicio TIME NOT NULL,
     hora_fim TIME NOT NULL,
 
@@ -237,6 +238,16 @@ CREATE TABLE horarios_veterinarios (
 
     CONSTRAINT chk_horario_intervalo
         CHECK (hora_inicio < hora_fim)
+);
+
+CREATE TABLE horarios_veterinarios_servicos (
+    id_horario INT NOT NULL,
+    id_servico INT NOT NULL,
+    PRIMARY KEY (id_horario, id_servico),
+    CONSTRAINT fk_horario_servico_horario FOREIGN KEY (id_horario)
+        REFERENCES horarios_veterinarios(id_horario) ON DELETE CASCADE,
+    CONSTRAINT fk_horario_servico_servico FOREIGN KEY (id_servico)
+        REFERENCES servicos(id_servico) ON DELETE RESTRICT
 );
 
 CREATE INDEX idx_horarios_unidade_dia
@@ -577,6 +588,12 @@ INSERT INTO unidades (
 UPDATE usuarios
 set tipo = "admin"
 where id_usuario = 2;
+
+INSERT INTO unidades_servicos (id_unidade, id_servico, ativo)
+SELECT u.id_unidade, s.id_servico, TRUE
+FROM unidades AS u
+CROSS JOIN servicos AS s
+ON DUPLICATE KEY UPDATE ativo = TRUE;
 
 SHOW CREATE TABLE unidades;
 SHOW CREATE TABLE unidades_servicos;

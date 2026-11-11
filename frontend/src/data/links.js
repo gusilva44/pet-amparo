@@ -59,6 +59,18 @@ const links = {
             caminho: '/admveterinario',
             texto: 'Atendimentos',
             icone: 'fa-solid fa-clipboard-list'
+        },
+        {
+            id: 2,
+            caminho: '/admveterinario?aba=agenda',
+            texto: 'Agenda do mês',
+            icone: 'fa-regular fa-calendar-days'
+        },
+        {
+            id: 3,
+            caminho: '/admveterinario?aba=disponibilidade',
+            texto: 'Disponibilidade',
+            icone: 'fa-regular fa-clock'
         }
     ]
 };

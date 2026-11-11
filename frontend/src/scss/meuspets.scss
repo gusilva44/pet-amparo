@@ -178,10 +178,14 @@
       gap: .5rem;
       min-width: 10rem;
       label { display: grid; gap: .4rem; font-size: .9rem; }
-      input { max-width: 15rem; font: inherit; }
       p { margin: 0; font-size: .85rem; }
       .botao-secundario { justify-self: start; }
     }
+    .seletor-imagem { display: grid; justify-items: start; gap: .45rem; }
+    .input-imagem-oculto { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
+    .botao-escolher-imagem { display: inline-flex; align-items: center; min-height: 2.4rem; box-sizing: border-box; padding: .45rem .85rem; border-radius: .45rem; background: #b9d2bd; color: #243b32; cursor: pointer; font-weight: 700; }
+    .botao-escolher-imagem:hover { background: #a9c7ae; }
+    .input-imagem-oculto:focus-visible + .botao-escolher-imagem { outline: 2px solid var(--laranja); outline-offset: 2px; }
     .botao-secundario {
       background: var(--verde-escuro, #243b32);
       color: white;
@@ -233,12 +237,17 @@
       color: var(--verde-escuro, #243b32);
     }
     .card-pet {
+      position: relative;
       display: grid;
       gap: 1rem;
       transition: transform .2s ease, box-shadow .2s ease;
       &:hover { transform: translateY(-3px); box-shadow: 0 14px 30px #243b321c; }
     }
+    .acoes-pet { position: absolute; top: .7rem; right: .7rem; display: flex; gap: .4rem; z-index: 1; }
+    .acoes-pet .botao-secundario { display: grid; width: 2.2rem; height: 2.2rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: #dce8d8; color: #111; cursor: pointer; }
+    .acoes-pet .botao-secundario:hover { background: #c8dcc7; }
     .pet-identidade { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+    .card-pet { padding-top: 3.4rem; }
     .foto-pet {
       width: 6.25rem;
       height: 6.25rem;

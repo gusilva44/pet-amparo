@@ -55,6 +55,8 @@ export async function buscarHorarioDoVeterinario(
   idVeterinario,
   idUnidade,
   diaSemana,
+  data,
+  idServico,
 ) {
   const [resultado] = await db.query(
     `
@@ -62,14 +64,18 @@ export async function buscarHorarioDoVeterinario(
             id_horario,
             hora_inicio,
             hora_fim,
-            id_unidade
+            id_unidade,
+            data_disponivel
         FROM horarios_veterinarios
         WHERE id_veterinario = ? AND id_unidade = ?
           AND dia_semana = ?
           AND ativo = TRUE
+          AND (data_disponivel IS NULL OR data_disponivel = ?)
+          AND (NOT EXISTS (SELECT 1 FROM horarios_veterinarios_servicos hs WHERE hs.id_horario = horarios_veterinarios.id_horario)
+               OR EXISTS (SELECT 1 FROM horarios_veterinarios_servicos hs WHERE hs.id_horario = horarios_veterinarios.id_horario AND hs.id_servico = ?))
         ORDER BY hora_inicio
     `,
-    [idVeterinario, idUnidade, diaSemana],
+    [idVeterinario, idUnidade, diaSemana, data, idServico],
   );
 
   return resultado;

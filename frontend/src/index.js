@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 
 import './scss/index.scss';
 import Navigation from './router';
+import './scss/painelInterno.scss';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

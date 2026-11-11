@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
 import CabecalhoVeterinario from "../components/veterinario/cabecalhoVeterinario";
 import AgendamentosVeterinario from "../components/veterinario/agendamentos";
@@ -8,26 +9,11 @@ import useAgendamentosVeterinario from "../components/veterinario/useAgendamento
 import usePerfilVeterinario from "../components/veterinario/usePerfilVeterinario";
 import "../scss/pagVeterinario.scss";
 
-const ABAS = [
-    {
-        id: "atendimentos",
-        rotulo: "Atendimentos",
-        icone: "fa-solid fa-clipboard-list"
-    },
-    {
-        id: "agenda",
-        rotulo: "Agenda do mês",
-        icone: "fa-regular fa-calendar-days"
-    },
-    {
-        id: "disponibilidade",
-        rotulo: "Minha disponibilidade",
-        icone: "fa-regular fa-clock"
-    }
-];
-
 export default function Veterinario() {
-    const [abaAtiva, setAbaAtiva] = useState("atendimentos");
+    const [searchParams] = useSearchParams();
+    const abaAtiva = ["agenda", "disponibilidade"].includes(searchParams.get("aba"))
+        ? searchParams.get("aba")
+        : "atendimentos";
     const nome = usePerfilVeterinario();
 
     const {
@@ -55,21 +41,6 @@ export default function Veterinario() {
                     pendentes={totais.pendentes}
                     total={totais.total}
                 />
-
-                <nav className="abas-veterinario" aria-label="Seções do painel">
-                    {ABAS.map((aba) => (
-                        <button
-                            type="button"
-                            key={aba.id}
-                            className={`aba ${abaAtiva === aba.id ? "ativa" : ""}`}
-                            aria-current={abaAtiva === aba.id ? "page" : undefined}
-                            onClick={() => setAbaAtiva(aba.id)}
-                        >
-                            <i className={aba.icone}></i>
-                            {aba.rotulo}
-                        </button>
-                    ))}
-                </nav>
 
                 {abaAtiva === "atendimentos" ? (
                     <AgendamentosVeterinario
