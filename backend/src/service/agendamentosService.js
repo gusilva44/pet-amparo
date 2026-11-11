@@ -31,23 +31,12 @@ async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim,
         throw new Error('Veterinário não encontrado ou indisponível nesta unidade.')
     }
 
-<<<<<<< HEAD
     if (!veterinario || !veterinario.ativo || !veterinario.usuario_ativo) throw new Error('Veterinário não encontrado ou inativo.')
 
     const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio), dataLocalISO(inicio), idServico)
 
     if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) throw new Error('O horário escolhido está fora do expediente do veterinário.')
     
-=======
-    const horarios = await repo.buscarHorarioDoVeterinario(
-        idVeterinario,
-        idUnidade,
-        diaSemana(dataDeDataHora(inicio)),
-    )
-    if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) {
-        throw new Error('O horário escolhido está fora do expediente do veterinário.')
-    }
->>>>>>> 298adaa81a9aa03269b56cc5c1b933ed4924c631
 }
 
 export function listarMeusAgendamentos(idCliente) {
@@ -56,7 +45,6 @@ export function listarMeusAgendamentos(idCliente) {
 }
 
 export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idServico, data }) {
-<<<<<<< HEAD
     validarId(idVeterinario);
     validarId(idUnidade);
     validarId(idServico);
@@ -73,28 +61,6 @@ export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idSe
     const passo = Math.max(15, Math.min(duracao, 60));
     const agora = new Date();
     const opcoes = new Set();
-=======
-    validarId(idVeterinario)
-    validarId(idUnidade)
-    validarId(idServico)
-    normalizarData(data)
-
-    const [unidade, servico, veterinario] = await Promise.all([
-        unidadesRepo.buscarUnidadePorId(idUnidade),
-        servicosRepo.buscarServicoPorId(idServico),
-        repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade),
-    ])
-    if (!unidade?.ativo || !servico?.ativo || !await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) return []
-    if (!veterinario?.ativo || !veterinario?.usuario_ativo || !veterinario?.unidade_ativa) return []
-
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, diaSemana(data))
-    const ocupados = await repo.listarConflitos(idVeterinario, data)
-    const duracao = Number(servico.duracao_minutos)
-    const passo = 15
-    const agora = agoraNoFuso()
-    const opcoes = new Set()
-
->>>>>>> 298adaa81a9aa03269b56cc5c1b933ed4924c631
     for (const horario of horarios) {
         const inicioExpediente = minutosDaHora(String(horario.hora_inicio))
         const fimExpediente = minutosDaHora(String(horario.hora_fim))
@@ -172,7 +138,6 @@ export async function criarAgendamento(dados, idCliente) {
     if (!servico || !servico.ativo) throw new Error('Serviço não encontrado ou inativo.')
     if (!await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) throw new Error('O serviço não está disponível nesta unidade.')
 
-<<<<<<< HEAD
     if (!servico || !servico.ativo) {
         throw new Error('Serviço não encontrado ou inativo.')
     }
@@ -185,12 +150,6 @@ export async function criarAgendamento(dados, idCliente) {
     const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
 
     await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim, idServico)
-=======
-    const inicio = normalizarDataHora(dados.inicio)
-    if (inicio <= agoraNoFuso()) throw new Error('O agendamento deve estar no futuro.')
-    const fim = adicionarMinutos(inicio, Number(servico.duracao_minutos))
-    await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim)
->>>>>>> 298adaa81a9aa03269b56cc5c1b933ed4924c631
 
     const observacao = typeof dados.observacao === 'string' ? dados.observacao.trim() : ''
     if (observacao.length > 500) throw new Error('A observação deve ter no máximo 500 caracteres.')

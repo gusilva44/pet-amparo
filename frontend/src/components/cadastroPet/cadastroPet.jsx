@@ -138,20 +138,10 @@ export default function CadastroPet({ onSaved, pet, onCancel }) {
             <option value="nao_informado">Não informado</option>
           </select>
         </label>
-<<<<<<< HEAD
         <label className="pet-foto-campo seletor-imagem">
           Foto do pet (opcional)
           <input className="input-imagem-oculto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
           <span className="botao-escolher-imagem">Escolher imagem</span>
-=======
-        <label className="pet-foto-campo">
-          <span>Foto do pet (opcional)</span>
-          <span className="botao-escolher-foto">
-            <i className="fa-regular fa-image" aria-hidden="true" />
-            Escolher imagem
-          </span>
-          <input className="entrada-foto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFoto} />
->>>>>>> 298adaa81a9aa03269b56cc5c1b933ed4924c631
           {erroFoto && <span className="erro-foto" role="alert">{erroFoto}</span>}
         </label>
         {dados.foto && <img className="pet-foto-previa" src={dados.foto} alt="Prévia da foto do pet" />}
