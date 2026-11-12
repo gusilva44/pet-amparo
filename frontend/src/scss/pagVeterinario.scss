@@ -111,6 +111,26 @@
                 }
             }
         }
+
+        .perfil-veterinario {
+            width: min(100%, 850px);
+            display: grid;
+            gap: 18px;
+            color: #263a31;
+
+            > header { margin-bottom: 2px; }
+            h2, h3 { margin: 0 0 6px; color: #084d39; font-family: var(--titulo); }
+            p { margin: 0; color: #6b7a71; }
+            form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 20px; border: 1px solid #e2e9e3; border-radius: 16px; background: #fff; box-shadow: 0 8px 22px #263a310d; }
+            form h3 { grid-column: 1 / -1; }
+            label { display: grid; gap: 6px; color: #45564c; font-size: 14px; font-weight: 600; }
+            input { box-sizing: border-box; width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #cbd7ce; border-radius: 9px; color: #263a31; font: inherit; }
+            input:focus { border-color: #28734e; outline: 3px solid #28734e20; }
+            button { grid-column: 1 / -1; justify-self: start; min-height: 42px; padding: 9px 18px; border: 0; border-radius: 9px; background: #084d39; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+            button:hover:not(:disabled) { background: #126748; }
+            button:disabled { opacity: .65; cursor: wait; }
+            [role="status"] { padding: 12px 14px; border-radius: 10px; background: #eaf4ec; color: #28543f; }
+        }
     }
 }
 
@@ -162,4 +182,6 @@
             font-size: 12px;
         }
     }
+
+    .pagina-veterinario .conteudo-veterinario .perfil-veterinario form { grid-template-columns: 1fr; padding: 15px; }
 }

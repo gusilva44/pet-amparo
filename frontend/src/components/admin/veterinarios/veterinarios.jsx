@@ -13,14 +13,11 @@ const formularioInicial = {
   telefone: "",
   id_unidade: "",
 };
-const fichaInicial = { id_usuario: "", nome: "", crmv: "", especialidade: "", telefone: "", id_unidade: "" };
 
 export default function VeterinariosAdmin() {
   const [veterinarios, setVeterinarios] = useState([]);
   const [unidades, setUnidades] = useState([]);
   const [formulario, setFormulario] = useState(formularioInicial);
-  const [ficha, setFicha] = useState(fichaInicial);
-  const [contasSemFicha, setContasSemFicha] = useState([]);
   const [unidadeExtra, setUnidadeExtra] = useState({});
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
@@ -29,13 +26,11 @@ export default function VeterinariosAdmin() {
   const carregar = useCallback(async () => {
     setCarregando(true);
     try {
-      const [resVets, resContas, resUnidades] = await Promise.all([
+      const [resVets, resUnidades] = await Promise.all([
         veterinariosApi.listarAdmin(),
-        veterinariosApi.contasSemFicha(),
         unidadesApi.listar(true),
       ]);
       setVeterinarios(resVets.resultado || []);
-      setContasSemFicha(resContas.resultado || []);
       setUnidades((resUnidades.resultado || []).filter((unidade) => unidade.ativo));
       setMensagem("");
     } catch (error) {
@@ -89,22 +84,6 @@ export default function VeterinariosAdmin() {
     }
   }
 
-  async function completarFicha(event) {
-    event.preventDefault();
-    setSalvando(true);
-    setMensagem("");
-    try {
-      await veterinariosApi.criarFichaConta(Number(ficha.id_usuario), { ...ficha, id_unidade: Number(ficha.id_unidade) });
-      setFicha(fichaInicial);
-      setMensagem("Ficha profissional criada para a conta existente.");
-      await carregar();
-    } catch (error) {
-      setMensagem(mensagemErroApi(error));
-    } finally {
-      setSalvando(false);
-    }
-  }
-
   return (
     <div className="pagina-admin-veterinarios">
       <Aside />
@@ -130,20 +109,6 @@ export default function VeterinariosAdmin() {
             <button type="submit" disabled={salvando || !unidades.length}>{salvando ? "Cadastrando..." : "Cadastrar veterinário"}</button>
           </form>
         </section>
-
-        {contasSemFicha.length > 0 && <section className="cadastro-admin-veterinario">
-          <h2>Completar conta veterinária existente</h2>
-          <p>Use esta opção para associar uma ficha profissional a uma conta que já pode entrar no sistema.</p>
-          <form onSubmit={completarFicha}>
-            <label>Conta sem ficha<select required value={ficha.id_usuario} onChange={(e) => setFicha({ ...ficha, id_usuario: e.target.value })}><option value="">Selecione uma conta</option>{contasSemFicha.map((conta) => <option key={conta.id_usuario} value={conta.id_usuario}>{conta.email}</option>)}</select></label>
-            <label>Nome completo<input required maxLength="150" value={ficha.nome} onChange={(e) => setFicha({ ...ficha, nome: e.target.value })} /></label>
-            <label>CRMV<input required maxLength="30" value={ficha.crmv} onChange={(e) => setFicha({ ...ficha, crmv: e.target.value })} /></label>
-            <label>Especialidade<input maxLength="150" value={ficha.especialidade} onChange={(e) => setFicha({ ...ficha, especialidade: e.target.value })} /></label>
-            <label>Telefone<input type="tel" maxLength="30" value={ficha.telefone} onChange={(e) => setFicha({ ...ficha, telefone: e.target.value })} /></label>
-            <label>Unidade inicial<select required value={ficha.id_unidade} onChange={(e) => setFicha({ ...ficha, id_unidade: e.target.value })}><option value="">Selecione uma unidade</option>{unidades.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}</select></label>
-            <button type="submit" disabled={salvando || !unidades.length || !ficha.id_usuario}>{salvando ? "Salvando..." : "Criar ficha profissional"}</button>
-          </form>
-        </section>}
 
         <section className="lista-admin-veterinarios">
           <div className="lista-admin-veterinarios-titulo"><h2>Profissionais cadastrados</h2><button type="button" onClick={carregar} disabled={carregando}>{carregando ? "Atualizando..." : "Atualizar lista"}</button></div>

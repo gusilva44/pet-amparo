@@ -131,6 +131,14 @@
     .meuspets h2 {
       font-size: clamp(1.7rem, 4vw, 2.5rem);
     }
+    .cabecalho-meu-perfil { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .acoes-conta-cliente { display: flex; flex-shrink: 0; align-items: center; gap: .55rem; }
+    .botao-acao-conta { display: grid; width: 2.7rem; height: 2.7rem; place-items: center; padding: 0; border: 1px solid #ffffff70; border-radius: .8rem; background: #ffffff20; color: #fff; font-size: 1rem; cursor: pointer; transition: background .18s ease, transform .18s ease; }
+    .botao-acao-conta:hover { background: #ffffff35; transform: translateY(-2px); }
+    .form-editar-perfil-cliente { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0; }
+    .form-editar-perfil-cliente label { display: grid; gap: .35rem; }
+    .form-editar-perfil-cliente input { box-sizing: border-box; min-height: 2.5rem; padding: .5rem; border: 1px solid #b8c2b9; border-radius: .4rem; font: inherit; }
+    @media (max-width: 650px) { .form-editar-perfil-cliente { grid-template-columns: 1fr; } }
     .banner {
       display: flex;
       align-items: center;

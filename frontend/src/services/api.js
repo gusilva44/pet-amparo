@@ -7,6 +7,7 @@ export const authApi = {
     requisicao({ method: "POST", url: "/auth/login", data: credenciais }),
   logout: () => requisicao({ method: "POST", url: "/auth/logout" }),
   usuarioAtual: () => requisicao({ method: "GET", url: "/auth/me" }),
+  trocarSenha: (senhaAntiga, senhaNova) => requisicao({ method: "PUT", url: "/auth/me", data: { senhaAntiga, senhaNova } }),
 };
 
 export const clientesApi = {
@@ -81,6 +82,8 @@ export const veterinariosApi = {
   vincularUnidade: (idVeterinario, idUnidade) =>
     requisicao({ method: "POST", url: `/admin/veterinarios/${idVeterinario}/unidades/${idUnidade}` }),
   minhasUnidades: () => requisicao({ method: "GET", url: "/veterinarios/me/unidades" }),
+  meuPerfil: () => requisicao({ method: "GET", url: "/veterinarios/me/perfil" }),
+  atualizarMeuPerfil: (dados) => requisicao({ method: "PUT", url: "/veterinarios/me/perfil", data: dados }),
   meusHorarios: () => requisicao({ method: "GET", url: "/veterinarios/me/horarios" }),
   criarMeuHorario: (dados) => requisicao({ method: "POST", url: "/veterinarios/me/horarios", data: dados }),
   excluirMeuHorario: (id) => requisicao({ method: "DELETE", url: `/veterinarios/me/horarios/${id}` }),

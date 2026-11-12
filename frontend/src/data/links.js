@@ -77,6 +77,12 @@ const links = {
             caminho: '/admveterinario?aba=disponibilidade',
             texto: 'Disponibilidade',
             icone: 'fa-regular fa-clock'
+        },
+        {
+            id: 4,
+            caminho: '/admveterinario?aba=perfil',
+            texto: 'Meu perfil',
+            icone: 'fa-regular fa-user'
         }
     ]
 };

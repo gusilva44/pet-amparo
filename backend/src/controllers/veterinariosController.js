@@ -156,6 +156,26 @@ endpoints.get("/veterinarios/me/unidades", autenticar, exigirVeterinario, async 
   }
 });
 
+endpoints.get("/veterinarios/me/perfil", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const perfil = await service.buscarMeuPerfil(Number(req.usuario.id_usuario));
+    res.status(200).json({ sucesso: true, perfil });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
+endpoints.put("/veterinarios/me/perfil", autenticar, exigirVeterinario, async (req, res) => {
+  try {
+    const perfil = await service.atualizarMeuPerfil(Number(req.usuario.id_usuario), req.body);
+    res.status(200).json({ sucesso: true, mensagem: "Perfil atualizado.", perfil });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
 endpoints.get("/veterinarios/me/horarios", autenticar, exigirVeterinario, async (req, res) => {
   try {
     const resultado = await service.listarHorarios(Number(req.veterinario.id_veterinario));

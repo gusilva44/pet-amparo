@@ -118,13 +118,13 @@ export default function Auth({
     setEnviando(true);
 
     try {
-      await concluirLogin({ email, senha });
+      const resposta = await concluirLogin({ email, senha });
 
       toast.success("Login realizado!", {
         description: "Seja bem-vindo de volta!",
       });
 
-      navigate(destino);
+      navigate(redirectTo === "/" ? (resposta.usuario?.tipo === "admin" ? "/visao" : resposta.usuario?.tipo === "veterinario" ? "/admveterinario" : destino) : destino);
     } catch (error) {
       toast.error("Não foi possível entrar", {
         description:
@@ -165,7 +165,7 @@ export default function Auth({
 
       await authApi.cadastrar(dadosCadastro);
 
-      await concluirLogin({
+      const resposta = await concluirLogin({
         email: cadastro.email,
         senha: cadastro.senha,
       });
@@ -174,7 +174,7 @@ export default function Auth({
         description: "Bem-vindo à nossa clínica veterinária!",
       });
 
-      navigate(destino);
+      navigate(redirectTo === "/" ? (resposta.usuario?.tipo === "admin" ? "/visao" : resposta.usuario?.tipo === "veterinario" ? "/admveterinario" : destino) : destino);
     } catch (error) {
       toast.error("Erro no cadastro", {
         description:

@@ -5,13 +5,14 @@ import CabecalhoVeterinario from "../components/veterinario/cabecalhoVeterinario
 import AgendamentosVeterinario from "../components/veterinario/agendamentos";
 import AgendaVeterinario from "../components/veterinario/agenda";
 import DisponibilidadeVeterinario from "../components/veterinario/disponibilidade";
+import PerfilVeterinario from "../components/veterinario/perfil";
 import useAgendamentosVeterinario from "../components/veterinario/useAgendamentosVeterinario";
 import usePerfilVeterinario from "../components/veterinario/usePerfilVeterinario";
 import "../scss/pagVeterinario.scss";
 
 export default function Veterinario() {
     const [searchParams] = useSearchParams();
-    const abaAtiva = ["agenda", "disponibilidade"].includes(searchParams.get("aba"))
+    const abaAtiva = ["agenda", "disponibilidade", "perfil"].includes(searchParams.get("aba"))
         ? searchParams.get("aba")
         : "atendimentos";
     const nome = usePerfilVeterinario();
@@ -59,8 +60,10 @@ export default function Veterinario() {
                         atualizandoId={atualizandoId}
                         alterarSituacao={alterarSituacao}
                     />
-                ) : (
+                ) : abaAtiva === "disponibilidade" ? (
                     <DisponibilidadeVeterinario />
+                ) : (
+                    <PerfilVeterinario />
                 )}
             </main>
         </div>

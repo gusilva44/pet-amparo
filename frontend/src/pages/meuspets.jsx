@@ -21,6 +21,9 @@ export default function MeusPets() {
   const [mensagemFoto, setMensagemFoto] = useState("");
   const [petEditando, setPetEditando] = useState(null);
   const [mensagemPets, setMensagemPets] = useState("");
+  const [editandoPerfil, setEditandoPerfil] = useState(false);
+  const [formPerfil, setFormPerfil] = useState({});
+  const [mensagemPerfil, setMensagemPerfil] = useState("");
 
   const carregarDados = useCallback(async (conta) => {
     setUsuario(conta);
@@ -33,6 +36,7 @@ export default function MeusPets() {
     setCliente(
       resCliente.status === "fulfilled" ? resCliente.value.cliente : null,
     );
+    if (resCliente.status === "fulfilled") setFormPerfil({ ...resCliente.value.cliente });
     setPets(
       resPets.status === "fulfilled" ? resPets.value.animais || [] : [],
     );
@@ -110,6 +114,32 @@ export default function MeusPets() {
     }
   }
 
+  async function salvarPerfil(event) {
+    event.preventDefault();
+    setMensagemPerfil("");
+    try {
+      await clientesApi.atualizarMeusDados(formPerfil);
+      const resposta = await clientesApi.meusDados();
+      setCliente(resposta.cliente);
+      setFormPerfil({ ...resposta.cliente });
+      setEditandoPerfil(false);
+      setMensagemPerfil("Perfil atualizado.");
+      avisarMudancaAutenticacao();
+    } catch (error) {
+      setMensagemPerfil(error.response?.data?.mensagem || "Não foi possível atualizar o perfil.");
+    }
+  }
+
+  async function removerConta() {
+    if (!window.confirm("Deseja realmente remover sua conta? Esta ação não pode ser desfeita.")) return;
+    try {
+      await clientesApi.excluirMinhaConta();
+      await sair();
+    } catch (error) {
+      setMensagemPerfil(error.response?.data?.mensagem || "Não foi possível remover a conta.");
+    }
+  }
+
   async function excluirPet(pet) {
     if (!window.confirm(`Remover ${pet.nome} da sua lista de pets?`)) return;
     setMensagemPets("");
@@ -160,7 +190,20 @@ export default function MeusPets() {
         ) : (
           <>
             <section className="meuPerfil">
-              <h1>Meu perfil</h1>
+              <div className="cabecalho-meu-perfil">
+                <h1>Meu perfil</h1>
+              </div>
+              {editandoPerfil && <form className="form-editar-perfil-cliente" onSubmit={salvarPerfil}>
+                <label>Nome<input required value={formPerfil.nome || ""} onChange={(event) => setFormPerfil({ ...formPerfil, nome: event.target.value })} /></label>
+                <label>E-mail<input required type="email" value={formPerfil.email || ""} onChange={(event) => setFormPerfil({ ...formPerfil, email: event.target.value })} /></label>
+                <label>Data de nascimento<input required type="date" value={formPerfil.data_nascimento ? String(formPerfil.data_nascimento).slice(0, 10) : ""} onChange={(event) => setFormPerfil({ ...formPerfil, data_nascimento: event.target.value })} /></label>
+                <label>Telefone<input required value={formPerfil.telefone || ""} onChange={(event) => setFormPerfil({ ...formPerfil, telefone: event.target.value })} /></label>
+                <label>CPF<input required value={formPerfil.cpf || ""} onChange={(event) => setFormPerfil({ ...formPerfil, cpf: event.target.value })} /></label>
+                <label>Endereço<input required value={formPerfil.endereco || ""} onChange={(event) => setFormPerfil({ ...formPerfil, endereco: event.target.value })} /></label>
+                <button className="botao-principal">Salvar alterações</button>
+                <button type="button" className="botao-secundario" onClick={() => setEditandoPerfil(false)}>Cancelar</button>
+              </form>}
+              {mensagemPerfil && <p role="status">{mensagemPerfil}</p>}
               <div className="banner">
                 <div className="sta">
                   <div className="avatar-iniciais" aria-label={nomeExibicao}>
@@ -181,9 +224,11 @@ export default function MeusPets() {
                   {fotoSelecionada && <button className="botao-secundario" onClick={salvarFotoPerfil} disabled={salvandoFoto}>{salvandoFoto ? "Salvando..." : "Salvar foto"}</button>}
                   {mensagemFoto && <p role="status">{mensagemFoto}</p>}
                 </div>
-                <button className="botao-secundario" onClick={sair}>
-                  Sair da conta
-                </button>
+                <div className="acoes-conta-cliente">
+                  <button type="button" className="botao-acao-conta" onClick={() => setEditandoPerfil((valor) => !valor)} aria-label="Editar perfil" title="Editar perfil"><i className="fa-solid fa-pen" /></button>
+                  <button type="button" className="botao-acao-conta" onClick={removerConta} aria-label="Remover conta" title="Remover conta"><i className="fa-solid fa-trash-can" /></button>
+                  <button type="button" className="botao-acao-conta" onClick={sair} aria-label="Sair da conta" title="Sair da conta"><i className="fa-solid fa-right-from-bracket" /></button>
+                </div>
               </div>
             </section>
 

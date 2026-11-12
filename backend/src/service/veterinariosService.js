@@ -89,6 +89,28 @@ export async function listarUnidadesDoVeterinario(idVeterinario) {
     return veterinariosRepo.listarUnidadesDoVeterinario(idVeterinario)
 }
 
+export async function buscarMeuPerfil(idUsuario) {
+    validarId(idUsuario)
+    const perfil = await veterinariosRepo.buscarPerfilPorUsuario(idUsuario)
+    if (!perfil) throw new Error('Perfil do veterinário não encontrado.')
+    return perfil
+}
+
+export async function atualizarMeuPerfil(idUsuario, dados) {
+    validarId(idUsuario)
+    const nome = dados?.nome?.trim()
+    const email = dados?.email?.trim().toLowerCase()
+    const crmv = dados?.crmv?.trim()
+    if (!nome || !email || !crmv) throw new Error('Nome, e-mail e CRMV são obrigatórios.')
+    if (!regex.verificarEmail.test(email)) throw new Error('Digite um e-mail válido.')
+    await veterinariosRepo.atualizarPerfilPorUsuario(idUsuario, {
+        nome, email, crmv,
+        especialidade: dados.especialidade?.trim() || null,
+        telefone: dados.telefone?.trim() || null,
+    })
+    return buscarMeuPerfil(idUsuario)
+}
+
 export async function vincularVeterinarioUnidade(idVeterinario, idUnidade) {
     validarId(idVeterinario)
     validarId(idUnidade)

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { authApi } from "../../services/api";
+import { veterinariosApi } from "../../services/api";
 
 export default function usePerfilVeterinario() {
     const [nome, setNome] = useState("");
@@ -9,10 +9,8 @@ export default function usePerfilVeterinario() {
 
         async function carregar() {
             try {
-                const resposta = await authApi.usuarioAtual();
-                const usuario = resposta?.usuario;
-
-                if (ativo) setNome(usuario?.nome || usuario?.email || "");
+                const resposta = await veterinariosApi.meuPerfil();
+                if (ativo) setNome(resposta?.perfil?.nome || "");
             } catch {
                 if (ativo) setNome("");
             }

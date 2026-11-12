@@ -27,6 +27,24 @@ export async function buscarVeterinarioPorUsuario(idUsuario) {
     return resultado[0]
 }
 
+export async function buscarPerfilPorUsuario(idUsuario) {
+    const [resultado] = await db.query(`
+        SELECT v.id_veterinario, v.id_usuario, v.nome, v.crmv, v.especialidade, v.telefone, u.email
+        FROM veterinarios v INNER JOIN usuarios u ON u.id_usuario = v.id_usuario
+        WHERE v.id_usuario = ? AND v.ativo = TRUE AND u.ativo = TRUE
+    `, [idUsuario])
+    return resultado[0]
+}
+
+export async function atualizarPerfilPorUsuario(idUsuario, dados) {
+    const [resultado] = await db.query(`
+        UPDATE veterinarios v INNER JOIN usuarios u ON u.id_usuario = v.id_usuario
+        SET v.nome = ?, v.crmv = ?, v.especialidade = ?, v.telefone = ?, u.email = ?
+        WHERE v.id_usuario = ? AND v.ativo = TRUE AND u.ativo = TRUE
+    `, [dados.nome, dados.crmv, dados.especialidade, dados.telefone, dados.email, idUsuario])
+    return resultado.affectedRows
+}
+
 export async function listarVeterinariosAdmin() {
     const [resultado] = await db.query(`
         SELECT v.id_veterinario, v.nome, v.crmv, v.especialidade, v.telefone,
@@ -141,27 +159,30 @@ export async function listarUnidadesDoVeterinario(idVeterinario) {
         SELECT u.id_unidade, u.nome
         FROM veterinarios_unidades vu
         INNER JOIN unidades u ON u.id_unidade = vu.id_unidade
-        WHERE vu.id_veterinario = ? AND vu.ativo = TRUE AND u.ativo = TRUE
+        WHERE vu.id_veterinario = ? AND (vu.ativo = TRUE OR vu.ativo IS NULL) AND u.ativo = TRUE
         ORDER BY u.nome
     `, [idVeterinario])
     return resultado
 }
 
 export async function criarHorario(dados) {
-    await db.beginTransaction();
+    const conexao = await db.getConnection();
     try {
-        const [resultado] = await db.query(`
+        await conexao.beginTransaction();
+        const [resultado] = await conexao.query(`
             INSERT INTO horarios_veterinarios (id_veterinario, id_unidade, dia_semana, data_disponivel, hora_inicio, hora_fim)
             VALUES (?, ?, ?, ?, ?, ?)
         `, [dados.id_veterinario, dados.id_unidade, dados.dia_semana, dados.data_disponivel, dados.hora_inicio, dados.hora_fim]);
         for (const idServico of dados.ids_servicos) {
-            await db.query(`INSERT INTO horarios_veterinarios_servicos (id_horario, id_servico) VALUES (?, ?)`, [resultado.insertId, idServico]);
+            await conexao.query(`INSERT INTO horarios_veterinarios_servicos (id_horario, id_servico) VALUES (?, ?)`, [resultado.insertId, idServico]);
         }
-        await db.commit();
+        await conexao.commit();
         return resultado.insertId;
     } catch (error) {
-        await db.rollback();
+        await conexao.rollback();
         throw error;
+    } finally {
+        conexao.release();
     }
 }
 
