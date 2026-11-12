@@ -1,4 +1,4 @@
--- Active: 1790850489930@@127.0.0.1@3306@pet_amparo
+-- Active: 1790850489930@@127.0.0.1@3306
 CREATE DATABASE IF NOT EXISTS pet_amparo;
 USE pet_amparo;
 

@@ -94,7 +94,7 @@ export default function Aside({ tipo }) {
           className="img-usuario"
           aria-label={nomeUsuario ? `Iniciais de ${nomeUsuario}` : "Perfil do usuário"}
         >
-          {fotoUsuario ? <img src={fotoUsuario} alt="" /> : iniciais || "?"}
+          {fotoUsuario ? <img src={fotoUsuario} alt="" /> : iniciais || <i class="fa-regular fa-user"></i>}
         </div>
 
         <div className="dados-usuario">
