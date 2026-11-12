@@ -5,6 +5,8 @@ import { authApi, clientesApi } from "../../services/api";
 import { avisarMudancaAutenticacao } from "../../utils/authEvents";
 import "./aside.scss";
 
+import img from '../../assets/imagens/aside_img.webp'
+
 const ROTULOS_TIPO = {
   cliente: "Cliente",
   admin: "Administrador",
@@ -144,6 +146,7 @@ export default function Aside({ tipo }) {
           )}
         </ul>
       </nav>
+      <img src={img} alt="Img linda" className="img"/>
     </aside>
   );
 }

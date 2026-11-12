@@ -194,13 +194,53 @@ export default function MeusPets() {
                 <h1>Meu perfil</h1>
               </div>
               {editandoPerfil && <form className="form-editar-perfil-cliente" onSubmit={salvarPerfil}>
-                <label>Nome<input required value={formPerfil.nome || ""} onChange={(event) => setFormPerfil({ ...formPerfil, nome: event.target.value })} /></label>
-                <label>E-mail<input required type="email" value={formPerfil.email || ""} onChange={(event) => setFormPerfil({ ...formPerfil, email: event.target.value })} /></label>
-                <label>Data de nascimento<input required type="date" value={formPerfil.data_nascimento ? String(formPerfil.data_nascimento).slice(0, 10) : ""} onChange={(event) => setFormPerfil({ ...formPerfil, data_nascimento: event.target.value })} /></label>
-                <label>Telefone<input required value={formPerfil.telefone || ""} onChange={(event) => setFormPerfil({ ...formPerfil, telefone: event.target.value })} /></label>
-                <label>CPF<input required value={formPerfil.cpf || ""} onChange={(event) => setFormPerfil({ ...formPerfil, cpf: event.target.value })} /></label>
-                <label>Endereço<input required value={formPerfil.endereco || ""} onChange={(event) => setFormPerfil({ ...formPerfil, endereco: event.target.value })} /></label>
-                <button className="botao-principal">Salvar alterações</button>
+                <label>
+                  Nome
+                  <input 
+                  required 
+                  value={formPerfil.nome || ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, nome: event.target.value })} />
+                </label>
+                <label>
+                  E-mail
+                  <input 
+                  required 
+                  type="email" 
+                  value={formPerfil.email || ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, email: event.target.value })} />
+                </label>
+                <label>
+                  Data de nascimento
+                  <input 
+                  required 
+                  type="date" 
+                  value={formPerfil.data_nascimento ? String(formPerfil.data_nascimento).slice(0, 10) : ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, data_nascimento: event.target.value })} />
+                </label>
+                <label>
+                  Telefone
+                  <input 
+                  required 
+                  value={formPerfil.telefone || ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, telefone: event.target.value })} />
+                </label>
+                <label>
+                  CPF
+                  <input 
+                  required 
+                  value={formPerfil.cpf || ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, cpf: event.target.value })} />
+                </label>
+                <label>
+                  Endereço
+                  <input 
+                  required 
+                  value={formPerfil.endereco || ""} 
+                  onChange={(event) => setFormPerfil({ ...formPerfil, endereco: event.target.value })} />
+                </label>
+                <button className="botao-principal">
+                  Salvar alterações
+                </button>
                 <button type="button" className="botao-secundario" onClick={() => setEditandoPerfil(false)}>Cancelar</button>
               </form>}
               {mensagemPerfil && <p role="status">{mensagemPerfil}</p>}
@@ -225,16 +265,37 @@ export default function MeusPets() {
                   {mensagemFoto && <p role="status">{mensagemFoto}</p>}
                 </div>
                 <div className="acoes-conta-cliente">
-                  <button type="button" className="botao-acao-conta" onClick={() => setEditandoPerfil((valor) => !valor)} aria-label="Editar perfil" title="Editar perfil"><i className="fa-solid fa-pen" /></button>
-                  <button type="button" className="botao-acao-conta" onClick={removerConta} aria-label="Remover conta" title="Remover conta"><i className="fa-solid fa-trash-can" /></button>
-                  <button type="button" className="botao-acao-conta" onClick={sair} aria-label="Sair da conta" title="Sair da conta"><i className="fa-solid fa-right-from-bracket" /></button>
+                  <button 
+                  type="button" 
+                  className="botao-acao-conta" 
+                  onClick={() => setEditandoPerfil((valor) => !valor)} 
+                  aria-label="Editar perfil" 
+                  title="Editar perfil">
+                    <i className="fa-solid fa-pen" />
+                  </button>
+                  <button 
+                  type="button" 
+                  className="botao-acao-conta" 
+                  onClick={removerConta} 
+                  aria-label="Remover conta" 
+                  title="Remover conta">
+                    <i className="fa-solid fa-trash-can" />
+                  </button>
+                  <button 
+                  type="button" 
+                  className="botao-acao-conta" 
+                  onClick={sair} 
+                  aria-label="Sair da conta" 
+                  title="Sair da conta">
+                    <i className="fa-solid fa-right-from-bracket" />
+                  </button>
                 </div>
               </div>
             </section>
 
             <section className="meuspets">
               <div className="pets-cabecalho">
-                <div>
+                <div> 
                   <h2>Meus pets</h2>
                   <p>Aqui estão os pets cadastrados na sua conta.</p>
                 </div>

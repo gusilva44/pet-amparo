@@ -1,4 +1,3 @@
-
 html {
     scroll-behavior: smooth;
 }
@@ -33,7 +32,7 @@ html {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                width: 80%;
+                width: 85%;
                 min-height: 290px;
                 margin-top: 30px;
                 background-color: var(--verde-escuro);
@@ -93,16 +92,21 @@ html {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 50%;
+                    width: 55%;
                     height: 290px;
                     min-width: 0;
+                    position: relative;
 
                     .img-banner {
                         display: block;
                         width: 100%;
                         height: 100%;
+                        width: 100%;
                         object-fit: contain;
                         object-position: center;
+
+                        position: absolute;
+                        top: 16.6%;
                     }
                 }
             }
@@ -111,7 +115,7 @@ html {
             .sobre {
                 display: flex;
                 flex-direction: column;
-                width: 80%;
+                width: 84%;
                 margin-top: 50px;
                 box-sizing: border-box;
 
@@ -126,7 +130,7 @@ html {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    gap: 25px;
+                    gap: 50px;
                     width: 100%;
 
                     .sobre-esq {
@@ -165,7 +169,7 @@ html {
                             p {
                                 margin: 5px 0;
                                 font-family: var(--textos);
-                                font-size: 14px;
+                                font-size: 16px;
                                 line-height: 1.6;
                                 text-align: justify;
                                 color: var(--verde-escuro);
@@ -197,7 +201,7 @@ html {
                 align-items: stretch;
                 justify-content: center;
                 gap: 30px;
-                width: 90%;
+                width: 85%;
                 margin: 50px 0;
 
                 .card {
@@ -246,7 +250,7 @@ html {
                 align-items: center;
                 justify-content: space-between;
                 gap: 20px;
-                width: 80%;
+                width: 85%;
                 margin: 30px 0;
                 padding: 20px;
                 background-color: var(--verde-claro);
@@ -279,7 +283,7 @@ html {
 
                     p {
                         font-family: var(--textos);
-                        font-size: 18px;
+                        font-size: 16px;
                         line-height: 1.6;
                         color: var(--branco);
                         text-align: justify;
@@ -310,9 +314,9 @@ html {
                 align-items: center;
                 justify-content: center;
                 gap: 30px;
-                width: 82%;
-                min-height: 100px;
-                padding: 15px;
+                width: 85%;
+                min-height: 10px;
+                padding: 10px;
                 box-sizing: border-box;
                 background-color: var(--verde-escuro);
                 border-radius: 15px;
@@ -336,7 +340,7 @@ html {
                 position: relative;
                 flex: 0 0 auto;
                 width: 100%;
-                margin-top: 50px;
+                margin-top: 30px;
                 margin-bottom: 48px;
                 padding-bottom: 24px;
 
@@ -362,7 +366,7 @@ html {
                     align-items: center;
                     justify-content: space-between;
                     gap: 20px;
-                    width: 80%;
+                    width: 85%;
                     min-height: 210px;
                     padding: 15px;
                     background-color: var(--verde-claro);
@@ -460,7 +464,9 @@ html {
         width: 100%;
         min-height: 299px;
         padding: 30px 20px;
-        background-color: var(--verde-claro);
+        border-top: 5px solid var(--laranja);
+
+        background-color: var(--verde-escuro);
         box-sizing: border-box;
 
         .footer-info {
@@ -484,6 +490,9 @@ html {
                 width: 140px;
                 height: auto;
                 margin-bottom: 10px;
+                background-color: var(--creme);
+                border-radius: 10px;
+                padding: 5px;
             }
 
             p {

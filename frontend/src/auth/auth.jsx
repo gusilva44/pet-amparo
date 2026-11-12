@@ -326,7 +326,7 @@ export default function Auth({
             Endereço
             <input
               name="endereco"
-              placeholder="Rua, número, bairro..."
+              placeholder="Rua, bairro..."
               required
               value={cadastro.endereco}
               onChange={atualizarCadastro}

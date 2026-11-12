@@ -63,6 +63,15 @@ export default function CadastroPet({ onSaved, pet, onCancel }) {
     }
   }
 
+  function formatarRGA(valor) {
+    const numeros = valor.replace(/\D/g, "").slice(0, 9);
+
+    return numeros
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2");
+  }
+
   return (
     <details className="cadastro-pet" open={Boolean(pet)}>
       {!pet && <summary>+ Adicionar um novo pet</summary>}
@@ -77,12 +86,15 @@ export default function CadastroPet({ onSaved, pet, onCancel }) {
         </label>
         <label>
           Espécie
-          <input
+          <select
             required
-            placeholder="Ex.: cão ou gato"
             value={dados.especie}
             onChange={(event) => atualizar("especie", event.target.value)}
-          />
+          >
+            <option value="">Selecione</option>
+            <option value="gato">Gato</option>
+            <option value="cão">Cão</option>
+          </select>
         </label>
         <label>
           Raça
@@ -96,8 +108,12 @@ export default function CadastroPet({ onSaved, pet, onCancel }) {
           RGA
           <input
             required
+            type="text"
+            maxLength={7}
             value={dados.rga}
-            onChange={(event) => atualizar("rga", event.target.value)}
+            onChange={(e) =>
+              atualizar("rga", e.target.value)
+            }
           />
         </label>
         <label>

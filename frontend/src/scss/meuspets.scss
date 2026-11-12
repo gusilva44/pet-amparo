@@ -220,11 +220,14 @@
         place-items: center;
         border-radius: .85rem;
         background: #dce8d8;
-        color: var(--verde-escuro, #243b32);
+        color: var(--verde-claro, #243b32);
         font-family: "Font Awesome 6 Free";
         font-weight: 900;
       }
-      p { margin: .35rem 0 0; color: #607168; }
+      p { 
+        margin: .35rem 0 0; 
+        color: #607168; 
+      }
     }
     .lista-pets {
       display: grid;

@@ -78,7 +78,7 @@ export default function Home(){
                                 Saúde animal <span>acessível</span><br />para todos!
                             </h2>
                             <p>
-                                Encontre unidades, serviços disponíveis e <br />informações para cuidar do seu pet.
+                                Encontre unidades, serviços disponíveis e informações para cuidar do seu pet.
                             </p><br />
                             <button >
                                <a href="#unidades">Encontre uma unidade</a> 
