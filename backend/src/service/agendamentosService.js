@@ -33,7 +33,8 @@ async function validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim,
 
     if (!veterinario || !veterinario.ativo || !veterinario.usuario_ativo) throw new Error('Veterinário não encontrado ou inativo.')
 
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicio), dataLocalISO(inicio), idServico)
+    const data = dataDeDataHora(inicio)
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, diaSemana(data), data, idServico)
 
     if (!horarios.some(horario => dentroDoHorario(inicio, fim, horario))) throw new Error('O horário escolhido está fora do expediente do veterinário.')
     
@@ -49,17 +50,16 @@ export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idSe
     validarId(idUnidade);
     validarId(idServico);
     if (typeof data !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new Error('Informe uma data válida.');
-    const inicioDia = new Date(`${data}T00:00:00`);
-    if (Number.isNaN(inicioDia.getTime()) || dataLocalISO(inicioDia) !== data) throw new Error('Informe uma data válida.');
+    const dataNormalizada = normalizarData(data);
     const servico = await servicosRepo.buscarServicoPorId(idServico);
     if (!servico?.ativo || !await servicosRepo.servicoDisponivelNaUnidade(idServico, idUnidade)) return [];
     const veterinario = await repo.buscarVeterinarioNaUnidade(idVeterinario, idUnidade);
     if (!veterinario?.ativo || !veterinario?.usuario_ativo) return [];
-    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, numeroDiaSemana(inicioDia), data, idServico);
+    const horarios = await repo.buscarHorarioDoVeterinario(idVeterinario, idUnidade, diaSemana(dataNormalizada), dataNormalizada, idServico);
     const ocupados = await repo.listarConflitos(idVeterinario, data);
     const duracao = Number(servico.duracao_minutos);
     const passo = Math.max(15, Math.min(duracao, 60));
-    const agora = new Date();
+    const agora = agoraNoFuso();
     const opcoes = new Set();
     for (const horario of horarios) {
         const inicioExpediente = minutosDaHora(String(horario.hora_inicio))
@@ -67,7 +67,8 @@ export async function listarHorariosDisponiveis({ idVeterinario, idUnidade, idSe
 
         for (let minuto = inicioExpediente; minuto + duracao <= fimExpediente; minuto += passo) {
             const hora = `${String(Math.floor(minuto / 60)).padStart(2, '0')}:${String(minuto % 60).padStart(2, '0')}`
-            const inicio = dataHoraParaBanco(data, hora)
+            const [horaInicio, minutoInicio] = hora.split(':')
+            const inicio = dataHoraParaBanco(data, horaInicio, minutoInicio)
             const fim = adicionarMinutos(inicio, duracao)
             if (inicio <= agora) continue
             if (ocupados.some(item => inicio < item.fim && fim > item.inicio)) continue
@@ -146,8 +147,8 @@ export async function criarAgendamento(dados, idCliente) {
         throw new Error('O serviço não está disponível nesta unidade.')
     }
 
-    const inicio = lerDataHora(dados.inicio)
-    const fim = new Date(inicio.getTime() + servico.duracao_minutos * 60_000)
+    const inicio = normalizarDataHora(dados.inicio)
+    const fim = adicionarMinutos(inicio, Number(servico.duracao_minutos))
 
     await validarVeterinarioEHorario(idVeterinario, idUnidade, inicio, fim, idServico)
 

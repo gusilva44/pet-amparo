@@ -40,7 +40,11 @@ endpoints.post('/auth/login', async (req, res) => {
 
     } catch (error) {
         logError(error)
-        res.status(401).json(formatarError(error))
+        const erro = formatarError(error)
+        res.status(401).json({
+            ...erro,
+            mensagem: "Email ou senha incorretos",
+        })
     }
 })
 
