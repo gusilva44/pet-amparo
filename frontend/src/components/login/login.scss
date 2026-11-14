@@ -103,3 +103,80 @@
     }
 }
 
+
+/* TABLETS E CELULARES */
+@media (max-width: 768px) {
+
+    html, body, #root {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .content {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        flex: 1;
+        padding: 20px 10px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    .comps-login {
+        width: min(500px, 100%);
+        max-width: 100%;
+        height: auto;
+        margin: 20px auto;
+        box-sizing: border-box;
+    }
+}
+
+/* CELULARES */
+@media (max-width: 480px) {
+
+    .content {
+        padding: 15px 8px;
+    }
+
+    .comps-login {
+        width: 100%;
+        margin: 15px auto;
+        border-radius: 10px;
+
+        .container {
+            padding: 25px 18px;
+        }
+    }
+}
+
+/* CELULARES PEQUENOS */
+@media (max-width: 360px) {
+    .comps-login {
+        .container {
+            padding: 20px 15px;
+
+            .titulo {
+                h2 {
+                    font-size: 18px;
+                }
+            }
+
+            .inputs {
+                margin-top: 25px;
+
+                input {
+                    height: 38px;
+                }
+            }
+        }
+    }
+}

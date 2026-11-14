@@ -1,3 +1,266 @@
+// TABLETS
+@media (max-width: 900px) {
+
+    .home-page {
+        .main {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .content {
+            width: 100%;
+            min-width: 0;
+            flex: 1;
+            padding: clamp(15px, 3vw, 30px);
+            box-sizing: border-box;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    /* CONFIGURAÇÕES GERAIS */
+    .home-page {
+        width: 100%;
+        overflow-x: hidden;
+
+        .main {
+            display: flex;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .content {
+            flex: 1;
+            min-width: 0;
+            width: 0;
+            padding: clamp(15px, 3vw, 45px);
+            box-sizing: border-box;
+        }
+
+        h2 {
+            font-size: clamp(21px, 2.2vw, 34px);
+        }
+
+        p {
+            font-size: clamp(14px, 1.1vw, 17px);
+            line-height: 1.7;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    /* BANNER */
+
+    .banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: clamp(20px, 4vw, 60px);
+        width: 100%;
+
+        .textos,
+        .imagem {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .textos {
+            h2 {
+                font-size: clamp(28px, 3.5vw, 52px);
+                line-height: 1.2;
+            }
+
+            p {
+                max-width: 500px;
+            }
+
+            button {
+                max-width: 100%;
+            }
+        }
+
+        .imagem {
+            display: flex;
+            justify-content: center;
+
+            .img-banner {
+                width: 100%;
+                max-width: 600px;
+                height: auto;
+                object-fit: contain;
+            }
+        }
+    }
+
+    /* SOBRE */
+
+    .sobre {
+        width: 100%;
+        margin-top: clamp(40px, 6vw, 90px);
+
+        .conteudo-sobre {
+            display: flex;
+            align-items: center;
+            gap: clamp(20px, 4vw, 55px);
+        }
+
+        .sobre-esq,
+        .sobre-img {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .img-sobre {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .sub-titulo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            img {
+                width: clamp(30px, 4vw, 50px);
+            }
+        }
+    }
+
+    /* CARDS */
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(15px, 2vw, 30px);
+        margin-top: clamp(40px, 6vw, 80px);
+
+        .card {
+            min-width: 0;
+            padding: clamp(15px, 2vw, 28px);
+            box-sizing: border-box;
+
+            img {
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: clamp(17px, 1.5vw, 23px);
+            }
+        }
+    }
+
+    /* PORQUE CRIAMOS */
+
+    .criacao {
+        display: flex;
+        align-items: center;
+        gap: clamp(20px, 4vw, 50px);
+        margin-top: clamp(40px, 6vw, 80px);
+
+        .text,
+        .img {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            img {
+                width: clamp(30px, 4vw, 50px);
+            }
+        }
+
+        .img img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+    }
+
+    /* MINI BANNER */
+
+    .mini-banner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: clamp(10px, 3vw, 35px);
+        padding: clamp(20px, 3vw, 40px);
+        margin-top: clamp(40px, 6vw, 80px);
+        text-align: center;
+
+        h2 {
+            font-size: clamp(18px, 2.5vw, 32px);
+        }
+
+        i {
+            flex-shrink: 0;
+        }
+    }
+
+    /* UNIDADES */
+
+    .unidades {
+        margin-top: clamp(40px, 6vw, 80px);
+        width: 100%;
+
+        .cards-unidades {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(15px, 2vw, 30px);
+            width: 100%;
+        }
+
+        .cards-unidades > .card {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .imagem img {
+            max-width: 100%;
+        }
+    }
+
+    /* FOOTER */
+
+    .footer {
+        display: grid;
+        grid-template-columns: 1.5fr repeat(3, 1fr);
+        gap: clamp(15px, 3vw, 40px);
+        padding: clamp(25px, 4vw, 60px);
+        box-sizing: border-box;
+
+        .footer-card,
+        .footer-info {
+            min-width: 0;
+        }
+
+        .footer-img img {
+            max-width: 100%;
+        }
+    }
+
+    .direitos {
+        padding: 15px;
+        text-align: center;
+
+        p {
+            font-size: clamp(11px, 1vw, 14px);
+        }
+    }
+
+}
+
 html {
     scroll-behavior: smooth;
 }
