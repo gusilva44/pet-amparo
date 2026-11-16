@@ -15,7 +15,7 @@ const links = {
         {
             id: 3,
             caminho: '/agendamentos',
-            texto: 'Agendamentos',
+            texto: 'Horários',
             icone: 'fa-regular fa-calendar'
         }
     ],

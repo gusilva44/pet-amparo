@@ -8,31 +8,31 @@ const unidades = [
     {
         id: 1,
         img: Leste1,
-        nome: "Unidade Leste I",
+        nome: "Unidade Leste I — Tatuapé",
         localizacao: "Rua Ulisses Cruz, 285 — Tatuapé, São Paulo."
     },
     {
         id: 2,
         img: Leste2,
-        nome: "Unidade Leste II",
+        nome: "Unidade Leste II — Cão Caramelo",
         localizacao: "Avenida Nordestina, 225, esquina com Rua Daniel Bernardo, 107 — São Miguel Paulista."
     },
     {
         id: 4,
         img: Norte,
-        nome: "Unidade Norte",
+        nome: "Unidade Norte — Casa Verde",
         localizacao: "Rua Atílio Piffer, 687 — Casa Verde, São Paulo."
     },
     {
         id: 5,
         img: Oeste,
-        nome: "Unidade Oeste",
+        nome: "Unidade Oeste — Butantã",
         localizacao: "Avenida Professor Orlando Marques de Paiva, 87 — Butantã, dentro da USP, São Paulo."
     },
     {
         id: 3,
         img: Sul,
-        nome: "Unidade Sul",
+        nome: "Unidade Sul — Jurubatuba'",
         localizacao: "Rua Agostino Togneri, 153 — Jurubatuba, São Paulo."
     }
 ];

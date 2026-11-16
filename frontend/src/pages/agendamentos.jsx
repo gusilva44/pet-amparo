@@ -122,12 +122,12 @@ export default function Agendamentos() {
                             </section>
 
                             <section className="texto-banner">
-                                <h2>Agendamento</h2>
+                                <h2>Horários</h2>
 
                                 <p>
                                     Aqui você pode visualizar seus
-                                    agendamentos e marcar um novo
-                                    atendimento para o seu pet.
+                                    horarios e clicar no botão para te direcionar 
+                                    para um novo agendamento em uma unidade.
                                 </p>
                             </section>
 

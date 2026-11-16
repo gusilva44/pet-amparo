@@ -493,11 +493,96 @@ export default function Unidades() {
                     )}
                   </h3>
                   {!usuario ? (
-                    <p>Para agendar, <Link className="agenda-link-login" to={`/meuspets?modo=login&redirect=${encodeURIComponent(`/unidades/${id}?aba=Agendamentos`)}`}>entre na sua conta de cliente</Link> e cadastre um pet.</p>
+                    <div className="agenda-nao-logado">
+                      <div className="agenda-nao-logado-icone">
+                        <span aria-hidden="true">🔒</span>
+                      </div>
+
+                      <div className="agenda-nao-logado-conteudo">
+                        <span className="agenda-nao-logado-tag">
+                          Identificação necessária
+                        </span>
+
+                        <h4>Entre na sua conta para agendar</h4>
+
+                        <p>
+                          Para solicitar um atendimento veterinário, precisamos
+                          identificar você e associar o agendamento ao cadastro
+                          do seu pet.
+                        </p>
+
+                        <div className="agenda-nao-logado-beneficios">
+                          <span>✓ Consulte os horários disponíveis</span>
+                          <span>✓ Associe o atendimento ao seu pet</span>
+                          <span>✓ Acompanhe seus agendamentos</span>
+                        </div>
+
+                        <Link
+                          className="agenda-botao-login"
+                          to={`/meuspets?modo=login&redirect=${encodeURIComponent(`/unidades/${id}?aba=Agendamentos`)}`}
+                        >
+                          Entrar na minha conta
+                          <span aria-hidden="true">→</span>
+                        </Link>
+
+                        <p className="agenda-cadastro-texto">
+                          Ainda não tem cadastro?{" "}
+                          <Link to="/meuspets?modo=cadastro">
+                            Cadastre-se gratuitamente
+                          </Link>
+                        </p>
+                      </div>
+                    </div>
                   ) : usuario.tipo !== "cliente" ? (
-                    <p>O agendamento está disponível para contas de cliente.</p>
+                    <div className="agenda-aviso-conta">
+                      <span aria-hidden="true">ℹ</span>
+                      <div>
+                        <strong>Conta de cliente necessária</strong>
+                        <p>
+                          O agendamento está disponível apenas para contas
+                          de clientes.
+                        </p>
+                      </div>
+                    </div>
                   ) : !pets.length ? (
-                    <p>Cadastre um pet em <Link className="agenda-link-login" to="/meuspets?modo=cadastro">Meus Pets</Link> para continuar.</p>
+                    <div className="agenda-sem-pet">
+                      <div className="agenda-sem-pet-icone">
+                        <span aria-hidden="true">🐾</span>
+                      </div>
+
+                      <div className="agenda-sem-pet-conteudo">
+                        <span className="agenda-sem-pet-tag">
+                          Cadastro necessário
+                        </span>
+
+                        <h4>Você ainda não cadastrou nenhum pet!</h4>
+
+                        <p>
+                          Antes de agendar uma consulta, precisamos conhecer
+                          seu companheiro. Cadastre seu pet para continuar
+                          com o agendamento.
+                        </p>
+
+                        <div className="agenda-sem-pet-beneficios">
+                          <span>✓ Cadastre as informações do seu pet</span>
+                          <span>✓ Tenha acesso aos serviços veterinários</span>
+                          <span>✓ Agende consultas de maneira simples</span>
+                        </div>
+
+                        <Link
+                          className="agenda-botao-cadastro-pet"
+                          to="/meuspets?modo=cadastro"
+                        >
+                          Cadastrar meu pet
+                          <span aria-hidden="true">→</span>
+                        </Link>
+
+                        <p className="agenda-sem-pet-texto">
+                          Após cadastrar seu pet, volte para esta página
+                          e solicite seu atendimento.
+                        </p>
+                      </div>
+                    </div>
                   ) : (
                     <label>
                       Pet
@@ -557,18 +642,7 @@ export default function Unidades() {
                       ))}
                     </select>
                   </label>
-                  <div className="agenda-disponibilidade-vet" aria-live="polite">
-                    <strong>Disponibilidade de {veterinarios.find((vet) => String(vet.id_veterinario) === String(idVeterinario))?.nome || ""}</strong>
-                    {carregandoHorarios ? <span>Carregando disponibilidade...</span> : horariosVeterinario.length ? (
-                      <ul>
-                        {horariosDoServico.map((horario) => {
-                          const dataLabel = horario.data_disponivel ? new Date(`${dataBancoParaISO(horario.data_disponivel)}T12:00:00`).toLocaleDateString("pt-BR") : ["", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"][Number(horario.dia_semana)];
-                          const faixa = `${String(horario.hora_inicio).slice(0, 5)}–${String(horario.hora_fim).slice(0, 5)}`;
-                          return <li key={horario.id_horario}><span>{dataLabel}</span><span>{faixa}</span></li>;
-                        })}
-                      </ul>
-                    ) : <span>Este veterinário ainda não cadastrou dias e horários nesta unidade.</span>}
-                  </div>
+                  
                   <label>
                     Hor&#225;rio dispon&#237;vel
                     <select

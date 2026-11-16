@@ -588,6 +588,6 @@ INSERT INTO unidades (
 
 UPDATE usuarios
 set tipo = "admin"
-where id_usuario = 1;
+where id_usuario = 2;
 
 SELECT * FROM usuarios;
