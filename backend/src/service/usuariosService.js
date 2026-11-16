@@ -75,3 +75,14 @@ export async function alterarStatusUsuario(id, ativo) {
         ativo
     };
 }
+
+export async function excluirUsuario(id) {
+    const idUsuario = Number(id);
+    if (!Number.isInteger(idUsuario) || idUsuario <= 0) {
+        throw new Error("ID do usuário inválido.");
+    }
+
+    const excluido = await db.excluirUsuario(idUsuario);
+    if (!excluido) throw new Error("Usuário não encontrado.");
+    return { id_usuario: idUsuario };
+}

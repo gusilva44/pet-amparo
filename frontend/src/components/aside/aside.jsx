@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import links from "../../data/links";
 import { authApi, clientesApi } from "../../services/api";
 import { avisarMudancaAutenticacao } from "../../utils/authEvents";
@@ -19,9 +19,11 @@ export default function Aside({ tipo }) {
   const [fotoUsuario, setFotoUsuario] = useState("");
   const [tipoUsuario, setTipoUsuario] = useState(tipo || "cliente");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const tipoAtual = tipo || tipoUsuario;
   const linksUsuario = links[tipoAtual] || links.cliente;
+  const abaVeterinario = new URLSearchParams(location.search).get("aba");
 
   useEffect(() => {
     let ativo = true;
@@ -126,11 +128,8 @@ export default function Aside({ tipo }) {
         <ul>
           {linksUsuario.map((link) => (
             <li key={link.id}>
-              <Link to={link.caminho} aria-hidden="true" tabIndex={-1}>
+              <Link className={`nav ${location.pathname + location.search === link.caminho || (!link.caminho.includes("?") && location.pathname === link.caminho && !(tipoAtual === "veterinario" && abaVeterinario)) ? "selecionado" : ""}`} to={link.caminho} aria-current={location.pathname + location.search === link.caminho || (!link.caminho.includes("?") && location.pathname === link.caminho && !(tipoAtual === "veterinario" && abaVeterinario)) ? "page" : undefined}>
                 <i className={link.icone} />
-              </Link>
-
-              <Link className="nav" to={link.caminho}>
                 {link.texto}
               </Link>
             </li>
@@ -138,8 +137,8 @@ export default function Aside({ tipo }) {
 
           {autenticado && (
             <li>
-              <i className="fa-solid fa-right-from-bracket" />
               <button type="button" className="nav botao-sair-aside" onClick={sair}>
+                <i className="fa-solid fa-right-from-bracket" />
                 Sair
               </button>
             </li>

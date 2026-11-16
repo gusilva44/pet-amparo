@@ -727,9 +727,9 @@ html {
         width: 100%;
         min-height: 299px;
         padding: 30px 20px;
-        border-top: 5px solid var(--laranja);
-
-        background-color: var(--verde-escuro);
+        border-bottom: 1px solid var(--laranja);
+        border-top: 2px solid var(--laranja);
+        background-color: var(--verde-claro);
         box-sizing: border-box;
 
         .footer-info {

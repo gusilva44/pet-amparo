@@ -84,6 +84,31 @@ export default function VeterinariosAdmin() {
     }
   }
 
+  async function desvincularUnidade(idVeterinario, idUnidade) {
+    setMensagem("");
+    try {
+      await veterinariosApi.desvincularUnidade(idVeterinario, idUnidade);
+      setCarregando(true);
+      const resposta = await veterinariosApi.listarAdmin();
+      const atualizados = resposta.resultado || [];
+      const vinculoContinuaAtivo = atualizados.some((item) =>
+        Number(item.id_veterinario) === Number(idVeterinario)
+        && Number(item.id_unidade) === Number(idUnidade)
+      );
+
+      if (vinculoContinuaAtivo) {
+        throw new Error("A API respondeu, mas a unidade continua vinculada. Atualize o backend e tente novamente.");
+      }
+
+      setVeterinarios(atualizados);
+      setMensagem("Unidade desvinculada do veterinário.");
+    } catch (error) {
+      setMensagem(mensagemErroApi(error));
+    } finally {
+      setCarregando(false);
+    }
+  }
+
   return (
     <div className="pagina-admin-veterinarios">
       <Aside />
@@ -117,7 +142,7 @@ export default function VeterinariosAdmin() {
             const disponiveis = unidades.filter((unidade) => !unidadesVinculadas.has(String(unidade.id_unidade)));
             return <article className="linha-admin-veterinario" key={veterinario.id_veterinario}>
               <div><strong>{veterinario.nome}</strong><span>{veterinario.crmv}{veterinario.especialidade ? ` · ${veterinario.especialidade}` : ""}</span><small>{veterinario.email}</small></div>
-              <div className="unidades-admin-veterinario"><strong>Unidades</strong><span>{veterinario.unidades.map((unidade) => unidade.nome || `Unidade ${unidade.id}`).join(", ") || "Nenhuma"}</span></div>
+              <div className="unidades-admin-veterinario"><strong>Unidades</strong>{veterinario.unidades.length ? veterinario.unidades.map((unidade) => <div className="unidade-vinculada-admin" key={unidade.id}><span>{unidade.nome || `Unidade ${unidade.id}`}</span><button type="button" className="desvincular-admin-veterinario" onClick={() => desvincularUnidade(veterinario.id_veterinario, unidade.id)} aria-label={`Desvincular ${veterinario.nome} da unidade ${unidade.nome}`}>Desvincular</button></div>) : <span>Nenhuma</span>}</div>
               {disponiveis.length > 0 && <div className="vincular-admin-veterinario"><select aria-label={`Vincular outra unidade a ${veterinario.nome}`} value={unidadeExtra[veterinario.id_veterinario] || ""} onChange={(e) => setUnidadeExtra({ ...unidadeExtra, [veterinario.id_veterinario]: e.target.value })}><option value="">Outra unidade...</option>{disponiveis.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}</select><button type="button" onClick={() => vincularUnidade(veterinario.id_veterinario)} disabled={!unidadeExtra[veterinario.id_veterinario]}>Vincular</button></div>}
             </article>;
           }) : <p>Nenhum veterinário cadastrado ainda.</p>}

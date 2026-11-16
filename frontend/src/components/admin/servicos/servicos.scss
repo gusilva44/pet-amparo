@@ -9,6 +9,8 @@
         min-width: 0;
         padding-bottom: 40px;
 
+        .sub .card-sub .icone-sub { background: transparent; }
+
         header {
             display: flex;
             padding: 25px;
@@ -655,4 +657,8 @@
             }
         }
     }
+}
+
+@media (max-width: 900px) {
+    .content { flex-direction: column; }
 }

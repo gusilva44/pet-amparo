@@ -236,18 +236,19 @@ export default function Clientes() {
 
     async function excluirUsuario(usuario) {
         const confirmar = window.confirm(
-            `Deseja realmente excluir ${usuario.nome}? Esta ação pode afetar os registros relacionados.`
+            `Deseja realmente excluir a conta de ${usuario.nome}? Os agendamentos vinculados a esta conta também serão removidos.`
         );
 
         if (!confirmar) return;
 
         try {
-            const id = usuario.id_cliente || usuario.id_usuario;
+            const id = usuario.id_usuario;
 
             if (!id) throw new Error("ID do usuário não encontrado.");
 
-            await clientesApi.excluir(id);
+            await usuariosApi.excluir(id);
             await carregarUsuarios();
+            setMensagem("Conta excluída com sucesso.");
 
         } catch (error) {
             setMensagem(mensagemErroApi(error));

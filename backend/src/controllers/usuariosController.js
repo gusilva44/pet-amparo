@@ -63,6 +63,18 @@ endpoints.put("/usuarios/:id", autenticar, verificarAdmin, async (req, res) => {
     }
 });
 
+endpoints.delete("/usuarios/:id", autenticar, verificarAdmin, async (req, res) => {
+    try {
+        const resultado = await service.excluirUsuario(Number(req.params.id));
+        return res.status(200).json({ sucesso: true, mensagem: "Conta excluída com sucesso.", resultado });
+    } catch (error) {
+        return res.status(error.message.includes("não encontrado") ? 404 : 400).json({
+            sucesso: false,
+            mensagem: error.message
+        });
+    }
+});
+
 endpoints.patch("/usuarios/:id/status", autenticar, verificarAdmin, async (req, res) => {
     try {
         const { ativo } = req.body;

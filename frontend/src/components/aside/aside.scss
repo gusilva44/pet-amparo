@@ -156,15 +156,15 @@
             box-sizing: border-box;
 
             li {
-                display: flex;
-                align-items: center;
-                gap: 15px;
+                display: block;
                 min-width: 0;
 
                 i {
                     color: var(--laranja);
                     font-size: 20px;
-                    min-width: 22px;
+                    width: 22px;
+                    flex: 0 0 22px;
+                    text-align: center;
                 }
 
                 a {
@@ -173,19 +173,32 @@
                 }
 
                 .nav {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    width: 100%;
+                    box-sizing: border-box;
                     text-decoration: none;
                     color: var(--branco);
                     transition: 0.2s;
+                    border-radius: 9px;
+                    padding: 8px 10px;
 
                     &:hover {
                         color: var(--laranja);
+                    }
+
+                    &.selecionado {
+                        background: #4f8068;
+                        color: var(--branco);
                     }
                 }
 
                 .botao-sair-aside {
                     border: 0;
-                    padding: 0;
+                    padding: 8px 10px;
                     background: transparent;
+                    color: var(--branco);
                     font-family: var(--textos);
                     font-size: inherit;
                     cursor: pointer;
@@ -309,6 +322,7 @@
 
                         gap: 5px;
                         padding: 5px 2px;
+                        border-radius: 10px;
 
                         font-size: clamp(9px, 2.5vw, 12px);
                         text-align: center;
@@ -321,6 +335,8 @@
                         i {
                             font-size: 19px;
                             min-width: auto;
+                            width: auto;
+                            flex: initial;
                         }
                     }
 

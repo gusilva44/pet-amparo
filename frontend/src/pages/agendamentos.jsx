@@ -1,6 +1,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import '../scss/agendamentos.scss';
 import Aside from '../components/aside/aside';
@@ -13,6 +13,7 @@ import Cachorro from '../assets/imagens/cachorro-agendamentos.png';
 import { authApi, agendamentosApi } from '../services/api';
 
 export default function Agendamentos() {
+    const navigate = useNavigate();
     const [usuario, setUsuario] = useState(null);
     const [carregando, setCarregando] = useState(true);
 
@@ -184,10 +185,8 @@ export default function Agendamentos() {
                                 </p>
 
                                 <button
-                                className='n'
-                                    onClick={() => {
-                                        window.location.href = '/#unidades';
-                                    }}
+                                    className="n"
+                                    onClick={() => navigate("/#unidades")}
                                 >
                                     Clique aqui para agendar seu atendimento
                                 </button>

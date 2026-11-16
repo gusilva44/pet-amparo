@@ -81,6 +81,8 @@ export const veterinariosApi = {
   criarFichaConta: (idUsuario, dados) => requisicao({ method: "POST", url: `/admin/veterinarios/contas/${idUsuario}/ficha`, data: dados }),
   vincularUnidade: (idVeterinario, idUnidade) =>
     requisicao({ method: "POST", url: `/admin/veterinarios/${idVeterinario}/unidades/${idUnidade}` }),
+  desvincularUnidade: (idVeterinario, idUnidade) =>
+    requisicao({ method: "DELETE", url: `/admin/veterinarios/${idVeterinario}/unidades/${idUnidade}` }),
   minhasUnidades: () => requisicao({ method: "GET", url: "/veterinarios/me/unidades" }),
   meuPerfil: () => requisicao({ method: "GET", url: "/veterinarios/me/perfil" }),
   atualizarMeuPerfil: (dados) => requisicao({ method: "PUT", url: "/veterinarios/me/perfil", data: dados }),

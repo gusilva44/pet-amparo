@@ -8,7 +8,7 @@ import Pets from '../assets/imagens/pets.webp'
 import unidades from "../data/unidades"
 import '../scss/home.scss'
 import sobre2 from '../assets/imagens/image0.png'
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import Logo from '../assets/imagens/Logo.webp'
 import { useEffect, useState } from "react"
 import { authApi } from "../services/api"
@@ -16,6 +16,7 @@ import { authApi } from "../services/api"
 
 export default function Home(){
     const navigate = useNavigate()
+    const location = useLocation()
     const [tipo, setTipo] = useState("cliente")
 
     useEffect(() => {
@@ -39,6 +40,19 @@ export default function Home(){
             window.removeEventListener("auth:changed", carregarTipoUsuario)
         }
     }, [])
+
+    useEffect(() => {
+        if (location.hash !== "#unidades") return undefined
+
+        const frame = window.requestAnimationFrame(() => {
+            document.getElementById("unidades")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            })
+        })
+
+        return () => window.cancelAnimationFrame(frame)
+    }, [location.hash, location.key])
 
     const cards = [
         {
@@ -142,8 +156,8 @@ export default function Home(){
                         <i class="fa-solid fa-heart"></i>
                     </div>
 
-                    <div className="unidades">
-                      <h2 id="unidades" >Unidades</h2>
+                    <div className="unidades" id="unidades">
+                      <h2>Unidades</h2>
                       <div className="cards-unidades">
                         {unidades.map((uni, key)=>
                         <div className="card" key={key}>

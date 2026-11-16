@@ -135,6 +135,7 @@
 }
 
 @media (max-width: 900px) {
+    .pagina-veterinario { flex-direction: column; }
     .pagina-veterinario .conteudo-veterinario {
         padding: 18px 16px 40px;
 

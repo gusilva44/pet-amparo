@@ -79,3 +79,45 @@ export async function alterarStatus(id, ativo) {
 
     return resultado.affectedRows;
 }
+
+export async function excluirUsuario(id) {
+    const conexao = await db.getConnection();
+    try {
+        await conexao.beginTransaction();
+        const [usuarios] = await conexao.query(
+            `SELECT tipo FROM usuarios WHERE id_usuario = ? FOR UPDATE`,
+            [id]
+        );
+
+        if (!usuarios.length) {
+            await conexao.rollback();
+            return 0;
+        }
+
+        if (usuarios[0].tipo === "cliente") {
+            await conexao.query(`
+                DELETE a FROM agendamentos a
+                INNER JOIN clientes c ON c.id_cliente = a.id_cliente
+                WHERE c.id_usuario = ?
+            `, [id]);
+        } else if (usuarios[0].tipo === "veterinario") {
+            await conexao.query(`
+                DELETE a FROM agendamentos a
+                INNER JOIN veterinarios v ON v.id_veterinario = a.id_veterinario
+                WHERE v.id_usuario = ?
+            `, [id]);
+        }
+
+        const [resultado] = await conexao.query(
+            `DELETE FROM usuarios WHERE id_usuario = ?`,
+            [id]
+        );
+        await conexao.commit();
+        return resultado.affectedRows;
+    } catch (error) {
+        await conexao.rollback();
+        throw error;
+    } finally {
+        conexao.release();
+    }
+}

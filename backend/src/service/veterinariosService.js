@@ -124,6 +124,14 @@ export async function vincularVeterinarioUnidade(idVeterinario, idUnidade) {
     return { id_veterinario: idVeterinario, id_unidade: idUnidade }
 }
 
+export async function desvincularVeterinarioUnidade(idVeterinario, idUnidade) {
+    validarId(idVeterinario)
+    validarId(idUnidade)
+    const alterados = await veterinariosRepo.desvincularUnidade(idVeterinario, idUnidade)
+    if (!alterados) throw new Error('Vínculo do veterinário com a unidade não encontrado.')
+    return { id_veterinario: idVeterinario, id_unidade: idUnidade }
+}
+
 export async function criarHorario(idVeterinario, dados) {
     validarId(idVeterinario)
 

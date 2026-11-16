@@ -233,6 +233,16 @@ endpoints.post("/admin/veterinarios/:id/unidades/:idUnidade", autenticar, verifi
   }
 });
 
+endpoints.delete("/admin/veterinarios/:id/unidades/:idUnidade", autenticar, verificarAdmin, async (req, res) => {
+  try {
+    const resultado = await service.desvincularVeterinarioUnidade(Number(req.params.id), Number(req.params.idUnidade));
+    res.status(200).json({ sucesso: true, mensagem: "Unidade desvinculada do veterinário.", resultado });
+  } catch (error) {
+    logError(error);
+    res.status(statusDoErro(error)).json(formatarError(error));
+  }
+});
+
 endpoints.get("/veterinarios/:id/horarios", async (req, res) => {
   try {
     const id_veterinario = Number(req.params.id);

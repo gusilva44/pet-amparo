@@ -18,6 +18,30 @@ export async function vincularUnidade(idVeterinario, idUnidade) {
     `, [idVeterinario, idUnidade])
 }
 
+export async function desvincularUnidade(idVeterinario, idUnidade) {
+    const conexao = await db.getConnection()
+    try {
+        await conexao.beginTransaction()
+        const [resultado] = await conexao.query(`
+            UPDATE veterinarios_unidades SET ativo = FALSE
+            WHERE id_veterinario = ? AND id_unidade = ? AND ativo = TRUE
+        `, [idVeterinario, idUnidade])
+        if (resultado.affectedRows) {
+            await conexao.query(`
+                UPDATE horarios_veterinarios SET ativo = FALSE
+                WHERE id_veterinario = ? AND id_unidade = ? AND ativo = TRUE
+            `, [idVeterinario, idUnidade])
+        }
+        await conexao.commit()
+        return resultado.affectedRows
+    } catch (error) {
+        await conexao.rollback()
+        throw error
+    } finally {
+        conexao.release()
+    }
+}
+
 export async function buscarVeterinarioPorUsuario(idUsuario) {
     const [resultado] = await db.query(`
         SELECT id_veterinario, id_usuario, nome, ativo
