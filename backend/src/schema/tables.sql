@@ -471,6 +471,7 @@ VALUES
 	45
 );
 
+
 INSERT INTO unidades (
     id_unidade,
     nome,
@@ -493,10 +494,10 @@ INSERT INTO unidades (
 (
     1,
     'Unidade Leste I — Tatuapé',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades.',
-    'a',
+    'Atendimento veterinário público e gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
+    '03076-000',
     'Avenida Salim Farah Maluf',
-    NULL,
+    '285',
     'Esquina com a Rua Ulisses Cruz, lado par',
     'Tatuapé',
     'São Paulo',
@@ -512,11 +513,11 @@ INSERT INTO unidades (
 (
     2,
     'Unidade Leste II — Cão Caramelo',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades, incluindo cardiologia, neurologia',
-    NULL,
+    'Hospital Veterinário Público Municipal Cão Caramelo, com atendimento gratuito para cães e gatos, oferecendo assistência clínica, cirúrgica e especializada.',
+    '08011-000',
     'Avenida Nordestina',
     '225',
-    'Esquina com Rua Daniel Bernardo, 107',
+    'Esquina com a Rua Daniel Bernardo',
     'São Miguel Paulista',
     'São Paulo',
     'SP',
@@ -531,15 +532,15 @@ INSERT INTO unidades (
 (
     3,
     'Unidade Sul — Jurubatuba',
-    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
-    NULL,
+    'Atendimento veterinário público e gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
+    '04690-090',
     'Rua Agostino Togneri',
     '153',
     NULL,
     'Jurubatuba',
     'São Paulo',
     'SP',
-    '3396-6100',
+    '(11) 3396-6100',
     NULL,
     NULL,
     NULL,
@@ -550,8 +551,8 @@ INSERT INTO unidades (
 (
     4,
     'Unidade Norte — Casa Verde',
-    'Atendimento veterinário gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades',
-    NULL,
+    'Atendimento veterinário público e gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
+    '02516-000',
     'Rua Atílio Piffer',
     '687',
     NULL,
@@ -569,11 +570,11 @@ INSERT INTO unidades (
 (
     5,
     'Unidade Oeste — Butantã',
-    'Atendimento veterinário gratuito, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades. Atende urgências e emergências durante o funcionamento.',
-    NULL,
+    'Atendimento veterinário público e gratuito para cães e gatos, com consultas clínicas, cirurgias, exames laboratoriais, internação e oito especialidades veterinárias.',
+    '05508-270',
     'Avenida Professor Orlando Marques de Paiva',
     '87',
-    'Dentro da USP',
+    'Dentro da Universidade de São Paulo (USP)',
     'Butantã',
     'São Paulo',
     'SP',
