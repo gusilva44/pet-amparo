@@ -1,7 +1,8 @@
+
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import links from "../../data/links";
-import { authApi, clientesApi } from "../../services/api";
+import { authApi, clientesApi, veterinariosApi } from "../../services/api";
 import { avisarMudancaAutenticacao } from "../../utils/authEvents";
 import "./aside.scss";
 
@@ -41,13 +42,28 @@ export default function Aside({ tipo }) {
 
         let nome = usuario?.nome || usuario?.email || "";
 
-        if (tipoConta === "cliente") {
+        if (tipoConta === "cliente" || tipoConta === "admin") {
           try {
             const perfil = await clientesApi.meusDados();
+
             nome = perfil.cliente?.nome || nome;
-            if (ativo) setFotoUsuario(perfil.cliente?.foto || "");
+
+            if (ativo) {
+              setFotoUsuario(
+                tipoConta === "cliente" ? perfil.cliente?.foto || "" : ""
+              );
+            }
           } catch {
-            nome = usuario?.nome || usuario?.email || "";
+            if (ativo) setFotoUsuario("");
+          }
+        } else if (tipoConta === "veterinario") {
+          try {
+            const perfil = await veterinariosApi.meuPerfil();
+
+            nome = perfil.perfil?.nome || nome;
+
+            if (ativo) setFotoUsuario("");
+          } catch {
             if (ativo) setFotoUsuario("");
           }
         } else if (ativo) {
@@ -55,6 +71,7 @@ export default function Aside({ tipo }) {
         }
 
         if (ativo) setNomeUsuario(nome);
+
       } catch {
         if (ativo) {
           setNomeUsuario("");
@@ -98,7 +115,7 @@ export default function Aside({ tipo }) {
           className="img-usuario"
           aria-label={nomeUsuario ? `Iniciais de ${nomeUsuario}` : "Perfil do usuário"}
         >
-          {fotoUsuario ? <img src={fotoUsuario} alt="" /> : iniciais || <i class="fa-regular fa-user"></i>}
+          {fotoUsuario ? <img src={fotoUsuario} alt="" /> : iniciais || <i className="fa-regular fa-user"></i>}
         </div>
 
         <div className="dados-usuario">

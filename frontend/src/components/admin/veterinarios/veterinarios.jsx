@@ -127,10 +127,62 @@ export default function VeterinariosAdmin() {
             <label>Nome completo<input required maxLength="150" value={formulario.nome} onChange={(e) => setFormulario({ ...formulario, nome: e.target.value })} /></label>
             <label>E-mail de acesso<input required type="email" autoComplete="email" value={formulario.email} onChange={(e) => setFormulario({ ...formulario, email: e.target.value })} /></label>
             <label>Senha inicial<input required type="password" minLength="6" autoComplete="new-password" value={formulario.senha} onChange={(e) => setFormulario({ ...formulario, senha: e.target.value })} /></label>
-            <label>CRMV<input required maxLength="30" value={formulario.crmv} onChange={(e) => setFormulario({ ...formulario, crmv: e.target.value })} /></label>
-            <label>Especialidade<input maxLength="150" value={formulario.especialidade} onChange={(e) => setFormulario({ ...formulario, especialidade: e.target.value })} /></label>
-            <label>Telefone<input type="tel" maxLength="30" value={formulario.telefone} onChange={(e) => setFormulario({ ...formulario, telefone: e.target.value })} /></label>
-            <label>Unidade inicial<select required value={formulario.id_unidade} onChange={(e) => setFormulario({ ...formulario, id_unidade: e.target.value })}><option value="">Selecione uma unidade</option>{unidades.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}</select></label>
+            <label>
+    CRMV
+    <input
+        type="text"
+        maxLength={10}
+        value={formulario.crmv}
+        onChange={(e) => setFormulario({ ...formulario, crmv: e.target.value.replace(/\D/g, "") })}
+        placeholder="Digite o CRMV"
+    />
+</label>
+<label>
+    Especialidade
+    <select
+        value={formulario.especialidade}
+        onChange={(e) => setFormulario({ ...formulario, especialidade: e.target.value })}
+        required
+    >
+        <option value="">Selecione uma especialidade</option>
+        <option value="Clínica Geral">Clínica Geral</option>
+        <option value="Cirurgia Veterinária">Cirurgia Veterinária</option>
+        <option value="Dermatologia">Dermatologia</option>
+        <option value="Cardiologia">Cardiologia</option>
+        <option value="Oftalmologia">Oftalmologia</option>
+        <option value="Ortopedia">Ortopedia</option>
+        <option value="Neurologia">Neurologia</option>
+        <option value="Oncologia">Oncologia</option>
+        <option value="Odontologia">Odontologia</option>
+        <option value="Anestesiologia">Anestesiologia</option>
+        <option value="Medicina Felina">Medicina Felina</option>
+        <option value="Nutrição Animal">Nutrição Animal</option>
+    </select>
+</label>            
+<label>
+    Telefone
+    <input
+        type="tel"
+        maxLength={15}
+        value={formulario.telefone}
+        onChange={(e) => {
+            let numero = e.target.value.replace(/\D/g, "").slice(0, 11);
+
+            if (numero.length > 2) {
+                numero = numero.replace(/^(\d{2})(\d)/, "($1) $2");
+            }
+
+            if (numero.length > 10) {
+                numero = numero.replace(/(\d{5})(\d{4})$/, "$1-$2");
+            } else if (numero.length > 9) {
+                numero = numero.replace(/(\d{4})(\d{4})$/, "$1-$2");
+            }
+
+            setFormulario({ ...formulario, telefone: numero });
+        }}
+        placeholder="(11) 99999-9999"
+    />
+</label>            <label>Unidade inicial<select required value={formulario.id_unidade} onChange={(e) => setFormulario({ ...formulario, id_unidade: e.target.value })}><option value="">Selecione uma unidade</option>{unidades.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}</select></label>
             <button type="submit" disabled={salvando || !unidades.length}>{salvando ? "Cadastrando..." : "Cadastrar veterinário"}</button>
           </form>
         </section>

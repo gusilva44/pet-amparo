@@ -1,3 +1,4 @@
+
 .pages-pets {
   display: flex;
   min-height: 100vh;
@@ -39,6 +40,7 @@
         color: var(--laranja, #ed795d);
         font-family: var(--titulo);
       }
+
       .auth-intro {
         margin-bottom: 1.5rem;
       }
@@ -48,6 +50,7 @@
       display: flex;
       margin-bottom: 1.25rem;
     }
+
     .auth-tabs button,
     .botao-principal,
     .botao-secundario {
@@ -57,12 +60,14 @@
       font: inherit;
       cursor: pointer;
     }
+
     .auth-tabs button {
       flex: 1;
       background: var(--verde-claro, #506c5b);
       color: white;
       border-bottom: 1px solid white;
     }
+
     .auth-tabs button.ativo {
       border-bottom: 1px solid var(--laranja);
       color: var(--laranja);
@@ -78,6 +83,7 @@
       display: flex;
       justify-content: space-between;
     }
+
     .ex {
       width: 48%;
     }
@@ -86,11 +92,13 @@
       display: grid;
       gap: 1rem;
     }
+
     .form-pets label {
       display: grid;
       gap: 0.4rem;
       font-family: var(--textos);
     }
+
     .form-pets input {
       box-sizing: border-box;
       width: 100%;
@@ -102,14 +110,17 @@
       color: #253b32;
       font: inherit;
     }
+
     .botao-principal {
       margin-top: 0.4rem;
       font-weight: 700;
     }
+
     button:disabled {
       cursor: wait;
       opacity: 0.7;
     }
+
     .mensagem-pets {
       padding: 0.75rem;
       border-radius: 0.4rem;
@@ -122,23 +133,107 @@
       width: min(100%, 62rem);
       margin: 2rem auto;
     }
+
     .meuPerfil h1,
     .meuspets h2 {
       color: var(--verde-escuro, #243b32);
       font-family: var(--titulo);
     }
+
     .meuPerfil h1,
     .meuspets h2 {
       font-size: clamp(1.7rem, 4vw, 2.5rem);
     }
-    .cabecalho-meu-perfil { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .acoes-conta-cliente { display: flex; flex-shrink: 0; align-items: center; gap: .55rem; }
-    .botao-acao-conta { display: grid; width: 2.7rem; height: 2.7rem; place-items: center; padding: 0; border: 1px solid #ffffff70; border-radius: .8rem; background: #ffffff20; color: #fff; font-size: 1rem; cursor: pointer; transition: background .18s ease, transform .18s ease; }
-    .botao-acao-conta:hover { background: #ffffff35; transform: translateY(-2px); }
-    .form-editar-perfil-cliente { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0; }
-    .form-editar-perfil-cliente label { display: grid; gap: .35rem; }
-    .form-editar-perfil-cliente input { box-sizing: border-box; min-height: 2.5rem; padding: .5rem; border: 1px solid #b8c2b9; border-radius: .4rem; font: inherit; }
-    @media (max-width: 650px) { .form-editar-perfil-cliente { grid-template-columns: 1fr; } }
+
+    .cabecalho-meu-perfil {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .acoes-conta-cliente {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      gap: .55rem;
+    }
+
+    .botao-acao-conta {
+      display: grid;
+      width: 2.7rem;
+      height: 2.7rem;
+      place-items: center;
+      padding: 0;
+      border: 1px solid #ffffff70;
+      border-radius: .8rem;
+      background: #ffffff20;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .botao-acao-conta:hover {
+      background: #ffffff35;
+      transform: translateY(-2px);
+    }
+
+    // Edição do perfil e alteração de senha
+    .form-editar-perfil-cliente {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+      margin: 1rem 0;
+
+      // Permite que os campos dos formulários
+      // ocupem diretamente as colunas deste grid
+      > form {
+        display: contents;
+      }
+
+      label {
+        display: grid;
+        gap: .35rem;
+      }
+
+      input {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 2.5rem;
+        padding: .5rem;
+        border: 1px solid #b8c2b9;
+        border-radius: .4rem;
+        font: inherit;
+      }
+
+      .form-alterar-senha-cliente {
+        display: contents;
+
+        h2 {
+          grid-column: 1 / -1;
+          margin: .5rem 0;
+          color: var(--verde-escuro, #243b32);
+          font-family: var(--titulo);
+          font-size: 1.5rem;
+        }
+
+        p {
+          grid-column: 1 / -1;
+        }
+
+        button {
+          grid-column: 1 / -1;
+          justify-self: start;
+          margin-top: .3rem;
+        }
+      }
+
+      > button {
+        width: 100%;
+      }
+    }
+
     .banner {
       display: flex;
       align-items: center;
@@ -149,12 +244,14 @@
       background: var(--verde-claro, #506c5b);
       color: white;
     }
+
     .sta {
       display: flex;
       align-items: center;
       gap: 1.25rem;
       min-width: 0;
     }
+
     .sta img,
     .avatar-iniciais {
       width: 5rem;
@@ -162,6 +259,7 @@
       flex: 0 0 5rem;
       border-radius: 50%;
     }
+
     .avatar-iniciais {
       display: grid;
       place-items: center;
@@ -171,33 +269,90 @@
       font-size: 1.5rem;
       font-weight: 700;
       overflow: hidden;
-      img { width: 100%; height: 100%; object-fit: cover; }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
+
     .infos-pessoais h2 {
       margin-bottom: 0.4rem;
       color: var(--laranja, #ed795d);
     }
+
     .infos-pessoais p {
       margin-bottom: 0.25rem;
       overflow-wrap: anywhere;
     }
+
     .foto-perfil-editar {
       display: grid;
       gap: .5rem;
       min-width: 10rem;
-      label { display: grid; gap: .4rem; font-size: .9rem; }
-      p { margin: 0; font-size: .85rem; }
-      .botao-secundario { justify-self: start; }
+
+      label {
+        display: grid;
+        gap: .4rem;
+        font-size: .9rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: .85rem;
+      }
+
+      .botao-secundario {
+        justify-self: start;
+      }
     }
-    .seletor-imagem { display: grid; justify-items: start; gap: .45rem; }
-    .input-imagem-oculto { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
-    .botao-escolher-imagem { display: inline-flex; align-items: center; min-height: 2.4rem; box-sizing: border-box; padding: .45rem .85rem; border-radius: .45rem; background: #b9d2bd; color: #243b32; cursor: pointer; font-weight: 700; }
-    .botao-escolher-imagem:hover { background: #a9c7ae; }
-    .input-imagem-oculto:focus-visible + .botao-escolher-imagem { outline: 2px solid var(--laranja); outline-offset: 2px; }
+
+    .seletor-imagem {
+      display: grid;
+      justify-items: start;
+      gap: .45rem;
+    }
+
+    .input-imagem-oculto {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+
+    .botao-escolher-imagem {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.4rem;
+      box-sizing: border-box;
+      padding: .45rem .85rem;
+      border-radius: .45rem;
+      background: #b9d2bd;
+      color: #243b32;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .botao-escolher-imagem:hover {
+      background: #a9c7ae;
+    }
+
+    .input-imagem-oculto:focus-visible + .botao-escolher-imagem {
+      outline: 2px solid var(--laranja);
+      outline-offset: 2px;
+    }
+
     .botao-secundario {
       background: var(--verde-escuro, #243b32);
       color: white;
     }
+
     .pets-cabecalho {
       display: flex;
       align-items: flex-start;
@@ -206,9 +361,11 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #243b321c;
     }
+
     .pets-cabecalho > div {
       position: relative;
       padding-left: 3.4rem;
+
       &::before {
         content: "\f1b0";
         position: absolute;
@@ -224,16 +381,19 @@
         font-family: "Font Awesome 6 Free";
         font-weight: 900;
       }
-      p { 
-        margin: .35rem 0 0; 
-        color: #607168; 
+
+      p {
+        margin: .35rem 0 0;
+        color: #607168;
       }
     }
+
     .lista-pets {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
       gap: 1.1rem;
     }
+
     .card-pet,
     .estado-pets {
       padding: 1.15rem;
@@ -243,22 +403,61 @@
       color: var(--verde-escuro, #243b32);
       box-shadow: 0 8px 24px #243b3210;
     }
+
     .card-pet h3 {
       margin-bottom: 0.35rem;
       color: var(--verde-escuro, #243b32);
     }
+
     .card-pet {
       position: relative;
       display: grid;
       gap: 1rem;
       transition: transform .2s ease, box-shadow .2s ease;
-      &:hover { transform: translateY(-3px); box-shadow: 0 14px 30px #243b321c; }
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px #243b321c;
+      }
     }
-    .acoes-pet { position: absolute; top: .7rem; right: .7rem; display: flex; gap: .4rem; z-index: 1; }
-    .acoes-pet .botao-secundario { display: grid; width: 2.2rem; height: 2.2rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: #dce8d8; color: #111; cursor: pointer; }
-    .acoes-pet .botao-secundario:hover { background: #c8dcc7; }
-    .pet-identidade { display: flex; align-items: center; gap: 1rem; min-width: 0; }
-    .card-pet { padding-top: 3.4rem; }
+
+    .acoes-pet {
+      position: absolute;
+      top: .7rem;
+      right: .7rem;
+      display: flex;
+      gap: .4rem;
+      z-index: 1;
+    }
+
+    .acoes-pet .botao-secundario {
+      display: grid;
+      width: 2.2rem;
+      height: 2.2rem;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #dce8d8;
+      color: #111;
+      cursor: pointer;
+    }
+
+    .acoes-pet .botao-secundario:hover {
+      background: #c8dcc7;
+    }
+
+    .pet-identidade {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .card-pet {
+      padding-top: 3.4rem;
+    }
+
     .foto-pet {
       width: 6.25rem;
       height: 6.25rem;
@@ -267,11 +466,35 @@
       border-radius: 1rem;
       background: #e9eee5;
     }
-    .pet-sem-foto { display: grid; place-items: center; color: var(--verde-escuro, #243b32); font-size: 1.6rem; }
-    .pet-identidade > div:last-child { min-width: 0; }
-    .pet-identidade h3 { margin: 0 0 .3rem; font-size: 1.3rem; }
-    .pet-identidade p { margin: 0; color: #65746b; overflow-wrap: anywhere; }
-    .pet-detalhes { display: flex; flex-wrap: wrap; gap: .45rem; }
+
+    .pet-sem-foto {
+      display: grid;
+      place-items: center;
+      color: var(--verde-escuro, #243b32);
+      font-size: 1.6rem;
+    }
+
+    .pet-identidade > div:last-child {
+      min-width: 0;
+    }
+
+    .pet-identidade h3 {
+      margin: 0 0 .3rem;
+      font-size: 1.3rem;
+    }
+
+    .pet-identidade p {
+      margin: 0;
+      color: #65746b;
+      overflow-wrap: anywhere;
+    }
+
+    .pet-detalhes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+
     .pet-detalhes span {
       display: inline-flex;
       align-items: center;
@@ -283,9 +506,21 @@
       font-size: .8rem;
       font-weight: 600;
     }
-    .pet-detalhes .vacinado { background: #e3f2e4; color: #356443; }
-    .pet-detalhes .pendente-vacina { background: #fff0df; color: #8c5723; }
-    .pet-detalhes i { font-size: .75rem; }
+
+    .pet-detalhes .vacinado {
+      background: #e3f2e4;
+      color: #356443;
+    }
+
+    .pet-detalhes .pendente-vacina {
+      background: #fff0df;
+      color: #8c5723;
+    }
+
+    .pet-detalhes i {
+      font-size: .75rem;
+    }
+
     .estado-pets {
       display: flex;
       align-items: center;
@@ -293,6 +528,7 @@
       min-height: 5rem;
       border-style: dashed;
       color: #607168;
+
       &::before {
         content: "\f1b0";
         display: grid;
@@ -310,16 +546,25 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 650px) {
   .pages-pets .main-pets {
     padding-inline: 1rem;
+
     .banner {
       align-items: flex-start;
       flex-direction: column;
     }
+
     .sta {
       gap: 0.75rem;
     }
-    .foto-perfil-editar { width: 100%; }
+
+    .foto-perfil-editar {
+      width: 100%;
+    }
+
+    .form-editar-perfil-cliente {
+      grid-template-columns: 1fr;
+    }
   }
 }

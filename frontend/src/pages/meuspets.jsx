@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Aside from "../components/aside/aside";
@@ -12,6 +13,7 @@ import { lerImagem } from "../utils/imagem";
 export default function MeusPets() {
   const [searchParams] = useSearchParams();
   const modoAuth = searchParams.get("modo") === "cadastro" ? "cadastro" : "login";
+
   const [usuario, setUsuario] = useState(null);
   const [cliente, setCliente] = useState(null);
   const [pets, setPets] = useState([]);
@@ -25,6 +27,13 @@ export default function MeusPets() {
   const [formPerfil, setFormPerfil] = useState({});
   const [mensagemPerfil, setMensagemPerfil] = useState("");
 
+  // Estados para alterar senha
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [mensagemSenha, setMensagemSenha] = useState("");
+  const [salvandoSenha, setSalvandoSenha] = useState(false);
+
   const carregarDados = useCallback(async (conta) => {
     setUsuario(conta);
 
@@ -34,11 +43,15 @@ export default function MeusPets() {
     ]);
 
     setCliente(
-      resCliente.status === "fulfilled" ? resCliente.value.cliente : null,
+      resCliente.status === "fulfilled" ? resCliente.value.cliente : null
     );
-    if (resCliente.status === "fulfilled") setFormPerfil({ ...resCliente.value.cliente });
+
+    if (resCliente.status === "fulfilled") {
+      setFormPerfil({ ...resCliente.value.cliente });
+    }
+
     setPets(
-      resPets.status === "fulfilled" ? resPets.value.animais || [] : [],
+      resPets.status === "fulfilled" ? resPets.value.animais || [] : []
     );
   }, []);
 
@@ -48,7 +61,10 @@ export default function MeusPets() {
     async function verificarSessao() {
       try {
         const resposta = await authApi.usuarioAtual();
-        if (ativo) await carregarDados(resposta.usuario);
+
+        if (ativo) {
+          await carregarDados(resposta.usuario);
+        }
       } catch {
         if (ativo) {
           setUsuario(null);
@@ -61,6 +77,7 @@ export default function MeusPets() {
     }
 
     verificarSessao();
+
     return () => {
       ativo = false;
     };
@@ -68,6 +85,7 @@ export default function MeusPets() {
 
   async function autenticar(dadosUsuario) {
     setCarregando(true);
+
     try {
       await carregarDados(dadosUsuario);
     } finally {
@@ -88,6 +106,7 @@ export default function MeusPets() {
 
   async function selecionarFotoPerfil(event) {
     setMensagemFoto("");
+
     try {
       setFotoSelecionada(await lerImagem(event.target.files?.[0]));
     } catch (error) {
@@ -98,17 +117,23 @@ export default function MeusPets() {
 
   async function salvarFotoPerfil() {
     if (!fotoSelecionada) return;
+
     setSalvandoFoto(true);
     setMensagemFoto("");
+
     try {
       await clientesApi.atualizarFoto(fotoSelecionada);
+
       const resposta = await clientesApi.meusDados();
+
       avisarMudancaAutenticacao();
       setCliente(resposta.cliente);
       setFotoSelecionada("");
       setMensagemFoto("Foto de perfil atualizada.");
     } catch (error) {
-      setMensagemFoto(error.response?.data?.mensagem || "Não foi possível salvar a foto.");
+      setMensagemFoto(
+        error.response?.data?.mensagem || "Não foi possível salvar a foto."
+      );
     } finally {
       setSalvandoFoto(false);
     }
@@ -117,42 +142,98 @@ export default function MeusPets() {
   async function salvarPerfil(event) {
     event.preventDefault();
     setMensagemPerfil("");
+
     try {
       await clientesApi.atualizarMeusDados(formPerfil);
+
       const resposta = await clientesApi.meusDados();
+
       setCliente(resposta.cliente);
       setFormPerfil({ ...resposta.cliente });
       setEditandoPerfil(false);
       setMensagemPerfil("Perfil atualizado.");
+
       avisarMudancaAutenticacao();
     } catch (error) {
-      setMensagemPerfil(error.response?.data?.mensagem || "Não foi possível atualizar o perfil.");
+      setMensagemPerfil(
+        error.response?.data?.mensagem || "Não foi possível atualizar o perfil."
+      );
     }
   }
 
+  async function alterarSenha(event) {
+    event.preventDefault();
+    setMensagemSenha("");
+
+    if (novaSenha !== confirmarSenha) {
+      setMensagemSenha("As senhas novas não coincidem.");
+      return;
+    }
+
+    setSalvandoSenha(true);
+
+    try {
+      await authApi.trocarSenha(senhaAtual, novaSenha);
+
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarSenha("");
+
+      setMensagemSenha("Senha alterada com sucesso.");
+    } catch (error) {
+      setMensagemSenha(
+        error.response?.data?.mensagem || "Não foi possível alterar a senha."
+      );
+    } finally {
+      setSalvandoSenha(false);
+    }
+  }
+
+  function cancelarEdicao() {
+    setEditandoPerfil(false);
+    setFormPerfil({ ...cliente });
+    setSenhaAtual("");
+    setNovaSenha("");
+    setConfirmarSenha("");
+    setMensagemSenha("");
+    setMensagemPerfil("");
+  }
+
   async function removerConta() {
-    if (!window.confirm("Deseja realmente remover sua conta? Esta ação não pode ser desfeita.")) return;
+    if (
+      !window.confirm(
+        "Deseja realmente remover sua conta? Esta ação não pode ser desfeita."
+      )
+    ) return;
+
     try {
       await clientesApi.excluirMinhaConta();
       await sair();
     } catch (error) {
-      setMensagemPerfil(error.response?.data?.mensagem || "Não foi possível remover a conta.");
+      setMensagemPerfil(
+        error.response?.data?.mensagem || "Não foi possível remover a conta."
+      );
     }
   }
 
   async function excluirPet(pet) {
     if (!window.confirm(`Remover ${pet.nome} da sua lista de pets?`)) return;
+
     setMensagemPets("");
+
     try {
       await animaisApi.excluir(pet.id_animal);
       await carregarDados(usuario);
       setMensagemPets("Pet removido com sucesso.");
     } catch (error) {
-      setMensagemPets(error.response?.data?.mensagem || "Não foi possível remover o pet.");
+      setMensagemPets(
+        error.response?.data?.mensagem || "Não foi possível remover o pet."
+      );
     }
   }
 
   const nomeExibicao = cliente?.nome || usuario?.nome || "";
+
   const iniciaisUsuario = nomeExibicao
     .trim()
     .split(/\s+/)
@@ -175,6 +256,7 @@ export default function MeusPets() {
   return (
     <div className="pages-pets">
       <Aside />
+
       <main className="main-pets">
         <div className="logo">
           <img src={Logo} alt="PetAmparo" />
@@ -193,100 +275,244 @@ export default function MeusPets() {
               <div className="cabecalho-meu-perfil">
                 <h1>Meu perfil</h1>
               </div>
-              {editandoPerfil && <form className="form-editar-perfil-cliente" onSubmit={salvarPerfil}>
-                <label>
-                  Nome
-                  <input 
-                  required 
-                  value={formPerfil.nome || ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, nome: event.target.value })} />
-                </label>
-                <label>
-                  E-mail
-                  <input 
-                  required 
-                  type="email" 
-                  value={formPerfil.email || ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, email: event.target.value })} />
-                </label>
-                <label>
-                  Data de nascimento
-                  <input 
-                  required 
-                  type="date" 
-                  value={formPerfil.data_nascimento ? String(formPerfil.data_nascimento).slice(0, 10) : ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, data_nascimento: event.target.value })} />
-                </label>
-                <label>
-                  Telefone
-                  <input 
-                  required 
-                  value={formPerfil.telefone || ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, telefone: event.target.value })} />
-                </label>
-                <label>
-                  CPF
-                  <input 
-                  required 
-                  value={formPerfil.cpf || ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, cpf: event.target.value })} />
-                </label>
-                <label>
-                  Endereço
-                  <input 
-                  required 
-                  value={formPerfil.endereco || ""} 
-                  onChange={(event) => setFormPerfil({ ...formPerfil, endereco: event.target.value })} />
-                </label>
-                <button className="botao-principal">
-                  Salvar alterações
-                </button>
-                <button type="button" className="botao-secundario" onClick={() => setEditandoPerfil(false)}>Cancelar</button>
-              </form>}
+
+              {editandoPerfil && (
+                <div className="form-editar-perfil-cliente">
+
+                  <form id="form-perfil" onSubmit={salvarPerfil}>
+                    <label>
+                      Nome
+                      <input
+                        required
+                        value={formPerfil.nome || ""}
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            nome: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      E-mail
+                      <input
+                        required
+                        type="email"
+                        value={formPerfil.email || ""}
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            email: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      Data de nascimento
+                      <input
+                        required
+                        type="date"
+                        value={
+                          formPerfil.data_nascimento
+                            ? String(formPerfil.data_nascimento).slice(0, 10)
+                            : ""
+                        }
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            data_nascimento: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      Telefone
+                      <input
+                        required
+                        value={formPerfil.telefone || ""}
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            telefone: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      CPF
+                      <input
+                        required
+                        value={formPerfil.cpf || ""}
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            cpf: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label>
+                      Endereço
+                      <input
+                        required
+                        value={formPerfil.endereco || ""}
+                        onChange={(event) =>
+                          setFormPerfil({
+                            ...formPerfil,
+                            endereco: event.target.value,
+                          })
+                        }
+                      />
+                    </label>
+                  </form>
+
+                  <form
+                    className="form-alterar-senha-cliente"
+                    onSubmit={alterarSenha}
+                  >
+                    <h2>Alterar senha</h2>
+
+                    <label>
+                      Senha atual
+                      <input
+                        type="password"
+                        required
+                        value={senhaAtual}
+                        onChange={(event) => setSenhaAtual(event.target.value)}
+                      />
+                    </label>
+
+                    <label>
+                      Nova senha
+                      <input
+                        type="password"
+                        required
+                        value={novaSenha}
+                        onChange={(event) => setNovaSenha(event.target.value)}
+                      />
+                    </label>
+
+                    <label>
+                      Confirme a nova senha
+                      <input
+                        type="password"
+                        required
+                        value={confirmarSenha}
+                        onChange={(event) =>
+                          setConfirmarSenha(event.target.value)
+                        }
+                      />
+                    </label>
+
+                    {mensagemSenha && (
+                      <p role="status">{mensagemSenha}</p>
+                    )}
+
+                    <button type="submit" disabled={salvandoSenha}>
+                      {salvandoSenha ? "Alterando..." : "Alterar senha"}
+                    </button>
+                  </form>
+
+                  <button
+                    type="submit"
+                    form="form-perfil"
+                    className="botao-principal"
+                  >
+                    Salvar alterações
+                  </button>
+
+                  <button
+                    type="button"
+                    className="botao-secundario"
+                    onClick={cancelarEdicao}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
+
               {mensagemPerfil && <p role="status">{mensagemPerfil}</p>}
+
               <div className="banner">
                 <div className="sta">
                   <div className="avatar-iniciais" aria-label={nomeExibicao}>
-                    {(fotoSelecionada || cliente?.foto) ? <img src={fotoSelecionada || cliente.foto} alt={`Foto de ${nomeExibicao}`} /> : iniciaisUsuario || "?"}
+                    {fotoSelecionada || cliente?.foto ? (
+                      <img
+                        src={fotoSelecionada || cliente.foto}
+                        alt={`Foto de ${nomeExibicao}`}
+                      />
+                    ) : (
+                      iniciaisUsuario || "?"
+                    )}
                   </div>
+
                   <div className="infos-pessoais">
                     <h2>{nomeExibicao || "Minha conta"}</h2>
                     <p>{cliente?.email || usuario.email}</p>
                     {cliente?.telefone && <p>{cliente.telefone}</p>}
                   </div>
                 </div>
+
                 <div className="foto-perfil-editar">
                   <label className="seletor-imagem">
                     Alterar foto de perfil
-                    <input className="input-imagem-oculto" type="file" accept="image/png,image/jpeg,image/webp" onChange={selecionarFotoPerfil} />
-                    <span className="botao-escolher-imagem">Escolher imagem</span>
+                    <input
+                      className="input-imagem-oculto"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      onChange={selecionarFotoPerfil}
+                    />
+                    <span className="botao-escolher-imagem">
+                      Escolher imagem
+                    </span>
                   </label>
-                  {fotoSelecionada && <button className="botao-secundario" onClick={salvarFotoPerfil} disabled={salvandoFoto}>{salvandoFoto ? "Salvando..." : "Salvar foto"}</button>}
+
+                  {fotoSelecionada && (
+                    <button
+                      className="botao-secundario"
+                      onClick={salvarFotoPerfil}
+                      disabled={salvandoFoto}
+                    >
+                      {salvandoFoto ? "Salvando..." : "Salvar foto"}
+                    </button>
+                  )}
+
                   {mensagemFoto && <p role="status">{mensagemFoto}</p>}
                 </div>
+
                 <div className="acoes-conta-cliente">
-                  <button 
-                  type="button" 
-                  className="botao-acao-conta" 
-                  onClick={() => setEditandoPerfil((valor) => !valor)} 
-                  aria-label="Editar perfil" 
-                  title="Editar perfil">
+                  <button
+                    type="button"
+                    className="botao-acao-conta"
+                    onClick={() => setEditandoPerfil(true)}
+                    aria-label="Editar perfil"
+                    title="Editar perfil"
+                  >
                     <i className="fa-solid fa-pen" />
                   </button>
-                  <button 
-                  type="button" 
-                  className="botao-acao-conta" 
-                  onClick={removerConta} 
-                  aria-label="Remover conta" 
-                  title="Remover conta">
+
+                  <button
+                    type="button"
+                    className="botao-acao-conta"
+                    onClick={removerConta}
+                    aria-label="Remover conta"
+                    title="Remover conta"
+                  >
                     <i className="fa-solid fa-trash-can" />
                   </button>
-                  <button 
-                  type="button" 
-                  className="botao-acao-conta" 
-                  onClick={sair} 
-                  aria-label="Sair da conta" 
-                  title="Sair da conta">
+
+                  <button
+                    type="button"
+                    className="botao-acao-conta"
+                    onClick={sair}
+                    aria-label="Sair da conta"
+                    title="Sair da conta"
+                  >
                     <i className="fa-solid fa-right-from-bracket" />
                   </button>
                 </div>
@@ -295,7 +521,7 @@ export default function MeusPets() {
 
             <section className="meuspets">
               <div className="pets-cabecalho">
-                <div> 
+                <div>
                   <h2>Meus pets</h2>
                   <p>Aqui estão os pets cadastrados na sua conta.</p>
                 </div>
@@ -306,17 +532,72 @@ export default function MeusPets() {
                   {pets.map((pet) => (
                     <article className="card-pet" key={pet.id_animal}>
                       <div className="pet-identidade">
-                        {pet.foto ? <img className="foto-pet" src={pet.foto} alt={`Foto de ${pet.nome}`} /> : <div className="foto-pet pet-sem-foto" aria-hidden="true"><i className="fa-solid fa-paw" /></div>}
-                        <div><h3>{pet.nome}</h3><p>{[pet.especie, pet.raca].filter(Boolean).join(" · ")}</p></div>
+                        {pet.foto ? (
+                          <img
+                            className="foto-pet"
+                            src={pet.foto}
+                            alt={`Foto de ${pet.nome}`}
+                          />
+                        ) : (
+                          <div className="foto-pet pet-sem-foto">
+                            <i className="fa-solid fa-paw" />
+                          </div>
+                        )}
+
+                        <div>
+                          <h3>{pet.nome}</h3>
+                          <p>
+                            {[pet.especie, pet.raca]
+                              .filter(Boolean)
+                              .join(" · ")}
+                          </p>
+                        </div>
                       </div>
+
                       <div className="pet-detalhes">
-                        <span>{pet.idade === 1 ? "1 ano" : `${pet.idade} anos`}</span>
-                        <span>{pet.sexo === "F" ? "Fêmea" : pet.sexo === "M" ? "Macho" : "Sexo não informado"}</span>
-                        <span className={pet.e_vacinado ? "vacinado" : "pendente-vacina"}>{pet.e_vacinado ? "Vacinado" : "Vacinação pendente"}</span>
+                        <span>
+                          {pet.idade === 1 ? "1 ano" : `${pet.idade} anos`}
+                        </span>
+
+                        <span>
+                          {pet.sexo === "F"
+                            ? "Fêmea"
+                            : pet.sexo === "M"
+                              ? "Macho"
+                              : "Sexo não informado"}
+                        </span>
+
+                        <span
+                          className={
+                            pet.e_vacinado ? "vacinado" : "pendente-vacina"
+                          }
+                        >
+                          {pet.e_vacinado
+                            ? "Vacinado"
+                            : "Vacinação pendente"}
+                        </span>
                       </div>
+
                       <div className="acoes-pet">
-                        <button type="button" className="botao-secundario" onClick={() => setPetEditando(pet)} aria-label={`Editar ${pet.nome}`} title="Editar"><i className="fa-solid fa-pen" /></button>
-                        <button type="button" className="botao-secundario" onClick={() => excluirPet(pet)} aria-label={`Remover ${pet.nome}`} title="Remover"><i className="fa-solid fa-trash-can" /></button>
+                        <button
+                          type="button"
+                          className="botao-secundario"
+                          onClick={() => setPetEditando(pet)}
+                          aria-label={`Editar ${pet.nome}`}
+                          title="Editar"
+                        >
+                          <i className="fa-solid fa-pen" />
+                        </button>
+
+                        <button
+                          type="button"
+                          className="botao-secundario"
+                          onClick={() => excluirPet(pet)}
+                          aria-label={`Remover ${pet.nome}`}
+                          title="Remover"
+                        >
+                          <i className="fa-solid fa-trash-can" />
+                        </button>
                       </div>
                     </article>
                   ))}
@@ -328,8 +609,17 @@ export default function MeusPets() {
               )}
 
               {mensagemPets && <p role="status">{mensagemPets}</p>}
+
               {petEditando ? (
-                <CadastroPet key={petEditando.id_animal} pet={petEditando} onCancel={() => setPetEditando(null)} onSaved={async () => { setPetEditando(null); await carregarDados(usuario); }} />
+                <CadastroPet
+                  key={petEditando.id_animal}
+                  pet={petEditando}
+                  onCancel={() => setPetEditando(null)}
+                  onSaved={async () => {
+                    setPetEditando(null);
+                    await carregarDados(usuario);
+                  }}
+                />
               ) : (
                 <CadastroPet onSaved={() => carregarDados(usuario)} />
               )}

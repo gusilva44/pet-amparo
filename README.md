@@ -57,6 +57,7 @@ Abra [http://localhost:3000](http://localhost:3000). A API fica em `http://local
 
 Em um volume novo, o Docker Compose executa automaticamente `backend/src/schema/tables.sql`. As imagens enviadas à API ficam no volume `pet_uploads`, persistindo entre reinicializações.
 
+
 Para parar os contêineres:
 
 ```bash
