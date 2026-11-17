@@ -68,7 +68,7 @@ export default function Unidades() {
   const [aberto, setAberto] = useState(null);
   const [erro, setErro] = useState("");
   const [mesAtual, setMesAtual] = useState(() => new Date());
-  const [dataSelecionada, setDataSelecionada] = useState(dataLocal(new Date()));
+  const [dataSelecionada, setDataSelecionada] = useState("");
   const [pets, setPets] = useState([]);
   const [usuario, setUsuario] = useState(null);
   const [veterinarios, setVeterinarios] = useState([]);
@@ -76,6 +76,8 @@ export default function Unidades() {
   const [horariosVeterinario, setHorariosVeterinario] = useState([]);
   const [carregandoHorarios, setCarregandoHorarios] = useState(false);
   const [opcoesHorario, setOpcoesHorario] = useState([]);
+  const [servicosDisponiveisNaData, setServicosDisponiveisNaData] = useState([]);
+  const [carregandoServicosData, setCarregandoServicosData] = useState(false);
   const [idPet, setIdPet] = useState("");
   const [idVeterinario, setIdVeterinario] = useState("");
   const [idServico, setIdServico] = useState("");
@@ -164,11 +166,39 @@ export default function Unidades() {
   }, [aba, id]);
 
   useEffect(() => {
-    if (!idServico || !servicos.some((servico) => String(servico.id_servico) === String(idServico))) {
-      setIdServico(servicos.length ? String(servicos[0].id_servico) : "");
+    if (idServico && !servicosDisponiveisNaData.includes(String(idServico))) {
+      setIdServico("");
       setHorarioSelecionado("");
     }
-  }, [servicos, idServico]);
+  }, [servicosDisponiveisNaData, idServico]);
+
+  useEffect(() => {
+    if (!idVeterinario || !dataSelecionada || dataPassada(dataSelecionada) || !servicos.length) {
+      setServicosDisponiveisNaData([]);
+      setCarregandoServicosData(false);
+      return undefined;
+    }
+    let ativo = true;
+    setCarregandoServicosData(true);
+    setServicosDisponiveisNaData([]);
+    Promise.all(servicos.map(async (servico) => {
+      const resposta = await agendamentosApi.disponibilidade({
+        id_veterinario: idVeterinario,
+        id_unidade: id,
+        id_servico: servico.id_servico,
+        data: dataSelecionada,
+      });
+      return (resposta.horarios || []).length ? String(servico.id_servico) : null;
+    })).then((ids) => {
+      if (ativo) setServicosDisponiveisNaData(ids.filter(Boolean));
+    }).catch((error) => {
+      if (ativo) {
+        setServicosDisponiveisNaData([]);
+        setMensagem(mensagemErroApi(error));
+      }
+    }).finally(() => { if (ativo) setCarregandoServicosData(false); });
+    return () => { ativo = false; };
+  }, [id, idVeterinario, dataSelecionada, servicos]);
 
   useEffect(() => {
     if (!idVeterinario || !veterinarios.some((vet) => String(vet.id_veterinario) === String(idVeterinario))) {
@@ -228,10 +258,7 @@ export default function Unidades() {
   const agendamentoSelecionado = agendamentos.find(
     (item) => item.data === dataSelecionada,
   ) || { data: dataSelecionada };
-  const horariosDoServico = horariosVeterinario.filter((horario) => {
-    const ids = String(horario.servicos_ids || "").split(",").filter(Boolean);
-    return !ids.length || ids.includes(String(idServico));
-  });
+  const horariosDoServico = horariosVeterinario;
   const diasDisponiveisVet = idVeterinario
     ? [...new Set(horariosDoServico.filter((horario) => !horario.data_disponivel).map((horario) => Number(horario.dia_semana)))]
     : undefined;
@@ -459,6 +486,7 @@ export default function Unidades() {
                   onSelecionarData={(data) => {
                     if (!dataPassada(data)) {
                       setDataSelecionada(data);
+                      setIdServico("");
                       setHorarioSelecionado("");
                     }
                   }}
@@ -469,7 +497,8 @@ export default function Unidades() {
                       1,
                     );
                     setMesAtual(proximo);
-                    setDataSelecionada(dataLocal(proximo));
+                    setDataSelecionada("");
+                    setIdServico("");
                     setHorarioSelecionado("");
                   }}
                 />
@@ -487,10 +516,7 @@ export default function Unidades() {
                   onSubmit={confirmarAgendamento}
                 >
                   <h3>
-                    Solicitar atendimento -{" "}
-                    {new Date(`${dataSelecionada}T12:00:00`).toLocaleDateString(
-                      "pt-BR",
-                    )}
+                    {dataSelecionada ? `Solicitar atendimento - ${new Date(`${dataSelecionada}T12:00:00`).toLocaleDateString("pt-BR")}` : "Selecione primeiro uma data no calendário"}
                   </h3>
                   {!usuario ? (
                     <div className="agenda-nao-logado">
@@ -601,32 +627,12 @@ export default function Unidades() {
                     </label>
                   )}
                   <label>
-                    Servi&#231;o
-                    <select
-                      value={idServico}
-                      onChange={(event) => {
-                        setIdServico(event.target.value);
-                        setHorarioSelecionado("");
-                      }}
-                      required
-                    >
-                      <option value="">Selecione um servi&#231;o</option>
-                      {servicos.map((servico) => (
-                        <option
-                          key={servico.id_servico}
-                          value={servico.id_servico}
-                        >
-                          {servico.nome}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
                     Veterin&#225;rio
                     <select
                       value={idVeterinario}
                       onChange={(event) => {
                         setIdVeterinario(event.target.value);
+                        setIdServico("");
                         setHorarioSelecionado("");
                       }}
                       required
@@ -642,6 +648,23 @@ export default function Unidades() {
                       ))}
                     </select>
                   </label>
+                  {dataSelecionada && <label>
+                    Servi&#231;o
+                    <select
+                      value={idServico}
+                      onChange={(event) => {
+                        setIdServico(event.target.value);
+                        setHorarioSelecionado("");
+                      }}
+                      required
+                      disabled={carregandoServicosData}
+                    >
+                      <option value="">{carregandoServicosData ? "Verificando serviços para esta data..." : "Escolha um Serviço"}</option>
+                      {servicos.filter((servico) => servicosDisponiveisNaData.includes(String(servico.id_servico))).map((servico) => (
+                        <option key={servico.id_servico} value={servico.id_servico}>{servico.nome}</option>
+                      ))}
+                    </select>
+                  </label>}
                   
                   <label>
                     Hor&#225;rio dispon&#237;vel

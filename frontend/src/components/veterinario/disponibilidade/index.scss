@@ -11,6 +11,13 @@
   header p { margin: 0; color: #5c6d62; }
   .form-disponibilidade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; column-gap: 2rem; row-gap: 1.1rem; }
   .form-disponibilidade > label { min-width: 0; }
+  .datas-disponibilidade { display: grid; gap: .5rem; }
+  .rotulo-datas { font-family: var(--textos); font-weight: 600; }
+  .campo-data-disponibilidade { display: flex; align-items: center; gap: .5rem; }
+  .campo-data-disponibilidade input { box-sizing: border-box; width: 100%; min-width: 0; }
+  .form-disponibilidade .adicionar-data, .form-disponibilidade .remover-data { min-height: 2.25rem; padding: .4rem .7rem; }
+  .form-disponibilidade .adicionar-data { justify-self: start; background: #e9f1e9; color: var(--verde-escuro); }
+  .form-disponibilidade .remover-data { flex: 0 0 auto; background: #fff0ed; color: #9e4334; }
   label { display: grid; gap: .4rem; font-family: var(--textos); font-weight: 600; }
   input, select { min-height: 2.7rem; padding: .55rem .7rem; border: 1px solid #b8c2b9; border-radius: .5rem; background: white; font: inherit; }
   .form-disponibilidade > label input, .form-disponibilidade > label select { box-sizing: border-box; width: 100%; }

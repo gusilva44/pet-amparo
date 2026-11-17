@@ -8,7 +8,7 @@ export default function DisponibilidadeVeterinario() {
   const [servicos, setServicos] = useState([]);
   const [catalogoUnidades, setCatalogoUnidades] = useState([]);
   const [horarios, setHorarios] = useState([]);
-  const [form, setForm] = useState({ id_unidade: "", data: "", hora_inicio: "09:00", hora_fim: "17:00", ids_servicos: [] });
+  const [form, setForm] = useState({ id_unidade: "", datas: [""], hora_inicio: "09:00", hora_fim: "17:00", ids_servicos: [] });
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [removendo, setRemovendo] = useState(null);
@@ -49,14 +49,25 @@ export default function DisponibilidadeVeterinario() {
     setSalvando(true);
     setMensagem("");
     try {
-      await veterinariosApi.criarMeuHorario({
-        ...form,
-        id_unidade: Number(form.id_unidade),
-        dia_semana: ((new Date(`${form.data}T12:00:00`).getDay() + 6) % 7) + 1,
-        ids_servicos: form.ids_servicos.map(Number),
-      });
+      const datas = [...new Set(form.datas.filter(Boolean))];
+      if (!datas.length) throw new Error("Adicione ao menos uma data disponível.");
+      const resultados = await Promise.allSettled(datas.map((data) => veterinariosApi.criarMeuHorario({
+          id_unidade: Number(form.id_unidade),
+          data,
+          hora_inicio: form.hora_inicio,
+          hora_fim: form.hora_fim,
+          ids_servicos: form.ids_servicos.map(Number),
+        })));
+      const salvas = resultados.filter((resultado) => resultado.status === "fulfilled").length;
       await carregar();
-      setMensagem("Disponibilidade adicionada.");
+      setForm((atual) => ({ ...atual, datas: [""] }));
+      const falhas = resultados.filter((resultado) => resultado.status === "rejected");
+      if (falhas.length) {
+        const detalhe = mensagemErroApi(falhas[0].reason);
+        setMensagem(`${salvas} de ${datas.length} datas salvas. ${detalhe}`);
+      } else {
+        setMensagem(`Disponibilidade adicionada para ${datas.length} ${datas.length === 1 ? "data" : "datas"}.`);
+      }
     } catch (error) {
       setMensagem(mensagemErroApi(error));
     } finally {
@@ -94,9 +105,14 @@ export default function DisponibilidadeVeterinario() {
               {unidades.map((unidade) => <option key={unidade.id_unidade} value={unidade.id_unidade}>{unidade.nome}</option>)}
             </select>
           </label>
-          <label>Data disponível
-            <input type="date" required value={form.data} min={new Date().toLocaleDateString("en-CA")} onChange={(event) => setForm({ ...form, data: event.target.value })} />
-          </label>
+          <div className="datas-disponibilidade">
+            <span className="rotulo-datas">Datas disponíveis</span>
+            {form.datas.map((data, indice) => <div className="campo-data-disponibilidade" key={indice}>
+              <input aria-label={`Data disponível ${indice + 1}`} type="date" required value={data} min={new Date().toLocaleDateString("en-CA")} onChange={(event) => setForm((atual) => ({ ...atual, datas: atual.datas.map((item, i) => i === indice ? event.target.value : item) }))} />
+              {form.datas.length > 1 && <button type="button" className="remover-data" onClick={() => setForm((atual) => ({ ...atual, datas: atual.datas.filter((_, i) => i !== indice) }))} aria-label={`Remover data ${indice + 1}`}>Remover</button>}
+            </div>)}
+            <button type="button" className="adicionar-data" onClick={() => setForm((atual) => ({ ...atual, datas: [...atual.datas, ""] }))}>Adicionar outra data</button>
+          </div>
           <label>Início <input type="time" required value={form.hora_inicio} onChange={(event) => setForm({ ...form, hora_inicio: event.target.value })} /></label>
           <label>Fim <input type="time" required value={form.hora_fim} onChange={(event) => setForm({ ...form, hora_fim: event.target.value })} /></label>
           <fieldset className="servicos-disponibilidade">
